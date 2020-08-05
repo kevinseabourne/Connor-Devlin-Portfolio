@@ -8,9 +8,10 @@ const Banner = (props) => {
       <Header />
       <InnerContainer>
         <InfoContainer>
-          <Title>Connor Devlin</Title>
+          <Title>CONNOR DEVLIN</Title>
           <Description>
-            Videographer for Wedding and Corporate work.
+            Digital media producer and filmmaker based out of Perth WA. Creating
+            videos for weddings, businesses and everything in between.
           </Description>
         </InfoContainer>
         <ImageLoader
@@ -45,6 +46,8 @@ const InnerContainer = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
+  max-width: 450px;
+  width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
@@ -55,6 +58,20 @@ const InfoContainer = styled.div`
 
 const Title = styled.h1`
   white-space: nowrap;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    height: 3px;
+    border-radius: 20px;
+    width: 36%;
+    background-color: white;
+    bottom: -6px;
+    left: 0;
+  }
 `;
 
-const Description = styled.p``;
+const Description = styled.p`
+  font-size: 1rem;
+  letter-spacing: 1px;
+`;

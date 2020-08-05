@@ -14,7 +14,7 @@ const Header = (props) => {
   return (
     <Container>
       <NameContainer>
-        <ImageLoader /> <Name>Connor Devlin</Name>
+        <ImageLoader /> <Name>CONNOR DEVLIN</Name>
       </NameContainer>
 
       <LinksContainer>
