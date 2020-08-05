@@ -37,12 +37,12 @@ const Container = styled.div`
 
 const TopWave = styled.img`
   position: absolute;
-  top: -80px;
+  top: 0;
   left: 0;
 `;
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -80px;
+  bottom: 0;
   left: 0;
 `;
