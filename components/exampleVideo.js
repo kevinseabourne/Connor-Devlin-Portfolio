@@ -20,7 +20,11 @@ export default ExampleVideo;
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #a6a998;
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(50, 172, 109, 1) 0%,
+    rgba(209, 251, 155, 1) 100.2%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
