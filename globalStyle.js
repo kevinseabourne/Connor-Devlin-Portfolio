@@ -21,7 +21,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Futura Std Heavy", -apple-system, BlinkMacSystemFont, "Segoe UI",
       "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
       "Helvetica Neue", sans-serif;
-    color: #F8F8F6;
+    color: rgb(30, 30, 30, 0.7);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 1.3px;
