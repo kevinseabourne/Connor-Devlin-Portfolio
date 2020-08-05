@@ -21,13 +21,13 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Futura Std Heavy", -apple-system, BlinkMacSystemFont, "Segoe UI",
       "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
       "Helvetica Neue", sans-serif;
-    color: white;
+    color: #F8F8F6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 1.3px;
     line-height: 1.47;
     height: 100vh;
-    background-color: rgba(242, 66, 54, 1);
+    background-color: #CBC3BA;
   }
 
   html {

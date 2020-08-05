@@ -59,13 +59,14 @@ const InfoContainer = styled.div`
 const Title = styled.h1`
   white-space: nowrap;
   position: relative;
+  margin-bottom: 8px;
   &::after {
     content: "";
     position: absolute;
     height: 3px;
     border-radius: 20px;
-    width: 36%;
-    background-color: white;
+    width: 38%;
+    background-color: #524f4a;
     bottom: -6px;
     left: 0;
   }

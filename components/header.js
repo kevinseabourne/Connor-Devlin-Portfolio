@@ -39,8 +39,8 @@ const Container = styled.div`
   left: 0;
   display: flex;
   align-items: center;
-  background-color: rgba(242, 66, 54, 1);
-  box-shadow: 0px -10px 16px 26px rgba(242, 66, 54, 1);
+  background-color: #cbc3ba;
+  box-shadow: 0px -10px 16px 26px #cbc3ba;
 `;
 
 const NameContainer = styled.div`
