@@ -16,6 +16,7 @@ const ImageLoader = ({
   borderRadius,
   hover,
   hoverColor,
+  boxShadow,
   centerImage,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -26,15 +27,15 @@ const ImageLoader = ({
 
   return (
     <ImageContainer
+      borderRadius={borderRadius}
       width={width}
       maxWidth={maxWidth}
       centerImage={centerImage}
-      hoverColor={hoverColor}
     >
       <Placeholder
+        borderRadius={borderRadius}
         onClick={onClick}
         placeholderSize={placeholderSize}
-        borderRadius={borderRadius}
       />
       <LazyLoad
         width="unset"
@@ -53,8 +54,9 @@ const ImageLoader = ({
           delay={delay}
           isFavourite={isFavourite}
           hover={hover}
-          hoverColor={hoverColor}
           borderRadius={borderRadius}
+          hoverColor={hoverColor}
+          boxShadow={boxShadow}
         />
       </LazyLoad>
     </ImageContainer>
@@ -70,9 +72,8 @@ const ImageContainer = styled.div`
   max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : "100%")};
   width: ${({ width }) => (width ? width : "100%")};
   position: relative;
-  border-radius: 10px;
   background: transparent;
-  margin: ${({ centerImage }) => (centerImage ? "auto" : "0")};
+  margin: ${({ centerImage }) => (centerImage ? "auto" : "none")};
   z-index: ${({ hoverColor }) => (hoverColor ? "auto" : "-1")};
 `;
 
@@ -92,6 +93,7 @@ const Image = styled.img`
   height: 100%;
   object-fit: contain;
   object-position: center;
+  box-shadow: ${({ boxShadow }) => (boxShadow ? boxShadow : "none")};
 border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
   filter: ${({ isFavourite }) =>
     isFavourite

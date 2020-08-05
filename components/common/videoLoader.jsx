@@ -44,7 +44,6 @@ const VideoLoader = ({
           onLoad={handleOnLoad}
           src={src}
           alt={alt}
-          z-index="1"
           key={keyValue}
           data-testid={dataTestId}
           delay={delay}

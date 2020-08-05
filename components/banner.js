@@ -15,7 +15,9 @@ const Banner = (props) => {
         </InfoContainer>
         <ImageLoader
           width="800px"
-          placeholderSize="66.85%"
+          placeholderSize="66.5%"
+          borderRadius="8px"
+          boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
           src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
         />
       </InnerContainer>
@@ -43,10 +45,11 @@ const InnerContainer = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   flex-direction: column;
-  margin-right: 60px;
+  margin-bottom: 100px;
+  margin-right: 30px;
   ${"" /* background-color: rgba(255, 255, 255, 0.8); */}
 `;
 
