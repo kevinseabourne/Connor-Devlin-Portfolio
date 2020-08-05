@@ -39,8 +39,9 @@ const Container = styled.div`
   left: 0;
   display: flex;
   align-items: center;
-  background-color: #a6a998;
-  box-shadow: box-shadow: 0px 0px 19px 26px #cbc3ba;
+  ${"" /* background-color: #a6a998; */}
+  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(50,172,109,1) 0%, rgba(209,251,155,1) 100.2% );
+  box-shadow: box-shadow: 0px 0px 19px 26px #a6a998;
   ${"" /* box-shadow: 0px -10px 16px 26px #cbc3ba; */}
 `;
 

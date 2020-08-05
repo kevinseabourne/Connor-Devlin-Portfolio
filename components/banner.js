@@ -8,7 +8,10 @@ const Banner = (props) => {
       <Header />
       <InfoContainer>
         <SmallTitle>Videographer</SmallTitle>
-        <Title>CONNOR DEVLIN</Title>
+        <Name>
+          <FirstName>CONNOR</FirstName>
+          <LastName>DEVLIN.</LastName>
+        </Name>
         <Description>
           Digital media producer and filmmaker based out of Perth WA. Creating
           videos for weddings, businesses and everything in between.
@@ -60,23 +63,46 @@ const SmallTitle = styled.span`
   opacity: 0.7;
 `;
 
-const Title = styled.h1`
+const Name = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const FirstName = styled.h1`
   white-space: nowrap;
   position: relative;
-  margin-bottom: 60px;
-  padding-bottom: 10px;
-  letter-spacing: -1px;
+  letter-spacing: 0px;
   font-size: 3rem;
+  margin-right: 12px;
   &::after {
     content: "";
     position: absolute;
     height: 2.1px;
     border-radius: 20px;
-    width: 45px;
-    background-color: #a6a998;
+    width: 155px;
+    background-image: radial-gradient(
+      circle farthest-corner at 10% 20%,
+      rgba(50, 172, 109, 1) 0%,
+      rgba(209, 251, 155, 1) 100.2%
+    );
     bottom: 0;
     left: 0;
   }
+`;
+
+const LastName = styled.h1`
+  white-space: nowrap;
+  position: relative;
+  letter-spacing: 0px;
+  font-size: 3rem;
+  padding-left: 3px;
+  text-align: center;
+  background-image: radial-gradient(
+    circle farthest-corner at 10% 20%,
+    rgba(50, 172, 109, 1) 0%,
+    rgba(209, 251, 155, 1) 100.2%
+  );
 `;
 
 const Description = styled.p`
