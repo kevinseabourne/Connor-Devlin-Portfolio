@@ -19,7 +19,7 @@ const Header = (props) => {
 
       <LinksContainer>
         {links.map((link) => (
-          <Link href={link.link}>
+          <Link key={links.indexOf(link)} href={link.link}>
             <LinkTitle>{link.title}</LinkTitle>
           </Link>
         ))}
@@ -32,13 +32,15 @@ export default Header;
 
 const Container = styled.div`
   width: 100%;
-  height: 90px;
-  position: absolute;
+  height: 75px;
+  position: fixed;
+  z-index: 500;
   top: 0;
   left: 0;
   display: flex;
   align-items: center;
-  background-color: #99aaab;
+  background-color: rgba(242, 66, 54, 1);
+  box-shadow: 0px -10px 16px 26px rgba(242, 66, 54, 1);
 `;
 
 const NameContainer = styled.div`
@@ -51,8 +53,10 @@ const NameContainer = styled.div`
 `;
 
 const Name = styled.span`
-  font-size: 20px;
+  font-size: 24px;
   white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: -1px;
 `;
 
 const LinksContainer = styled.div`
