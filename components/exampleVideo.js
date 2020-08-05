@@ -20,7 +20,7 @@ export default ExampleVideo;
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #524f4a;
+  background-color: #a6a998;
   display: flex;
   justify-content: center;
   align-items: center;
