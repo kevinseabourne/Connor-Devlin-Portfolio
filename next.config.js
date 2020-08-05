@@ -2,7 +2,7 @@ module.exports = {
   // add more font or image formats if importing them to here.
   webpack: (config, options) => {
     config.module.rules.push({
-      test: /\.(png|jpg|gif|woff|woff2|otf)$/i,
+      test: /\.(svg|xml|png|jpg|gif|woff|woff2|otf)$/i,
       use: [
         {
           loader: "url-loader",

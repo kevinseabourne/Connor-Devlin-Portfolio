@@ -6,7 +6,7 @@ const ExampleVideo = (props) => {
     <Container>
       <VideoLoader
         src={"https://www.youtube.com/embed/8Z1eMy2FoX4"}
-        width="1000px"
+        width="900px"
         placeholderSize="56.25%"
         alt="example-video"
         centerVideo={true}

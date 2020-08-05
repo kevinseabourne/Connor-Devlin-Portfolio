@@ -58,7 +58,7 @@ const Name = styled.span`
   font-size: 24px;
   white-space: nowrap;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 `;
 
 const LinksContainer = styled.div`
