@@ -39,8 +39,9 @@ const Container = styled.div`
   left: 0;
   display: flex;
   align-items: center;
-  background-color: #cbc3ba;
-  box-shadow: 0px -10px 16px 26px #cbc3ba;
+  background-color: #a6a998;
+  box-shadow: box-shadow: 0px 0px 19px 26px #cbc3ba;
+  ${"" /* box-shadow: 0px -10px 16px 26px #cbc3ba; */}
 `;
 
 const NameContainer = styled.div`
