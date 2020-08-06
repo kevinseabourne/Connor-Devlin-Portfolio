@@ -59,7 +59,7 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
-  margin-bottom: 130px;
+  margin-bottom: 110px;
   margin-right: 30px;
   ${"" /* background-color: rgba(255, 255, 255, 0.8); */}
   @media (max-width: 1024px) {
