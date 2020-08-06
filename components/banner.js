@@ -56,12 +56,13 @@ const InfoContainer = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
-  margin-bottom: 50px;
+  margin-bottom: 130px;
   margin-right: 30px;
   ${"" /* background-color: rgba(255, 255, 255, 0.8); */}
   @media (max-width: 1024px) {
     margin-top: 60px;
     margin-right: 0px;
+    margin-bottom: 50px;
     order: 2;
   }
 `;
@@ -118,8 +119,10 @@ const Description = styled.p`
 const ImageContainer = styled.div`
   max-width: 700px;
   width: 100%;
+  margin-bottom: 75px;
   @media (max-width: 1024px) {
-    margin-top: 40px;
+    margin-top: 20px;
+    margin-bottom: 0px;
     max-width: 580px;
   }
 `;

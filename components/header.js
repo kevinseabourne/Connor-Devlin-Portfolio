@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import Link from "next/link";
+import BurgerBar from "./burgerBar.js";
 
 const Header = (props) => {
+  const ref = useRef(null);
   const [links, setLinks] = useState([
     { title: "About", link: "/about" },
     { title: "Weddings", link: "/weddings" },
@@ -11,11 +13,31 @@ const Header = (props) => {
     { title: "Pricing", link: "/pricing" },
     { title: "Contact", link: "/contact" },
   ]);
+  const [burgerOpen, setBurgerOpen] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      setBurgerOpen(false);
+    }
+  };
+
+  const handleBurgerClick = () => {
+    setBurgerOpen(!burgerOpen);
+  };
   return (
     <Container>
-      <NameContainer>
-        <ImageLoader /> <Name>CONNOR DEVLIN</Name>
-      </NameContainer>
+      <Link href="/">
+        <NameContainer>
+          <ImageLoader /> <Name>CONNOR DEVLIN</Name>
+        </NameContainer>
+      </Link>
 
       <LinksContainer>
         {links.map((link) => (
@@ -24,6 +46,12 @@ const Header = (props) => {
           </Link>
         ))}
       </LinksContainer>
+      <BurgerBar
+        ref={ref}
+        onClick={handleBurgerClick}
+        burgerOpen={burgerOpen}
+        links={links}
+      />
     </Container>
   );
 };
@@ -34,7 +62,7 @@ const Container = styled.div`
   width: 100%;
   height: 75px;
   position: sticky;
-  z-index: 500;
+  z-index: 1;
   top: 0;
   left: 0;
   display: flex;
@@ -54,6 +82,10 @@ const NameContainer = styled.div`
   flex-direction: row;
   margin-right: auto;
   margin-left: 50px;
+  z-index: 1;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Name = styled.span`
@@ -83,6 +115,9 @@ const LinkTitle = styled.span`
   &:hover {
     cursor: pointer;
     opacity: 1;
-    background-color: grey;
+    background-color: ${({ theme }) => theme.colors.secondary};
+  }
+  @media (max-width: 1024px) {
+    display: none;
   }
 `;

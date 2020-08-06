@@ -1,9 +1,12 @@
 import styled from "styled-components";
+import Link from "next/link";
 
 const HomePageContact = (props) => {
   return (
     <Container>
-      <ContactButton>CONTACT</ContactButton>
+      <Link href="/contact">
+        <ContactButton>CONTACT</ContactButton>
+      </Link>
     </Container>
   );
 };
@@ -23,12 +26,16 @@ const ContactButton = styled.button`
   margin: 90px;
   font-size: 1.1rem;
   display: flex;
-  background-color: #cbc3ba;
+  font-weight: 700;
+  background-color: ${({ theme }) => theme.colors.secondary};
   padding: 12px 20px;
-  color: rgb(30, 30, 30, 0.7);
+  color: ${({ theme }) => theme.colors.fontColor};
   border-radius: 8px;
   border: none;
   justify-content: center;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Title = styled.h1``;

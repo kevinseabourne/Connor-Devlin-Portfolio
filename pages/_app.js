@@ -11,6 +11,7 @@ const theme = {
     gradient2: "rgba(209, 251, 155, 1)",
     primary: "rgba(50, 172, 109, 1)",
     secondary: "#E7ECEF",
+    fontColor: "#272932",
   },
 };
 

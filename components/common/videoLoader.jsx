@@ -64,7 +64,6 @@ const VideoLoader = ({
 export default VideoLoader;
 
 const VideoContainer = styled.div`
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +90,6 @@ const Video = styled.iframe`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 3;
   object-fit: contain;
   object-position: center;
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};

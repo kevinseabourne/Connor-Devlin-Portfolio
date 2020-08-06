@@ -16,7 +16,7 @@ export default Clients;
 
 const Container = styled.div`
   width: 100%;
-  height: 500px;
+  height: 900px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,13 +26,13 @@ const Container = styled.div`
 
 const Wave = styled.img`
   position: absolute;
-  top: -1px;
+  top: -20px;
   left: 0;
 `;
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -10px;
+  bottom: -20px;
   left: 0;
   z-index: -100;
 `;
