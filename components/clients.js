@@ -6,7 +6,7 @@ const Clients = (props) => {
   return (
     <Container>
       <Wave src={downWave} />
-      Client Logos
+      <Title>Clients</Title>
       <BottomWave src={topWave} />
     </Container>
   );
@@ -19,9 +19,14 @@ const Container = styled.div`
   height: 900px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: row;
   position: relative;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  margin-top: 270px;
 `;
 
 const Wave = styled.img`
