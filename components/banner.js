@@ -73,6 +73,9 @@ const InfoContainer = styled.div`
 const SmallTitle = styled.span`
   font-size: 1rem;
   opacity: 0.7;
+  @media (max-width: 424px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const Name = styled.div`
@@ -99,6 +102,9 @@ const FirstName = styled.h1`
     bottom: 0;
     left: 0;
   }
+  @media (max-width: 424px) {
+    font-size: 2.5rem;
+  }
 `;
 
 const LastName = styled.h1`
@@ -110,6 +116,9 @@ const LastName = styled.h1`
   text-align: center;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
+  @media (max-width: 424px) {
+    font-size: 2.5rem;
+  }
 `;
 
 const Description = styled.p`
@@ -120,6 +129,9 @@ const Description = styled.p`
   margin-bottom: 90px;
   @media (max-width: 1024px) {
     margin-bottom: 40px;
+  }
+  @media (max-width: 424px) {
+    font-size: 0.9rem;
   }
 `;
 
@@ -146,6 +158,9 @@ const ReadMoreLink = styled.span`
     &::after {
       width: 100%;
     }
+  }
+  @media (max-width: 424px) {
+    font-size: 0.9rem;
   }
 `;
 
