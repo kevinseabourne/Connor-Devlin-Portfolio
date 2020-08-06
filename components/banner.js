@@ -127,8 +127,25 @@ const ReadMoreLink = styled.span`
   font-size: 1rem;
   font-weight: 800;
   z-index: 1;
+  position: relative;
+  transition: all 0.3s;
+  &::after {
+    transition: all 0.2s;
+    content: "";
+    position: absolute;
+    height: 3px;
+    border-radius: 20px;
+    width: 0%;
+    background-image: ${({ theme }) =>
+      `linear-gradient( to right,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100% )`};
+    bottom: -3px;
+    left: 0;
+  }
   &:hover {
     cursor: pointer;
+    &::after {
+      width: 100%;
+    }
   }
 `;
 
