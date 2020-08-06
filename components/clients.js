@@ -26,7 +26,7 @@ const Container = styled.div`
 
 const Title = styled.h1`
   font-size: 2rem;
-  margin-top: 272px;
+  margin-top: 270px;
 `;
 
 const Wave = styled.img`
