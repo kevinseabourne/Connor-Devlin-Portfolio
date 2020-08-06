@@ -102,6 +102,7 @@ const LinksContainer = styled.div`
   flex-direction: row;
   margin-left: auto;
   margin-right: 50px;
+  z-index: 1;
 `;
 
 const LinkTitle = styled.span`
