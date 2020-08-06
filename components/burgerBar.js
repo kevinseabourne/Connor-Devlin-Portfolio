@@ -152,7 +152,7 @@ const BurgerLinkTitle = styled.span`
   &:hover {
     cursor: pointer;
     opacity: 1;
-    background-color: ${({ theme }) => theme.colors.secondary};
+    background-color: rgba(203, 195, 186, 0.3);
   }
   &:first-child {
     border-top: none;
