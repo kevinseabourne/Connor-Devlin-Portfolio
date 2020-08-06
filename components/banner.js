@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Header from "./header";
+import Link from "next/link";
 import ImageLoader from "./common/imageLoader";
 import topWave from "../public/images/top-wave.svg";
 
@@ -16,6 +16,9 @@ const Banner = (props) => {
           Digital media producer and filmmaker based out of Perth WA. Creating
           videos for weddings, businesses and everything in between.
         </Description>
+        <Link href="/about">
+          <ReadMoreLink>Read More</ReadMoreLink>
+        </Link>
       </InfoContainer>
       <ImageContainer>
         <ImageLoader
@@ -114,6 +117,19 @@ const Description = styled.p`
   letter-spacing: 1px;
   width: 95%;
   opacity: 0.7;
+  margin-bottom: 90px;
+  @media (max-width: 1024px) {
+    margin-bottom: 40px;
+  }
+`;
+
+const ReadMoreLink = styled.span`
+  font-size: 1rem;
+  font-weight: 800;
+  z-index: 1;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -123,7 +139,7 @@ const ImageContainer = styled.div`
   @media (max-width: 1024px) {
     margin-top: 20px;
     margin-bottom: 0px;
-    max-width: 580px;
+    max-width: 500px;
   }
 `;
 
