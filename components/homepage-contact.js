@@ -26,9 +26,10 @@ const ContactButton = styled.button`
   margin: 90px;
   font-size: 1.1rem;
   display: flex;
+  z-index: 1;
   font-weight: 700;
   background-color: ${({ theme }) => theme.colors.secondary};
-  padding: 12px 20px;
+  padding: 15px 26px;
   color: ${({ theme }) => theme.colors.fontColor};
   border-radius: 8px;
   border: none;
