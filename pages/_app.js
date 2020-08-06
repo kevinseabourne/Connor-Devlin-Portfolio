@@ -3,10 +3,14 @@ import { ThemeProvider } from "styled-components";
 import { GlobalStyle } from "../globalStyle";
 import AppContext from "../context/appContext";
 import { useRouter } from "next/router";
+import Header from "../components/header";
 
 const theme = {
   colors: {
-    primary: "#0070f3",
+    gradient1: "rgba(50, 172, 109, 1)",
+    gradient2: "rgba(209, 251, 155, 1)",
+    primary: "rgba(50, 172, 109, 1)",
+    secondary: "#E7ECEF",
   },
 };
 
@@ -42,6 +46,7 @@ export default class MyApp extends App {
       >
         <ThemeProvider theme={theme}>
           <GlobalStyle />
+          <Header />
           <Component {...pageProps} />
         </ThemeProvider>
       </AppContext.Provider>

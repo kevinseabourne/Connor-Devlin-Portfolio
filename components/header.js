@@ -33,15 +33,16 @@ export default Header;
 const Container = styled.div`
   width: 100%;
   height: 75px;
-  position: fixed;
+  position: sticky;
   z-index: 500;
   top: 0;
   left: 0;
   display: flex;
   align-items: center;
   ${"" /* background-color: #a6a998; */}
-  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(50,172,109,1) 0%, rgba(209,251,155,1) 100.2% );
-  box-shadow: 0px 0px 6px 1px rgba(50, 172, 109, 0.7)
+  background-image: ${({ theme }) =>
+    `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
+  box-shadow: 0px 0px 6px 1px rgba(50, 172, 109, 0.7);
     ${"" /* box-shadow: box-shadow: 0px 0px 19px 26px #a6a998; */}
     ${"" /* box-shadow: 0px -10px 16px 26px #cbc3ba; */};
 `;

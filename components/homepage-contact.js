@@ -12,11 +12,8 @@ export default HomePageContact;
 
 const Container = styled.div`
   width: 100%;
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(50, 172, 109, 1) 0%,
-    rgba(209, 251, 155, 1) 100.2%
-  );
+  background-image: ${({ theme }) =>
+    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
   display: flex;
   align-items: center;
   justify-content: center;

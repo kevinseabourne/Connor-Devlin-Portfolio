@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import VideoLoader from "./common/videoLoader";
 import wave from "../public/images/wave.svg";
-import topWave from "../public/images/top-wave.svg";
+import topWave from "../public/images/green-wave.svg";
 
 const ExampleVideo = (props) => {
   return (
@@ -13,7 +13,6 @@ const ExampleVideo = (props) => {
         alt="example-video"
         centerVideo={true}
       />
-      <BottomWave src={topWave} />
     </Container>
   );
 };
@@ -22,16 +21,15 @@ export default ExampleVideo;
 
 const Container = styled.div`
   width: 100%;
-  height: 1200px;
-  background-image: linear-gradient(
-    to right,
-    rgba(50, 172, 109, 1) 10%,
-    rgba(209, 251, 155, 1) 100%
-  );
+  height: 600px;
+  background-image: ${({ theme }) =>
+    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 const TopWave = styled.img`

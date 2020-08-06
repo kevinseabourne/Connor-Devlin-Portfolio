@@ -6,7 +6,6 @@ import topWave from "../public/images/top-wave.svg";
 const Banner = (props) => {
   return (
     <Container>
-      <Header />
       <InfoContainer>
         <SmallTitle>Videographer</SmallTitle>
         <Name>
@@ -18,13 +17,15 @@ const Banner = (props) => {
           videos for weddings, businesses and everything in between.
         </Description>
       </InfoContainer>
-      <ImageLoader
-        width="700px"
-        placeholderSize="66.5%"
-        borderRadius="8px"
-        boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
-        src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
-      />
+      <ImageContainer>
+        <ImageLoader
+          maxWidth="inherit"
+          placeholderSize="66.5%"
+          borderRadius="8px"
+          boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
+          src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
+        />
+      </ImageContainer>
       <BottomWave src={topWave} />
     </Container>
   );
@@ -33,19 +34,19 @@ const Banner = (props) => {
 export default Banner;
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(100vh - 75px);
   width: 100%;
   display: flex;
+  padding: 0px 50px;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
-`;
-
-const InnerContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: row;
-  position: relative;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0 20px;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -58,6 +59,11 @@ const InfoContainer = styled.div`
   margin-bottom: 50px;
   margin-right: 30px;
   ${"" /* background-color: rgba(255, 255, 255, 0.8); */}
+  @media (max-width: 1024px) {
+    margin-top: 60px;
+    margin-right: 0px;
+    order: 2;
+  }
 `;
 
 const SmallTitle = styled.span`
@@ -84,10 +90,8 @@ const FirstName = styled.h1`
     height: 4px;
     border-radius: 20px;
     width: 155px;
-    background-image: linear-gradient(
-      rgba(50, 172, 109, 1) 0%,
-      rgba(209, 251, 155, 1) 100%
-    );
+    background-image: ${({ theme }) =>
+      `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
     bottom: 0;
     left: 0;
   }
@@ -100,11 +104,8 @@ const LastName = styled.h1`
   font-size: 3rem;
   padding-left: 3px;
   text-align: center;
-  background-image: radial-gradient(
-    circle farthest-corner at 10% 20%,
-    rgba(50, 172, 109, 1) 0%,
-    rgba(209, 251, 155, 1) 100%
-  );
+  background-image: ${({ theme }) =>
+    `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
 `;
 
 const Description = styled.p`
@@ -114,8 +115,18 @@ const Description = styled.p`
   opacity: 0.7;
 `;
 
+const ImageContainer = styled.div`
+  max-width: 700px;
+  width: 100%;
+  @media (max-width: 1024px) {
+    margin-top: 40px;
+    max-width: 580px;
+  }
+`;
+
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -80px;
+  bottom: -1px;
   left: 0;
+  z-index: -100;
 `;
