@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Header from "./header";
 import ImageLoader from "./common/imageLoader";
+import topWave from "../public/images/top-wave.svg";
 
 const Banner = (props) => {
   return (
@@ -24,6 +25,7 @@ const Banner = (props) => {
         boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
         src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
       />
+      <BottomWave src={topWave} />
     </Container>
   );
 };
@@ -79,13 +81,12 @@ const FirstName = styled.h1`
   &::after {
     content: "";
     position: absolute;
-    height: 2.1px;
+    height: 4px;
     border-radius: 20px;
     width: 155px;
-    background-image: radial-gradient(
-      circle farthest-corner at 10% 20%,
+    background-image: linear-gradient(
       rgba(50, 172, 109, 1) 0%,
-      rgba(209, 251, 155, 1) 100.2%
+      rgba(209, 251, 155, 1) 100%
     );
     bottom: 0;
     left: 0;
@@ -102,7 +103,7 @@ const LastName = styled.h1`
   background-image: radial-gradient(
     circle farthest-corner at 10% 20%,
     rgba(50, 172, 109, 1) 0%,
-    rgba(209, 251, 155, 1) 100.2%
+    rgba(209, 251, 155, 1) 100%
   );
 `;
 
@@ -111,4 +112,10 @@ const Description = styled.p`
   letter-spacing: 1px;
   width: 95%;
   opacity: 0.7;
+`;
+
+const BottomWave = styled.img`
+  position: absolute;
+  bottom: -80px;
+  left: 0;
 `;
