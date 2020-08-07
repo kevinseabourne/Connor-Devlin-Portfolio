@@ -30,6 +30,9 @@ const Container = styled.div`
   position: relative;
   padding: 0 20px;
   box-sizing: border-box;
+  @media (max-width: 680px) {
+    height: 420px;
+  }
 `;
 
 const TopWave = styled.img`

@@ -86,6 +86,13 @@ const NameContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
+  @media (max-width: 680px) {
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const Name = styled.span`
@@ -103,6 +110,9 @@ const LinksContainer = styled.div`
   margin-left: auto;
   margin-right: 50px;
   z-index: 1;
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const LinkTitle = styled.span`
