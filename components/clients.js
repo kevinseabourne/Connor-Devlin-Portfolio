@@ -10,21 +10,21 @@ const Clients = (props) => {
       <Title>Clients</Title>
       <IconsContainer>
         <ImageLoader
-          maxWidth="230px"
+          maxWidth="215px"
           placeholderSize="75.7%"
           borderRadius="8px"
           centerImage={true}
           src="https://chpistel.sirv.com/Connor-Portfolio/tlg.png?cx=105&cy=109&cw=554&ch=493"
         />
         <ImageLoader
-          maxWidth="230px"
+          maxWidth="215px"
           placeholderSize="75.7%"
           borderRadius="8px"
           centerImage={true}
           src="https://chpistel.sirv.com/Connor-Portfolio/Logo_ECU.png?w=700"
         />
         <ImageLoader
-          maxWidth="230px"
+          maxWidth="215px"
           placeholderSize="75.7%"
           borderRadius="8px"
           centerImage={true}
@@ -68,7 +68,7 @@ const Title = styled.h1`
 const IconsContainer = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, minmax(50px, 230px));
+  grid-template-columns: repeat(3, minmax(50px, 215px));
   justify-content: center;
   grid-auto-flow: row;
   grid-gap: 12%;
