@@ -28,14 +28,19 @@ const ContactButton = styled.button`
   display: flex;
   z-index: 1;
   font-weight: 700;
+  transition: all 0.2s;
   background-color: ${({ theme }) => theme.colors.secondary};
   padding: 15px 26px;
   color: ${({ theme }) => theme.colors.fontColor};
   border-radius: 8px;
   border: none;
   justify-content: center;
+  opacity: 0.9;
   &:hover {
     cursor: pointer;
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.secondary};
+    background-color: ${({ theme }) => theme.colors.fontColor};
   }
 `;
 
