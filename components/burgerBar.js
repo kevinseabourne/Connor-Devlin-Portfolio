@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Link from "next/link";
 
 const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
@@ -6,7 +7,7 @@ const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
     <Container ref={ref}>
       <GlobalStyle burgerOpen={burgerOpen} />
       <Burger
-        value={burgerOpen}
+        burgerOpen={burgerOpen}
         onClick={onClick}
         id="burgerOpen"
         data-testid="burgerOpen"
@@ -20,7 +21,18 @@ const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
           </Link>
         ))}
       </Content>
-      <Overlay burgerOpen={burgerOpen} />
+      <TransitionGroup component={null}>
+        {burgerOpen && (
+          <CSSTransition
+            in={burgerOpen}
+            classNames="overlayAnimation"
+            timeout={300}
+            unmountOnExit
+          >
+            <Overlay burgerOpen={burgerOpen} />
+          </CSSTransition>
+        )}{" "}
+      </TransitionGroup>
     </Container>
   );
 });
@@ -31,6 +43,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
 `;
 
 const Burger = styled.div`
@@ -38,7 +51,7 @@ const Burger = styled.div`
   position: relative;
   width: 36px;
   height: 24px;
-  padding: 40px;
+  padding: 25.5px;
   margin-left: auto;
   z-index: 200;
   &:hover {
@@ -110,6 +123,21 @@ const Overlay = styled.div`
   transition: all 0.3s;
   background-color: ${({ burgerOpen }) =>
     burgerOpen ? "rgba(0, 0, 0, 0.25)" : "transparent"};
+  &.overlayAnimation-enter {
+    background-color: transparent;
+  }
+  &.overlayAnimation-enter-active {
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+  }
+  &.overlayAnimation-exit {
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: all 0.3s;
+  }
+  &.overlayAnimation-exit-active {
+    background-color: transparent;
+    transition: all 0.3s;
+  }
 `;
 
 const Content = styled.div`
