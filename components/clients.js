@@ -55,7 +55,7 @@ const Container = styled.div`
 
 const Title = styled.h1`
   font-size: 2.5rem;
-  margin-top: -86px;
+  margin-top: -70px;
   opacity: 0.8;
   margin-bottom: 65px;
   padding-left: 3px;
