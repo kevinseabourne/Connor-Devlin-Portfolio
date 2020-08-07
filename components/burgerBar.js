@@ -40,10 +40,13 @@ const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
 export default BurgerBar;
 
 const Container = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   margin-left: auto;
+  @media (max-width: 1024px) {
+    display: flex;
+  }
 `;
 
 const Burger = styled.div`
