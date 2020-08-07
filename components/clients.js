@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ImageLoader from "./common/imageLoader";
 import downWave from "../public/images/wave.svg";
 import topWave from "../public/images/top-wave.svg";
 
@@ -7,6 +8,29 @@ const Clients = (props) => {
     <Container>
       <Wave src={downWave} />
       <Title>Clients</Title>
+      <IconsContainer>
+        <ImageLoader
+          maxWidth="230px"
+          placeholderSize="75.7%"
+          borderRadius="8px"
+          centerImage={true}
+          src="https://chpistel.sirv.com/Connor-Portfolio/tlg.png?cx=105&cy=109&cw=554&ch=493"
+        />
+        <ImageLoader
+          maxWidth="230px"
+          placeholderSize="75.7%"
+          borderRadius="8px"
+          centerImage={true}
+          src="https://chpistel.sirv.com/Connor-Portfolio/Logo_ECU.png?w=700"
+        />
+        <ImageLoader
+          maxWidth="230px"
+          placeholderSize="75.7%"
+          borderRadius="8px"
+          centerImage={true}
+          src="https://chpistel.sirv.com/Connor-Portfolio/Kalamunda%20Logo%2001%20CMYK.png?cw=750&ch=563&w=750&h=563"
+        />
+      </IconsContainer>
       <BottomWave src={topWave} />
     </Container>
   );
@@ -18,15 +42,42 @@ const Container = styled.div`
   width: 100%;
   height: 900px;
   display: flex;
+  padding: 0 20px;
+  box-sizing: border-box;
   justify-content: center;
-  align-items: flex-start;
-  flex-direction: row;
+  align-items: center;
+  flex-direction: column;
   position: relative;
+  @media (max-width: 750px) {
+    height: 900px;
+  }
 `;
 
 const Title = styled.h1`
-  font-size: 2rem;
-  margin-top: 270px;
+  font-size: 2.5rem;
+  margin-top: -86px;
+  opacity: 0.8;
+  margin-bottom: 65px;
+  padding-left: 3px;
+  padding-right: 3px;
+  @media (max-width: 680px) {
+    margin-bottom: 25px;
+  }
+`;
+
+const IconsContainer = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(50px, 230px));
+  justify-content: center;
+  grid-auto-flow: row;
+  grid-gap: 12%;
+  opacity: 0.8;
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+    box-sizing: border-box;
+    padding: 0 26%;
+  }
 `;
 
 const Wave = styled.img`
