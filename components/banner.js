@@ -150,7 +150,7 @@ const ReadMoreLink = styled.span`
     width: 0%;
     background-image: ${({ theme }) =>
       `linear-gradient( to right,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100% )`};
-    bottom: -3px;
+    bottom: -4px;
     left: 0;
   }
   &:hover {
