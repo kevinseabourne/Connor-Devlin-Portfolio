@@ -35,7 +35,18 @@ const Header = (props) => {
     <Container>
       <Link href="/">
         <NameContainer>
-          <ImageLoader /> <Name>CONNOR DEVLIN</Name>
+          <LogoNameContainer>
+            <Name>CONNOR</Name>
+            <Logo>
+              <ImageLoader
+                width="18px"
+                placeholderSize="100%"
+                src="https://chpistel.sirv.com/Connor-Portfolio/photography.png?w=74&png.optimize=true"
+              />
+            </Logo>
+            <Name>DEVLIN</Name>
+          </LogoNameContainer>
+          <LogoSecondLabel>Media</LogoSecondLabel>
         </NameContainer>
       </Link>
 
@@ -79,10 +90,12 @@ const NameContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
+  flex-direction: column;
+  margin-top: 10px;
   margin-right: auto;
   margin-left: 50px;
   z-index: 0;
+  position: relative;
   &:hover {
     cursor: pointer;
   }
@@ -95,11 +108,33 @@ const NameContainer = styled.div`
   }
 `;
 
-const Name = styled.span`
+const LogoNameContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LogoSecondLabel = styled.label`
+  margin-left: 21.2px;
+  font-size: 1rem:
+`;
+
+const Logo = styled.div`
+  margin-bottom: 4px;
+  margin-left: 6px;
+  margin-right: 6px;
+  top: -9px;
+  left: -2px;
+  z-index: -1;
+`;
+
+const Name = styled.label`
   font-size: 24px;
   white-space: nowrap;
   font-weight: 700;
   letter-spacing: -0.5px;
+  line-height: 20px;
 `;
 
 const LinksContainer = styled.div`
