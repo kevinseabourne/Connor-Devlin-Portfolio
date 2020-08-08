@@ -65,7 +65,7 @@ const Title = styled.h1`
   padding-left: 3px;
   padding-right: 3px;
   @media (max-width: 680px) {
-    margin-top: -93px;
+    margin-top: -98px;
     margin-bottom: 25px;
   }
 `;
@@ -100,4 +100,7 @@ const BottomWave = styled.img`
   z-index: -100;
   width: 100%;
   object-fit: cover;
+  @media (max-width: 680px) {
+    bottom: -15px;
+  }
 `;
