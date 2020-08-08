@@ -48,9 +48,12 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   position: relative;
-  @media (max-width: 450px) {
+  @media (max-width: 680px) {
     height: 100%;
     padding: 40% 20px;
+  }
+  @media (max-width: 355px) {
+    padding: 140px 20px;
   }
 `;
 
