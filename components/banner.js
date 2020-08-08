@@ -6,29 +6,31 @@ import topWave from "../public/images/top-wave.svg";
 const Banner = (props) => {
   return (
     <Container>
-      <InfoContainer>
-        <SmallTitle>Videographer</SmallTitle>
-        <Name>
-          <FirstName>CONNOR</FirstName>
-          <LastName>DEVLIN.</LastName>
-        </Name>
-        <Description>
-          Digital media producer and filmmaker based out of Perth WA. Creating
-          videos for weddings, businesses and everything in between.
-        </Description>
-        <Link href="/about">
-          <ReadMoreLink>Read More</ReadMoreLink>
-        </Link>
-      </InfoContainer>
-      <ImageContainer>
-        <ImageLoader
-          maxWidth="inherit"
-          placeholderSize="66.5%"
-          borderRadius="8px"
-          boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
-          src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
-        />
-      </ImageContainer>
+      <InnerContainer>
+        <InfoContainer>
+          <SmallTitle>Videographer</SmallTitle>
+          <Name>
+            <FirstName>CONNOR</FirstName>
+            <LastName>DEVLIN.</LastName>
+          </Name>
+          <Description>
+            Digital media producer and filmmaker based out of Perth WA. Creating
+            videos for weddings, businesses and everything in between.
+          </Description>
+          <Link href="/about">
+            <ReadMoreLink>Read More</ReadMoreLink>
+          </Link>
+        </InfoContainer>
+        <ImageContainer>
+          <ImageLoader
+            maxWidth="inherit"
+            placeholderSize="66.5%"
+            borderRadius="8px"
+            boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
+            src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
+          />
+        </ImageContainer>
+      </InnerContainer>
       <BottomWave src={topWave} />
     </Container>
   );
@@ -40,8 +42,27 @@ const Container = styled.div`
   height: calc(100vh - 75px);
   width: 100%;
   display: flex;
-  padding: 0px 50px;
   box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  @media (max-width: 1024px) {
+    justify-content: flex-start;
+  }
+  @media (min-width: 1023px) and (max-height: 780px) {
+    height: 100%;
+  }
+  @media (max-width: 1024px) and (max-height: 845px) {
+    height: 100%;
+  }
+`;
+
+const InnerContainer = styled.div`
+  padding: 0px 50px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
@@ -49,6 +70,13 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: flex-start;
     padding: 0 20px;
+  }
+  @media (max-width: 1024px) and (max-height: 845px) {
+    padding-bottom: 146.4px;
+  }
+  @media (min-width: 1023px) and (max-height: 780px) {
+    margin-top: 80px;
+    padding-bottom: 246.4px;
   }
 `;
 
@@ -67,6 +95,9 @@ const InfoContainer = styled.div`
     margin-right: 0px;
     margin-bottom: 50px;
     order: 2;
+  }
+  @media (min-width: 1023px) and (max-height: 780px) {
+    margin-bottom: 0px;
   }
 `;
 
@@ -172,6 +203,9 @@ const ImageContainer = styled.div`
     margin-top: 20px;
     margin-bottom: 0px;
     max-width: 500px;
+  }
+  @media (min-width: 1023px) and (max-height: 780px) {
+    margin-bottom: 0px;
   }
 `;
 
