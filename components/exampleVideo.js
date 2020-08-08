@@ -7,9 +7,7 @@ const ExampleVideo = (props) => {
   return (
     <Container>
       <VideoLoader
-        src={
-          "https://www.dropbox.com/s/wafb1uu1zhfef6j/CDM_Showreel_1.mp4?raw=1"
-        }
+        src={"https://player.vimeo.com/video/445793664"}
         width="900px"
         placeholderSize="56.25%"
         alt="example-video"
