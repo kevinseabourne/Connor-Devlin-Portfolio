@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import downWave from "../public/images/wave3.svg";
-import topWave from "../public/images/top-wave.svg";
+import topWave from "../public/images/wave4.svg";
 
 const Clients = (props) => {
   return (
@@ -48,8 +48,9 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   position: relative;
-  @media (max-width: 750px) {
-    height: 900px;
+  @media (max-width: 450px) {
+    height: 100%;
+    padding: 40% 20px;
   }
 `;
 
@@ -61,6 +62,7 @@ const Title = styled.h1`
   padding-left: 3px;
   padding-right: 3px;
   @media (max-width: 680px) {
+    margin-top: -93px;
     margin-bottom: 25px;
   }
 `;
