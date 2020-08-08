@@ -213,6 +213,7 @@ const BottomWave = styled.img`
   position: absolute;
   bottom: -55px;
   left: -1px;
+  width: 100%;
   z-index: -100;
   @media (max-width: 1024px) {
     bottom: -1px;

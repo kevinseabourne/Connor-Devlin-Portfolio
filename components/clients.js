@@ -98,5 +98,6 @@ const BottomWave = styled.img`
   bottom: -20px;
   left: -1px;
   z-index: -100;
+  width: 100%;
   object-fit: cover;
 `;
