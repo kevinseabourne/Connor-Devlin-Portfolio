@@ -138,7 +138,7 @@ const Description = styled.p`
 const ReadMoreLink = styled.span`
   font-size: 1rem;
   font-weight: 800;
-  z-index: 1;
+  z-index: 0;
   position: relative;
   transition: all 0.3s;
   &::after {
