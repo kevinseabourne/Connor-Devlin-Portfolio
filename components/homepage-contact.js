@@ -7,6 +7,7 @@ const HomePageContact = (props) => {
       <Link href="/contact">
         <ContactButton>CONTACT</ContactButton>
       </Link>
+      <CopyRight>Copyright © 2020 Connor Devlin</CopyRight>
     </Container>
   );
 };
@@ -20,6 +21,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 `;
 
 const ContactButton = styled.button`
@@ -31,6 +33,8 @@ const ContactButton = styled.button`
   transition: all 0.2s;
   background-color: ${({ theme }) => theme.colors.secondary};
   padding: 15px 26px;
+  margin-top: 100px;
+  margin-bottom: 100px;
   color: ${({ theme }) => theme.colors.fontColor};
   border-radius: 8px;
   border: none;
@@ -42,6 +46,12 @@ const ContactButton = styled.button`
     color: ${({ theme }) => theme.colors.secondary};
     background-color: ${({ theme }) => theme.colors.fontColor};
   }
+`;
+
+const CopyRight = styled.span`
+  font-size: 1rem;
+  margin: auto;
+  margin-bottom: 50px;
 `;
 
 const Title = styled.h1``;

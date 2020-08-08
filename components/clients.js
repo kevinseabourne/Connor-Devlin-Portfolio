@@ -89,6 +89,8 @@ const Wave = styled.img`
   position: absolute;
   top: -20px;
   left: -1px;
+  width: 100%;
+  object-fit: cover;
 `;
 
 const BottomWave = styled.img`
@@ -96,4 +98,5 @@ const BottomWave = styled.img`
   bottom: -20px;
   left: -1px;
   z-index: -100;
+  object-fit: cover;
 `;

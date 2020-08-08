@@ -34,15 +34,3 @@ const Container = styled.div`
     height: 420px;
   }
 `;
-
-const TopWave = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
-
-const BottomWave = styled.img`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-`;
