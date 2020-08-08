@@ -178,6 +178,6 @@ const ImageContainer = styled.div`
 const BottomWave = styled.img`
   position: absolute;
   bottom: -1px;
-  left: 0;
+  left: -1px;
   z-index: -100;
 `;

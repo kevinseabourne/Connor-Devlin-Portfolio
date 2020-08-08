@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
-import downWave from "../public/images/wave.svg";
+import downWave from "../public/images/wave3.svg";
 import topWave from "../public/images/top-wave.svg";
 
 const Clients = (props) => {
@@ -83,12 +83,12 @@ const IconsContainer = styled.div`
 const Wave = styled.img`
   position: absolute;
   top: -20px;
-  left: 0;
+  left: -1px;
 `;
 
 const BottomWave = styled.img`
   position: absolute;
   bottom: -20px;
-  left: 0;
+  left: -1px;
   z-index: -100;
 `;
