@@ -82,7 +82,7 @@ const NameContainer = styled.div`
   flex-direction: row;
   margin-right: auto;
   margin-left: 50px;
-  z-index: 1;
+  z-index: 0;
   &:hover {
     cursor: pointer;
   }

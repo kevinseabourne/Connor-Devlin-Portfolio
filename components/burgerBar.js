@@ -4,23 +4,25 @@ import Link from "next/link";
 
 const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
   return (
-    <Container ref={ref}>
-      <GlobalStyle burgerOpen={burgerOpen} />
-      <Burger
-        burgerOpen={burgerOpen}
-        onClick={onClick}
-        id="burgerOpen"
-        data-testid="burgerOpen"
-      >
-        <BurgerInner burgerOpen={burgerOpen} />
-      </Burger>
-      <Content burgerOpen={burgerOpen}>
-        {links.map((link) => (
-          <Link key={links.indexOf(link)} href={link.link}>
-            <BurgerLinkTitle onClick={onClick}>{link.title}</BurgerLinkTitle>
-          </Link>
-        ))}
-      </Content>
+    <React.Fragment>
+      <Container ref={ref}>
+        <GlobalStyle burgerOpen={burgerOpen} />
+        <Burger
+          burgerOpen={burgerOpen}
+          onClick={onClick}
+          id="burgerOpen"
+          data-testid="burgerOpen"
+        >
+          <BurgerInner burgerOpen={burgerOpen} />
+        </Burger>
+        <Content burgerOpen={burgerOpen}>
+          {links.map((link) => (
+            <Link key={links.indexOf(link)} href={link.link}>
+              <BurgerLinkTitle onClick={onClick}>{link.title}</BurgerLinkTitle>
+            </Link>
+          ))}
+        </Content>
+      </Container>
       <TransitionGroup component={null}>
         {burgerOpen && (
           <CSSTransition
@@ -31,9 +33,9 @@ const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
           >
             <Overlay burgerOpen={burgerOpen} />
           </CSSTransition>
-        )}{" "}
+        )}
       </TransitionGroup>
-    </Container>
+    </React.Fragment>
   );
 });
 
