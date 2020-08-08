@@ -24,7 +24,7 @@ const Banner = (props) => {
         <ImageContainer>
           <ImageLoader
             maxWidth="inherit"
-            placeholderSize="66.5%"
+            placeholderSize="66.7%"
             borderRadius="8px"
             boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
             src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
