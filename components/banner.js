@@ -50,10 +50,10 @@ const Container = styled.div`
   @media (max-width: 1024px) {
     justify-content: flex-start;
   }
-  @media (min-width: 1023px) and (max-height: 780px) {
+  @media (min-width: 1023px) and (max-height: 810px) {
     height: 100%;
   }
-  @media (max-width: 1024px) and (max-height: 845px) {
+  @media (max-width: 1024px) and (max-height: 910px) {
     height: 100%;
   }
 `;
@@ -71,10 +71,10 @@ const InnerContainer = styled.div`
     justify-content: flex-start;
     padding: 0 20px;
   }
-  @media (max-width: 1024px) and (max-height: 845px) {
+  @media (max-width: 1024px) and (max-height: 910px) {
     padding-bottom: 146.4px;
   }
-  @media (min-width: 1023px) and (max-height: 780px) {
+  @media (min-width: 1023px) and (max-height: 810px) {
     margin-top: 80px;
     padding-bottom: 246.4px;
   }
@@ -96,7 +96,7 @@ const InfoContainer = styled.div`
     margin-bottom: 50px;
     order: 2;
   }
-  @media (min-width: 1023px) and (max-height: 780px) {
+  @media (min-width: 1023px) and (max-height: 810px) {
     margin-bottom: 0px;
   }
 `;
@@ -204,14 +204,17 @@ const ImageContainer = styled.div`
     margin-bottom: 0px;
     max-width: 500px;
   }
-  @media (min-width: 1023px) and (max-height: 780px) {
+  @media (min-width: 1023px) and (max-height: 810px) {
     margin-bottom: 0px;
   }
 `;
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -1px;
+  bottom: -55px;
   left: -1px;
   z-index: -100;
+  @media (max-width: 1024px) {
+    bottom: -1px;
+  }
 `;
