@@ -39,9 +39,9 @@ const Header = (props) => {
             <Name>CONNOR</Name>
             <Logo>
               <ImageLoader
-                width="18px"
+                width="21px"
                 placeholderSize="100%"
-                src="https://chpistel.sirv.com/Connor-Portfolio/photography.png?w=74&png.optimize=true"
+                src="https://chpistel.sirv.com/Connor-Portfolio/jam%20(1).png?w=40&png.optimize=true"
               />
             </Logo>
             <Name>DEVLIN</Name>
