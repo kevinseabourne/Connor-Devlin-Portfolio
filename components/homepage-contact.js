@@ -52,6 +52,12 @@ const CopyRight = styled.span`
   font-size: 1rem;
   margin: auto;
   margin-bottom: 50px;
+  @media (max-width: 424px) {
+    font-size: 0.9rem;
+  }
+  @media (max-width: 300px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Title = styled.h1``;

@@ -107,6 +107,9 @@ const SmallTitle = styled.span`
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }
+  @media (max-width: 300px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Name = styled.div`
@@ -127,14 +130,20 @@ const FirstName = styled.h1`
     position: absolute;
     height: 4px;
     border-radius: 20px;
-    width: 155px;
+    width: 75%;
     background-image: ${({ theme }) =>
       `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
     bottom: 0;
     left: 0;
   }
-  @media (max-width: 424px) {
-    font-size: 2.5rem;
+  @media (max-width: 450px) {
+    font-size: 2.3rem;
+  }
+  @media (max-width: 350px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 300px) {
+    font-size: 1.7rem;
   }
 `;
 
@@ -147,8 +156,14 @@ const LastName = styled.h1`
   text-align: center;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
-  @media (max-width: 424px) {
-    font-size: 2.5rem;
+  @media (max-width: 450px) {
+    font-size: 2.3rem;
+  }
+  @media (max-width: 350px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 300px) {
+    font-size: 1.7rem;
   }
 `;
 
@@ -163,6 +178,9 @@ const Description = styled.p`
   }
   @media (max-width: 424px) {
     font-size: 0.9rem;
+  }
+  @media (max-width: 300px) {
+    font-size: 0.8rem;
   }
 `;
 
@@ -192,6 +210,9 @@ const ReadMoreLink = styled.span`
   }
   @media (max-width: 424px) {
     font-size: 0.9rem;
+  }
+  @media (max-width: 300px) {
+    font-size: 0.8rem;
   }
 `;
 
