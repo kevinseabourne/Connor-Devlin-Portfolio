@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import Link from "next/link";
-import BurgerBar from "./burgerBar.js";
+import BurgerBar from "./common/burgerBar";
 
 const Header = (props) => {
   const ref = useRef(null);
@@ -35,18 +35,13 @@ const Header = (props) => {
     <Container>
       <Link href="/">
         <NameContainer>
-          <LogoNameContainer>
-            <Name>CONNOR</Name>
-            <Logo>
-              <ImageLoader
-                width="21px"
-                placeholderSize="100%"
-                src="https://chpistel.sirv.com/Connor-Portfolio/jam%20(1).png?w=40&png.optimize=true"
-              />
-            </Logo>
-            <Name>DEVLIN</Name>
-          </LogoNameContainer>
-          <LogoSecondLabel>Media</LogoSecondLabel>
+          <Logo>
+            <ImageLoader
+              width="100%"
+              placeholderSize="13.2%"
+              src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=350&png.optimize=true"
+            />
+          </Logo>
         </NameContainer>
       </Link>
 
@@ -82,8 +77,6 @@ const Container = styled.div`
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   box-shadow: 0px 0px 6px 1px rgba(50, 172, 109, 0.7);
-    ${"" /* box-shadow: box-shadow: 0px 0px 19px 26px #a6a998; */}
-    ${"" /* box-shadow: 0px -10px 16px 26px #cbc3ba; */};
 `;
 
 const NameContainer = styled.div`
@@ -91,20 +84,25 @@ const NameContainer = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 10px;
-  margin-right: auto;
   margin-left: 50px;
   z-index: 0;
   position: relative;
   &:hover {
     cursor: pointer;
   }
-  @media (max-width: 680px) {
+  @media (max-width: 1024px) {
     position: absolute;
     left: 50%;
     right: 50%;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0px;
+  }
+  @media (max-width: 414px) {
+    position: relative;
+    margin-left: 20px;
+    left: 0%;
+  }
+  @media (max-width: 330px) {
+    margin-left: 20px;
   }
 `;
 
@@ -121,12 +119,14 @@ const LogoSecondLabel = styled.label`
 `;
 
 const Logo = styled.div`
-  margin-bottom: 4px;
-  margin-left: 6px;
-  margin-right: 6px;
-  top: -9px;
-  left: -2px;
   z-index: -1;
+  width: 260px;
+  @media (max-width: 680px) {
+    width: 220px;
+  }
+  @media (max-width: 335px) {
+    width: 180px;
+  }
 `;
 
 const Name = styled.label`
