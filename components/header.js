@@ -120,7 +120,7 @@ const LogoSecondLabel = styled.label`
 
 const Logo = styled.div`
   z-index: -1;
-  width: 260px;
+  width: 240px;
   @media (max-width: 680px) {
     width: 220px;
   }
