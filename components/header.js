@@ -39,6 +39,7 @@ const Header = (props) => {
             <ImageLoader
               width="100%"
               placeholderSize="13.2%"
+              hover={true}
               src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=350&png.optimize=true"
             />
           </Logo>
@@ -73,7 +74,6 @@ const Container = styled.div`
   left: 0;
   display: flex;
   align-items: center;
-  ${"" /* background-color: #a6a998; */}
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   box-shadow: 0px 0px 6px 1px rgba(50, 172, 109, 0.7);
