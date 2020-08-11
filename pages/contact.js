@@ -158,6 +158,8 @@ const Form = styled.form`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  max-width: 450px;
+  width: 100%;
 `;
 
 const InputContainer = styled.div`
@@ -212,7 +214,7 @@ const ErrorMessage = styled.label`
 `;
 
 const NameInput = styled.input`
-  padding: 14px 250px 14px 12px;
+  padding: 14px 14px 14px 12px;
   font-size: 1rem;
   border-radius: 9px;
   outline: none;
@@ -225,7 +227,7 @@ const NameInput = styled.input`
 `;
 
 const EmailInput = styled.input`
-  padding: 14px 250px 14px 12px;
+  padding: 14px 14px 14px 12px;
   font-size: 1rem;
   border-radius: 9px;
   outline: none;
@@ -239,7 +241,7 @@ const EmailInput = styled.input`
 `;
 
 const MessageInput = styled.textarea`
-  padding: 14px 250px 120px 12px;
+  padding: 14px 14px 120px 12px;
   border: 1.2px solid ${({ theme }) => theme.colors.fontColor};
   transition: all 0.2s;
   border-radius: 9px;
