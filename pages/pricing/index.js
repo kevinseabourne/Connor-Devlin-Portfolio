@@ -13,6 +13,7 @@ const Pricing = (props) => {
               maxWidth="700px"
               placeholderSize="66.7%"
               borderRadius="8px"
+              hover={true}
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
               src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
             />
@@ -25,6 +26,7 @@ const Pricing = (props) => {
               maxWidth="700px"
               placeholderSize="66.7%"
               borderRadius="8px"
+              hover={true}
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
               src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
             />
