@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 import ImageLoader from "../../components/common/imageLoader";
+import bottomWave from "../../public/images/wave4.svg";
 
 const Pricing = (props) => {
   return (
@@ -34,6 +35,7 @@ const Pricing = (props) => {
           </CorporateContainer>
         </Link>
       </InnerContainer>
+      <BottomWave src={bottomWave} />
     </Container>
   );
 };
@@ -88,4 +90,15 @@ const Label = styled.label`
   bottom: 20px;
   left: 40%;
   right: 50%;
+`;
+
+const BottomWave = styled.img`
+  position: absolute;
+  bottom: -50px;
+  left: -1px;
+  width: 100%;
+  z-index: -100;
+  @media (max-width: 1024px) {
+    bottom: -1px;
+  }
 `;
