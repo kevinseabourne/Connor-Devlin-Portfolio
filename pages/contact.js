@@ -261,7 +261,7 @@ const MessageInput = styled.textarea`
 `;
 
 const SubmitButton = styled.button`
-  margin-top: 25px;
+  margin-top: 10px;
   font-size: 1rem;
   padding: 18px 80px;
   border-radius: 9px;
@@ -282,7 +282,7 @@ const SubmitButton = styled.button`
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -5px;
+  bottom: -90px;
   left: -1px;
   width: 100%;
   z-index: -100;
