@@ -40,7 +40,7 @@ export default Clients;
 
 const Container = styled.div`
   width: 100%;
-  height: 900px;
+  height: 100vh;
   display: flex;
   padding: 0 20px;
   box-sizing: border-box;
@@ -54,6 +54,9 @@ const Container = styled.div`
   }
   @media (max-width: 355px) {
     padding: 140px 20px;
+  }
+  @media (max-height: 1024px) {
+    height: 1000px;
   }
 `;
 
