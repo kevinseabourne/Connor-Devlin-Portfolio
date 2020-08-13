@@ -64,7 +64,7 @@ const InnerContainer = styled.div`
 
 const WeddingsContainer = styled.div`
   max-width: 700px;
-  width: 100%;
+  width: 48%;
   position: relative;
   transition: all 0.25s ease;
   &:hover {
@@ -75,7 +75,7 @@ const WeddingsContainer = styled.div`
 
 const CorporateContainer = styled.div`
   max-width: 700px;
-  width: 100%;
+  width: 48%;
   position: relative;
   transition: all 0.25s ease;
   &:hover {
