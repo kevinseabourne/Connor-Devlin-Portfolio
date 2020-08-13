@@ -52,7 +52,7 @@ const VideoLoader = ({
           hoverColor={hoverColor}
           borderRadius={borderRadius}
           title="movie-trailer"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; autoplay; fullscreen;"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen;"
           frameBorder="0"
           allowFullScreen="allowFullScreen"
         />
