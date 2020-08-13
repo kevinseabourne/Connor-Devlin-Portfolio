@@ -1,0 +1,17 @@
+<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+      <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="10%"   stop-color="rgba(50, 172, 109, 1)"/>
+        <stop offset="100%" stop-color="rgba(209, 251, 155, 1)"/>
+      </linearGradient>
+    </defs>
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <rect id="svg_16" height="7.337798" width="5.928404" y="4.475117" x="5.595081" stroke-opacity="null" stroke-width="null" stroke="null" fill="url(#linear)"/>
+  <path fill-rule="evenodd" fill="white" clip-rule="evenodd" id="Play_4" d="m8,0c-4.418,0 -8,3.582 -8,8s3.582,8 8,8s8,-3.582 8,-8s-3.582,-8 -8,-8zm2.659,8.501l-3.876,2.355c-0.432,0.327 -0.783,0.079 -0.783,-0.557l0,-4.598c0,-0.635 0.351,-0.885 0.783,-0.558l3.876,2.357c0.455,0.276 0.455,0.725 0,1.001z"/>
+ </g>
+</svg>
