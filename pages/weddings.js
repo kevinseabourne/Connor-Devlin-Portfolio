@@ -3,9 +3,11 @@ import React, { useState, useEffect } from "react";
 import { cloneDeep } from "lodash";
 import playIcon from "../public/images/playIcon.svg";
 import ImageLoader from "../components/common/imageLoader";
+import VideoLoader from "../components/common/videoLoader";
 import VideoOverlay from "../components/common/videoOverlay";
 import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const Weddings = (props) => {
   const [weddings, setWeddings] = useState([
@@ -14,48 +16,51 @@ const Weddings = (props) => {
       coverPhoto:
         "https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true",
       names: [
-        { firstName: "James", lastName: "Jones" },
-        { firstName: "Emma", lastName: "Jones" },
+        { firstName: "Bri", lastName: "Jones" },
+        { firstName: "Kai", lastName: "Jones" },
       ],
-      location: "Perth WA",
-      video: "",
+      location: "Donnybrook, WA",
+      video: "https://player.vimeo.com/video/447477898?autoplay=1",
     },
     {
       id: 2,
       coverPhoto:
         "https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true",
       names: [
-        { firstName: "Eli", lastName: "Roberts" },
-        { firstName: "Megan", lastName: "Ball" },
+        { firstName: "Teagan", lastName: "Roberts" },
+        { firstName: "Stephen", lastName: "Ball" },
       ],
-      location: "Perth WA",
-      video: "",
+      location: "Middle Swan WA",
+      video: "https://player.vimeo.com/video/447465658?autoplay=1",
     },
     {
       id: 3,
       coverPhoto:
         "https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true",
       names: [
-        { firstName: "Harvey", lastName: "Spectre" },
-        { firstName: "Ella", lastName: "Harper" },
+        { firstName: "Megan", lastName: "Spectre" },
+        { firstName: "Tom", lastName: "Harper" },
       ],
-      location: "Perth WA",
-      video: "",
+      location: "Fremantle, WA",
+      video: "https://player.vimeo.com/video/447459730?autoplay=1",
     },
   ]);
 
   const [selectedWedding, setSelectedWedding] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [weddingNames, setWeddingNames] = useState([]);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const weddingsClone = _.cloneDeep(weddings);
 
-    let weddingNames = "";
-    weddingsClone.map((wedding) => {
-      wedding.names.map((name) => console.log(name));
+    const namesArray = weddingsClone.map((wedding) => {
+      let weddingNamesArray = [];
+      wedding.names.map((name) => weddingNamesArray.push(name.firstName));
+      wedding.displayNames = weddingNamesArray.join(" & ");
+      return wedding;
     });
-    // setWeddingNames(weddingNames);
+    setWeddings(namesArray);
   }, []);
 
   const handleClick = (id) => {
@@ -68,6 +73,10 @@ const Weddings = (props) => {
 
   const closeOverlay = () => {
     setIsOpen(false);
+  };
+
+  const handleOnLoadOutside = () => {
+    setImageLoaded(true);
   };
 
   return (
@@ -84,26 +93,29 @@ const Weddings = (props) => {
                 maxWidth="100%"
                 placeholderSize="100%"
                 src={wedding.coverPhoto}
+                hover={true}
                 boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
+                lazyLoad={true}
+                handleOnLoadOutside={handleOnLoadOutside}
               />
-
-              <PlayIcon>
+              <PlayIcon imageLoaded={imageLoaded}>
                 <ImageLoader
                   maxWidth="15%"
                   placeholderSize="100%"
                   src={playIcon}
                   hover={true}
                   centerImage={true}
+                  lazyLoad={true}
                 />
               </PlayIcon>
             </ImageContainer>
-            <Names>Mark & Ella</Names>
+            <Names>{wedding.displayNames}</Names>
           </Item>
         ))}
         <VideoOverlay
           isOpen={isOpen}
           closeOverlay={closeOverlay}
-          src={"https://player.vimeo.com/video/445793664?autoplay=1"}
+          src={selectedWedding.video}
           maxWidth={"900px"}
           placeholderSize={"56.25%"}
           alt={weddingNames}
@@ -162,7 +174,7 @@ const InnerContainer = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  margin-bottom: 5px;
+  margin-bottom: 7px;
   z-index: 0;
   position: relative;
   border-radius: 10px;
@@ -175,6 +187,7 @@ const PlayIcon = styled.div`
   bottom: 50%;
   right: 0;
   transition: all 0.15s ease-in-out;
+  opacity: ${({ imageLoaded }) => (imageLoaded ? 1 : 0)};
 `;
 
 const Item = styled.div`
