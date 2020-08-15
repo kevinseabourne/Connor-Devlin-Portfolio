@@ -37,10 +37,6 @@ const VideoOverlay = ({
     }
   };
 
-  const handleVideoLoad = () => {
-    setVideoLoaded(true);
-  };
-
   return (
     <React.Fragment>
       <GlobalStyle isOpen={isOpen} />
@@ -48,7 +44,7 @@ const VideoOverlay = ({
         {isOpen && (
           <CSSTransition
             in={isOpen}
-            classNames="animateVideoOverlay"
+            classNames="overlayAnimation"
             timeout={300}
             unmountOnExit
           >
@@ -63,6 +59,7 @@ const VideoOverlay = ({
                   width={width}
                   placeholderSize={placeholderSize}
                   centerVideo={centerVideo}
+                  lazyLoad={false}
                 />
               </VideoContainer>
             </Overlay>
@@ -92,25 +89,25 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 93px;
+  padding-top: 0px;
   padding-left: 20px;
   padding-right: 20px;
   box-sizing: border-box;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 
-  &.animateVideoOverlay-enter {
+  &.overlayAnimation-enter {
     opacity: 0;
   }
-  &.animateVideoOverlay-enter-active {
+  &.overlayAnimation-enter-active {
     opacity: 1;
     transition: all 0.3s;
   }
-  &.animateVideoOverlay-exit {
+  &.overlayAnimation-exit {
+    transition: all 0.3s;
     opacity: 1;
   }
-  &.animateVideoOverlay-exit-active {
+  &.overlayAnimation-exit-active {
     opacity: 0;
-    transition: all 0.3s;
   }
 `;
 
