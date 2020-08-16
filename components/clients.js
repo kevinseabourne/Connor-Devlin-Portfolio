@@ -14,6 +14,7 @@ const Clients = (props) => {
           placeholderSize="75.7%"
           borderRadius="8px"
           centerImage={true}
+          lazyLoad={true}
           src="https://chpistel.sirv.com/Connor-Portfolio/tlg.png?cx=105&cy=109&cw=554&ch=493"
         />
         <ImageLoader
@@ -21,6 +22,7 @@ const Clients = (props) => {
           placeholderSize="75.7%"
           borderRadius="8px"
           centerImage={true}
+          lazyLoad={true}
           src="https://chpistel.sirv.com/Connor-Portfolio/Logo_ECU.png?w=700"
         />
         <ImageLoader
@@ -28,6 +30,7 @@ const Clients = (props) => {
           placeholderSize="75.7%"
           borderRadius="8px"
           centerImage={true}
+          lazyLoad={true}
           src="https://chpistel.sirv.com/Connor-Portfolio/Kalamunda%20Logo%2001%20CMYK.png?cw=750&ch=563&w=750&h=563"
         />
       </IconsContainer>
@@ -42,7 +45,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  padding: 0 20px;
+  padding: 20% 20px;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
@@ -52,12 +55,15 @@ const Container = styled.div`
     height: 100%;
     padding: 40% 20px;
   }
+  @media (min-width: 681px) and (max-height: 1200px) {
+    min-height: 900px;
+  }
   @media (max-width: 355px) {
     padding: 140px 20px;
   }
-  @media (max-height: 1024px) {
-    height: 1000px;
-  }
+  ${"" /* @media (max-height: 1024px) {
+    height: 570px;
+  } */}
 `;
 
 const Title = styled.h1`
