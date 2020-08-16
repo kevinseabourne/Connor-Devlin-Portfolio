@@ -18,11 +18,16 @@ const ImageLoader = ({
   hoverColor,
   boxShadow,
   centerImage,
+  lazyLoad,
+  handleOnLoadOutside,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const onLoad = () => {
     setIsLoaded(true);
+    if (handleOnLoadOutside) {
+      handleOnLoadOutside();
+    }
   };
 
   return (
@@ -37,13 +42,31 @@ const ImageLoader = ({
         onClick={onClick}
         placeholderSize={placeholderSize}
       />
-      <LazyLoad
-        width="unset"
-        height="unset"
-        once={true}
-        offset={500}
-        debounce={false}
-      >
+      {lazyLoad && (
+        <LazyLoad
+          width="unset"
+          height="unset"
+          once={true}
+          offset={500}
+          debounce={false}
+        >
+          <Image
+            isLoaded={isLoaded}
+            onLoad={onLoad}
+            src={src}
+            alt={alt}
+            key={keyValue}
+            data-testid={dataTestId}
+            delay={delay}
+            isFavourite={isFavourite}
+            hover={hover}
+            borderRadius={borderRadius}
+            hoverColor={hoverColor}
+            boxShadow={boxShadow}
+          />
+        </LazyLoad>
+      )}
+      {!lazyLoad && (
         <Image
           isLoaded={isLoaded}
           onLoad={onLoad}
@@ -58,7 +81,7 @@ const ImageLoader = ({
           hoverColor={hoverColor}
           boxShadow={boxShadow}
         />
-      </LazyLoad>
+      )}
     </ImageContainer>
   );
 };

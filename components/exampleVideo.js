@@ -12,6 +12,7 @@ const ExampleVideo = (props) => {
         placeholderSize="56.25%"
         alt="example-video"
         centerVideo={true}
+        lazyLoad={true}
       />
     </Container>
   );

@@ -40,6 +40,7 @@ const Header = (props) => {
               width="100%"
               placeholderSize="13.2%"
               hover={true}
+              lazyLoad={true}
               src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=350&png.optimize=true"
             />
           </Logo>

@@ -18,6 +18,7 @@ const VideoLoader = ({
   hover,
   hoverColor,
   centerVideo,
+  lazyLoad,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -32,13 +33,34 @@ const VideoLoader = ({
         placeholderSize={placeholderSize}
         borderRadius={borderRadius}
       />
-      <LazyLoad
-        width="inherit"
-        height="inherit"
-        once={true}
-        offset={500}
-        debounce={false}
-      >
+      {lazyLoad && (
+        <LazyLoad
+          width="inherit"
+          height="inherit"
+          once={true}
+          offset={500}
+          debounce={true}
+        >
+          <Video
+            isLoaded={isLoaded}
+            onLoad={handleOnLoad}
+            src={src}
+            alt={alt}
+            key={keyValue}
+            data-testid={dataTestId}
+            delay={delay}
+            isFavourite={isFavourite}
+            hover={hover}
+            hoverColor={hoverColor}
+            borderRadius={borderRadius}
+            title="movie-trailer"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen;"
+            frameBorder="0"
+            allowFullScreen="allowFullScreen"
+          />
+        </LazyLoad>
+      )}
+      {!lazyLoad && (
         <Video
           isLoaded={isLoaded}
           onLoad={handleOnLoad}
@@ -56,7 +78,7 @@ const VideoLoader = ({
           frameBorder="0"
           allowFullScreen="allowFullScreen"
         />
-      </LazyLoad>
+      )}
     </VideoContainer>
   );
 };
