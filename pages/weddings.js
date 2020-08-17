@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { cloneDeep } from "lodash";
 import playIcon from "../public/images/playIcon.svg";
 import ImageLoader from "../components/common/imageLoader";
 import VideoLoader from "../components/common/videoLoader";
 import VideoOverlay from "../components/common/videoOverlay";
-import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
+import topWave from "../public/images/wave4.svg";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const Weddings = (props) => {
@@ -21,6 +22,7 @@ const Weddings = (props) => {
       ],
       location: "Donnybrook, WA",
       video: "https://player.vimeo.com/video/447477898?autoplay=1",
+      review: "",
     },
     {
       id: 2,
@@ -32,6 +34,7 @@ const Weddings = (props) => {
       ],
       location: "Middle Swan WA",
       video: "https://player.vimeo.com/video/447465658?autoplay=1",
+      review: "",
     },
     {
       id: 3,
@@ -43,6 +46,7 @@ const Weddings = (props) => {
       ],
       location: "Fremantle, WA",
       video: "https://player.vimeo.com/video/447459730?autoplay=1",
+      review: "",
     },
   ]);
 
@@ -83,7 +87,6 @@ const Weddings = (props) => {
     <Container>
       <TopContainer>
         <Title>Weddings</Title>
-        <Description></Description>
       </TopContainer>
       <InnerContainer>
         {weddings.map((wedding) => (
@@ -122,9 +125,22 @@ const Weddings = (props) => {
           centerVideo={true}
         />
       </InnerContainer>
-      <Quotes>
-        <Wave src={downWave} />
-      </Quotes>
+      <QuotesContainer>
+        <Quote>
+          <Wave src={downWave} />
+          <WeddingPartners>Bri & Kai</WeddingPartners>
+          <Description>
+            "The Wedding video was amazing thank you so much i love re watching
+            this amazing day"
+          </Description>
+        </Quote>
+        <TopWave src={topWave} />
+      </QuotesContainer>
+      <Pricing>
+        <Link href="/pricing/[id]" as="/pricing/weddings">
+          <ContactButton>PRICING</ContactButton>
+        </Link>
+      </Pricing>
     </Container>
   );
 };
@@ -151,11 +167,6 @@ const TopContainer = styled.div`
 const Title = styled.h1`
   margin-top: 50px;
   margin-bottom: 0px;
-`;
-
-const Description = styled.p`
-  margin-top: 0px;
-  margin-bottom: 60px;
 `;
 
 const InnerContainer = styled.div`
@@ -211,27 +222,83 @@ const Names = styled.label`
   white-space: nowrap;
 `;
 
-const Quotes = styled.div`
-  width: 100%;
-  height: 400px;
-  position: relative;
-`;
-
-const BottomWave = styled.img`
-  position: absolute;
-  bottom: -30px;
-  left: -1px;
-  width: 100%;
-  z-index: -100;
-  @media (max-width: 1024px) {
-    ${"" /* bottom: -1px; */}
-  }
-`;
-
 const Wave = styled.img`
   position: absolute;
   top: -20px;
   left: -1px;
   width: 100%;
   object-fit: cover;
+`;
+
+const TopWave = styled.img`
+  position: absolute;
+  bottom: -20px;
+  left: -1px;
+  z-index: -100;
+  width: 100%;
+  object-fit: cover;
+  @media (max-width: 680px) {
+    bottom: -15px;
+  }
+`;
+
+const Quote = styled.div`
+  max-width: 600px;
+`;
+
+const WeddingPartners = styled.span`
+  align-self: flex-start;
+  font-size: 1rem;
+`;
+
+const QuotesContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 1200px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Description = styled.div`
+  margin-top: 9px;
+  font-family: exmouth;
+  font-size: 3.5rem;
+  letter-spacing: 1px;
+`;
+
+const Pricing = styled.div`
+  width: 100%;
+  background-image: ${({ theme }) =>
+    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const ContactButton = styled.button`
+  margin: 135px;
+  font-size: 1.1rem;
+  display: flex;
+  z-index: 1;
+  font-weight: 700;
+  transition: all 0.2s;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  padding: 15px 26px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  color: ${({ theme }) => theme.colors.fontColor};
+  border-radius: 8px;
+  border: none;
+  justify-content: center;
+  opacity: 0.9;
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.secondary};
+    background-color: ${({ theme }) => theme.colors.fontColor};
+  }
 `;
