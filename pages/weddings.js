@@ -165,8 +165,7 @@ const TopContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  margin-top: 50px;
-  margin-bottom: 0px;
+  margin: 50px 0px;
 `;
 
 const InnerContainer = styled.div`
