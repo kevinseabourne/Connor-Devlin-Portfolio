@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import VideoLoader from "./common/videoLoader";
-import wave from "../public/images/wave.svg";
-import topWave from "../public/images/green-wave.svg";
 
 const ExampleVideo = (props) => {
   return (
