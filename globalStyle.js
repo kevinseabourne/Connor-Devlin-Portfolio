@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import mainFont from "./fonts/FuturaStd-Heavy.otf";
+import fancyFont from "./fonts/exmouth_.ttf";
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -14,6 +15,11 @@ export const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: "Futura Std Heavy";
     src: url(${mainFont});
+  }
+
+  @font-face {
+    font-family: "exmouth";
+    src: url(${fancyFont});
   }
 
   body {
