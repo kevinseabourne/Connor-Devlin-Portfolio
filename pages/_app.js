@@ -1,9 +1,12 @@
 import App from "next/app";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
+import { ToastContainer } from "react-toastify";
 import { GlobalStyle } from "../globalStyle";
 import AppContext from "../context/appContext";
 import { useRouter } from "next/router";
 import Header from "../components/header";
+import { SignIn, SignOut } from "./api/auth";
 
 const theme = {
   colors: {
@@ -15,42 +18,47 @@ const theme = {
   },
 };
 
-export default class MyApp extends App {
-  state = {
-    user: null,
-  };
+const MyApp = ({ Component, pageProps }) => {
+  const [currentUser, setCurrentUser] = useState(null);
 
-  componentDidMount() {
-    if (localStorage.getItem("user")) {
-      this.setState({ user: localStorage.getItem("user") });
+  useEffect(() => {
+    if (localStorage.getItem("currentUser") && !currentUser) {
+      const currentUser = window.localStorage.getItem("currentUser");
+      setCurrentUser(JSON.parse(currentUser));
     }
-  }
+  }, []);
 
-  handleSignIn = () => {
-    localStorage.setItem("user", "admin");
+  const handleSignIn = async (data) => {
+    const response = await SignIn(data);
+    if (response) {
+      const { user } = response;
+      setCurrentUser(user.email);
+      localStorage.setItem("currentUser", user.email);
+    }
   };
 
-  handleSignOut = () => {
-    localStorage.setItem("user", null);
+  const handleSignOut = async () => {
+    const response = await SignOut();
+    setCurrentUser(null);
+    localStorage.setItem("currentUser", null);
   };
 
-  render() {
-    const { user, handleUser } = this.state;
-    const { Component, pageProps } = this.props;
-    return (
-      <AppContext.Provider
-        value={{
-          user: user,
-          handleSignIn: this.handleSignIn,
-          handleSignOut: this.handleSignOut,
-        }}
-      >
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <Header />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </AppContext.Provider>
-    );
-  }
-}
+  return (
+    <AppContext.Provider
+      value={{
+        currentUser: currentUser,
+        handleSignIn: handleSignIn,
+        handleSignOut: handleSignOut,
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <ToastContainer />
+        <Header />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </AppContext.Provider>
+  );
+};
+
+export default MyApp;
