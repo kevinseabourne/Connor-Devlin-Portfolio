@@ -6,16 +6,16 @@ import Link from "next/link";
 
 const Admin = (props) => {
   const context = useContext(AppContext);
-  const { user, handleSignOut } = context;
+  const { currentUser, handleSignOut } = context;
   const router = useRouter();
 
   useEffect(() => {
-    if (!user) {
+    if (!currentUser) {
       router.push("/login");
     }
-  }, []);
+  }, [currentUser]);
 
-  return !user ? (
+  return !currentUser ? (
     ""
   ) : (
     <Container>
