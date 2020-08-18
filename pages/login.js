@@ -1,21 +1,27 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import AppContext from "../context/appContext";
 import { useForm } from "react-hook-form";
 
 const Login = (props) => {
-  const context = useContext(AppContext);
+  const { handleSignIn, currentUser } = useContext(AppContext);
   const router = useRouter();
   const { register, handleSubmit, watch, errors } = useForm();
 
-  const onSubmit = (query) => {
-    const { handleSignIn } = context;
-    handleSignIn();
-    router.push("/admin");
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/admin");
+    }
+  }, [currentUser]);
+
+  const onSubmit = async (query) => {
+    handleSignIn(query);
   };
 
-  return (
+  return currentUser ? (
+    ""
+  ) : (
     <Container>
       <Title>Login</Title>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
@@ -28,6 +34,7 @@ const Login = (props) => {
         />
         <InputLabel>Password</InputLabel>
         <Password
+          type="password"
           name="password"
           ref={register({ required: true, maxLength: 100 })}
         />
