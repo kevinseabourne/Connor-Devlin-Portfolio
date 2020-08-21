@@ -34,6 +34,7 @@ export const GlobalStyle = createGlobalStyle`
     line-height: 1.47;
     height: 100vh;
     background-color: E7ECEF;
+    scroll-behavior: smooth;
   }
 
   html {
