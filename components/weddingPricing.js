@@ -13,3 +13,5 @@ export default WeddingPricing;
 const Container = styled.div``;
 
 const WeddingPricingPackages = styled.h1``;
+
+const Title = styled.h1``;
