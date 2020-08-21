@@ -248,7 +248,6 @@ const AddOnsContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   max-width: 360px;
-  max-width: 549.19px;
   margin: 30px;
   margin-right: 0px;
   border-radius: 9px;
