@@ -30,6 +30,9 @@ const Contact = (props) => {
       required: "A message is required !",
       minLength: { value: 3, message: "message is too short !" },
     },
+    date: {
+      required: "A date is required !",
+    },
   };
 
   const onSubmit = () => {};
@@ -90,6 +93,36 @@ const Contact = (props) => {
                     src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                   />
                   <ErrorMessage>{errors.email.message}</ErrorMessage>
+                </ErrorContainer>
+              </CSSTransition>
+            )}
+          </TransitionGroup>
+        </InputContainer>
+        <InputContainer>
+          <Label>Date</Label>
+          <EmailInput
+            name="date"
+            type="date"
+            ref={register(schema.date)}
+            placeholder="Date"
+          />
+          <TransitionGroup component={null}>
+            {errors.date && (
+              <CSSTransition
+                in={errors.date}
+                classNames="errorAnimation"
+                timeout={250}
+                unmountOnExit
+              >
+                <ErrorContainer>
+                  <ImageLoader
+                    maxWidth="18px"
+                    placeholderSize="100%"
+                    borderRadius="8px"
+                    boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
+                    src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
+                  />
+                  <ErrorMessage>{errors.date.message}</ErrorMessage>
                 </ErrorContainer>
               </CSSTransition>
             )}
