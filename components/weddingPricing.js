@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
+import topWave from "../public/images/top-wave.svg";
+import downWave from "../public/images/wave3.svg";
 
 const WeddingPricing = (props) => {
   const [packages, setPackages] = useState([
@@ -57,13 +59,13 @@ const WeddingPricing = (props) => {
       <Title>Wedding Pricing Packages</Title>
       <PackagesContainer>
         {packages.map((packageItem) => (
-          <Package>
+          <Package key={packages.indexOf(packageItem)}>
             <InnerPackageContainer>
               <Name>{packageItem.packageName}</Name>
               <Price>{packageItem.price}</Price>
               <Description>{packageItem.description}</Description>
               {packageItem.packageItems.map((item) => (
-                <Item>{item}</Item>
+                <Item key={packageItem.packageItems.indexOf(item)}>{item}</Item>
               ))}
             </InnerPackageContainer>
             <Button>Contact</Button>
@@ -97,18 +99,19 @@ const WeddingPricing = (props) => {
           </ListItem>
         </AddOnsContainer>
       </PackagesContainer>
-
+      <BottomWave src={topWave} />
       <FAQContainer>
         <FAQTitle>FAQ</FAQTitle>
         <FAQInnerContainer>
           {questions.map((QandA) => (
-            <FAQItem>
+            <FAQItem key={questions.indexOf(QandA)}>
               <Question>{QandA.question}</Question>
               <Answer>{QandA.answer}</Answer>
             </FAQItem>
           ))}
         </FAQInnerContainer>
       </FAQContainer>
+      <Wave src={downWave} />
     </Container>
   );
 };
@@ -122,7 +125,6 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 0px 20px;
 `;
 
 const Title = styled.h1`
@@ -130,25 +132,44 @@ const Title = styled.h1`
 `;
 
 const PackagesContainer = styled.div`
-  display: grid;
+  display: flex;
   width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(30px, 360px));
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  grid-auto-flow: row;
-  grid-column-end: auto;
-  grid-gap: 60px;
-  grid-auto-flow: row;
-  margin-bottom: 150px;
+  margin-bottom: 0px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  @media (max-width: 852px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 `;
 
 const Package = styled.div`
   display: flex;
+  flex-basis: 360px;
   align-items: center;
   justify-content: center;
+  margin: 30px;
   flex-direction: column;
   border: 1px solid #efefef;
   border-radius: 9px;
+  &:first-child {
+    margin-left: 0px;
+  }
+  &:last-child {
+    margin-right: 0px;
+  }
+  @media (max-width: 852px) {
+    margin: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    &:first-child {
+      margin: 30px auto;
+    }
+  }
 `;
 
 const InnerPackageContainer = styled.div`
@@ -223,11 +244,20 @@ const AddOnsContainer = styled.div`
   flex-direction: column;
   border: 1px solid #efefef;
   padding: 0px 20px;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 360px;
+  flex-basis: 360px;
+  max-width: 549.19px;
+  margin: 30px;
+  margin-right: 0px;
   border-radius: 9px;
   &:hover {
     cursor: default;
+  }
+  @media (max-width: 1241px) {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
   }
 `;
 
@@ -236,9 +266,9 @@ const ListItem = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-direction: row;
-  width: 100%;
   font-size: 1rem;
   padding: 25px 0px;
+  width: 100%;
   letter-spacing: 0.2px;
 `;
 
@@ -246,13 +276,26 @@ const ListItemLabel = styled.label``;
 
 const AddOnPrice = styled.span``;
 
+const BottomWave = styled.img`
+  bottom: -25px;
+  left: -1px;
+  margin-bottom: -24px;
+  width: 100%;
+  z-index: -100;
+  @media (max-width: 1024px) {
+    bottom: -1px;
+  }
+`;
+
 const FAQContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 120px;
+  padding-bottom: 60px;
+  background-image: ${({ theme }) =>
+    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
 `;
 
 const FAQTitle = styled.h1`
@@ -268,6 +311,9 @@ const FAQInnerContainer = styled.div`
   grid-auto-flow: row;
   grid-column-end: auto;
   grid-gap: 60px;
+  @media (max-width: 852px) {
+    grid-template-columns: repeat(1, minmax(30px, 360px));
+  }
 `;
 
 const FAQItem = styled.div`
@@ -289,4 +335,12 @@ const Answer = styled.p`
   margin: 0px;
   text-align: center;
   color: #5b6b7f;
+`;
+
+const Wave = styled.img`
+  margin-top: -3px;
+  top: -20px;
+  left: -1px;
+  width: 100%;
+  object-fit: cover;
 `;
