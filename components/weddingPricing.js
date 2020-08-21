@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
+import Contact from "../pages/contact";
 
 const WeddingPricing = (props) => {
   const [packages, setPackages] = useState([
@@ -112,6 +113,7 @@ const WeddingPricing = (props) => {
         </FAQInnerContainer>
       </FAQContainer>
       <Wave src={downWave} />
+      <Contact />
     </Container>
   );
 };
