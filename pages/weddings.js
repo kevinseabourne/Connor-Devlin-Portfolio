@@ -130,7 +130,7 @@ const Weddings = (props) => {
           <Wave src={downWave} />
           <WeddingPartners>Bri & Kai</WeddingPartners>
           <Description>
-            "The Wedding video was amazing thank you so much i love re watching
+            "The Wedding video was amazing. Thank you so much I love re watching
             this amazing day"
           </Description>
         </Quote>
