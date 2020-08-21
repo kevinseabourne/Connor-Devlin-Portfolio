@@ -158,6 +158,9 @@ const InnerPackageContainer = styled.div`
   flex-direction: column;
   box-sizing: border-box;
   padding: 0px 20px;
+  &:hover {
+    cursor: default;
+  }
 `;
 
 const Name = styled.h3`
@@ -223,6 +226,9 @@ const AddOnsContainer = styled.div`
   width: 100%;
   max-width: 360px;
   border-radius: 9px;
+  &:hover {
+    cursor: default;
+  }
 `;
 
 const ListItem = styled.div`
