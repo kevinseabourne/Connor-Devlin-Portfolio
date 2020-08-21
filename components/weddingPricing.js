@@ -148,7 +148,7 @@ const PackagesContainer = styled.div`
 
 const Package = styled.div`
   display: flex;
-  flex-basis: 360px;
+  max-width: 360px;
   align-items: center;
   justify-content: center;
   margin: 30px;
@@ -166,6 +166,7 @@ const Package = styled.div`
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
+    max-width: 500px;
     &:first-child {
       margin: 30px auto;
     }
@@ -246,7 +247,7 @@ const AddOnsContainer = styled.div`
   padding: 0px 20px;
   box-sizing: border-box;
   width: 100%;
-  flex-basis: 360px;
+  max-width: 360px;
   max-width: 549.19px;
   margin: 30px;
   margin-right: 0px;
@@ -258,6 +259,9 @@ const AddOnsContainer = styled.div`
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
+  }
+  @media (max-width: 852px) {
+    max-width: 500px;
   }
 `;
 
