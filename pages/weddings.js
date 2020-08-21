@@ -131,7 +131,7 @@ const Weddings = (props) => {
           <WeddingPartners>Bri & Kai</WeddingPartners>
           <Description>
             "The Wedding video was amazing. Thank you so much I love re watching
-            this amazing day"
+            this amazing day !"
           </Description>
         </Quote>
         <TopWave src={topWave} />
