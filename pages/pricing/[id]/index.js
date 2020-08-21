@@ -1,27 +1,35 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
+import WeddingPricing from "../../../components/weddingPricing";
+import CorporatePricing from "../../../components/corporatePricing";
 
-const Pricing = (props) => {
+const Pricing = ({ query }) => {
   const router = useRouter();
-  const { id } = router.query;
+  const routerr = router.query;
 
   useEffect(() => {
-    console.log(id);
-    // if (id !== "weddings" || id !== "corporate") {
-    //   router.push("/404");
-    // }
-  }, []);
+    handleURLQuery();
+  }, [query]);
 
-  return <Container>{id}</Container>;
+  const handleURLQuery = () => {
+    if (query) {
+      if (query.id === "weddings" || query.id === "corporate") {
+      } else {
+        router.push("/404");
+      }
+    }
+  };
+
+  return query.id === "weddings" ? <WeddingPricing /> : <CorporatePricing />;
+};
+
+Pricing.getInitialProps = ({ query }) => {
+  return { query };
 };
 
 export default Pricing;
 
 const Container = styled.div`
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex-direction: row;
 `;
