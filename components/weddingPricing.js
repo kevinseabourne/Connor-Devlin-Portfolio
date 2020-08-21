@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
 import Contact from "../pages/contact";
 
 const WeddingPricing = (props) => {
+  const contactRef = useRef(null);
   const [packages, setPackages] = useState([
     {
       packageName: "Standard",
@@ -55,6 +56,13 @@ const WeddingPricing = (props) => {
     },
   ]);
 
+  const handleClick = () => {
+    window.scrollTo({
+      top: contactRef.current.offsetTop - 180,
+      left: 0,
+    });
+  };
+
   return (
     <Container>
       <Title>Wedding Pricing Packages</Title>
@@ -69,7 +77,7 @@ const WeddingPricing = (props) => {
                 <Item key={packageItem.packageItems.indexOf(item)}>{item}</Item>
               ))}
             </InnerPackageContainer>
-            <Button>Contact</Button>
+            <Button onClick={handleClick}>Contact</Button>
           </Package>
         ))}
         <AddOnsContainer>
@@ -113,7 +121,9 @@ const WeddingPricing = (props) => {
         </FAQInnerContainer>
       </FAQContainer>
       <Wave src={downWave} />
-      <Contact />
+      <ContactContainer ref={contactRef}>
+        <Contact />
+      </ContactContainer>
     </Container>
   );
 };
@@ -238,6 +248,9 @@ const Button = styled.button`
   &:hover {
     cursor: pointer;
   }
+  &:focus {
+    outline: none;
+  }
 `;
 
 const AddOnsContainer = styled.div`
@@ -348,4 +361,8 @@ const Wave = styled.img`
   left: -1px;
   width: 100%;
   object-fit: cover;
+`;
+
+const ContactContainer = styled.div`
+  width: 100%;
 `;
