@@ -31,7 +31,7 @@ export const DayPicker = React.forwardRef(
         defaultValue=""
         render={({ onChange, onBlur, value, rules }) => (
           <Container>
-            <Label>Date</Label>
+            <Label>{label}</Label>
             <InputContainer>
               <DayPickerInput
                 rules={rules}
@@ -84,7 +84,6 @@ export const DayPicker = React.forwardRef(
 const Container = styled.div`
   font-size: 1.1rem;
   margin-bottom: 3px;
-  margin-left: 9px;
   display: flex;
   width: 100%;
   flex-direction: column;
