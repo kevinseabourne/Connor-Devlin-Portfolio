@@ -3,6 +3,7 @@ import bottomWave from "../public/images/top-wave.svg";
 import { useForm } from "react-hook-form";
 import { DayPicker } from "../components/common/dayPicker";
 import { Input } from "../components/common/input";
+import { ReactSelect } from "../components/common/select";
 import { TextArea } from "../components/common/textArea";
 
 const Contact = (props) => {
@@ -34,7 +35,15 @@ const Contact = (props) => {
     date: {
       required: "A date is required !",
     },
+    topic: {
+      required: "select a topic !",
+    },
   };
+
+  const options = [
+    { value: "Wedding Package One", label: "Wedding" },
+    { value: "vanilla", label: "Corporate" },
+  ];
 
   const onSubmit = (data) => {
     console.log(data);
@@ -57,14 +66,26 @@ const Contact = (props) => {
           error={errors.email}
         />
 
-        <DayPicker
-          control={control}
-          ref={register}
-          label="Date"
-          name="dayPicker"
-          validation={schema.date}
-          error={errors.dayPicker}
-        />
+        <InnerContainer>
+          <DayPicker
+            control={control}
+            ref={register}
+            label="Date"
+            name="dayPicker"
+            validation={schema.date}
+            error={errors.dayPicker}
+          />
+
+          <ReactSelect
+            control={control}
+            ref={register}
+            label="Topic"
+            name="topic"
+            options={options}
+            validation={schema.topic}
+            error={errors.topic}
+          />
+        </InnerContainer>
 
         <TextArea
           name="message"
@@ -108,6 +129,14 @@ const Form = styled.form`
   flex-direction: column;
   max-width: 450px;
   width: 100%;
+`;
+
+const InnerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
 `;
 
 const SubmitButton = styled.button`
