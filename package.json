@@ -9,8 +9,10 @@
   "dependencies": {
     "firebase": "^7.18.0",
     "lodash": "^4.17.19",
+    "moment": "^2.27.0",
     "next": "latest",
     "react": "^16.8.0",
+    "react-day-picker": "^7.4.8",
     "react-dom": "^16.8.0",
     "react-hook-form": "^6.2.0",
     "react-lazy-load": "^3.1.13",
