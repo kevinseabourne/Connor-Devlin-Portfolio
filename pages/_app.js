@@ -25,17 +25,15 @@ const MyApp = ({ Component, pageProps }) => {
   useEffect(() => {
     if (localStorage.getItem("currentUser") && !currentUser) {
       const currentUser = window.localStorage.getItem("currentUser");
-      setCurrentUser(JSON.parse(currentUser));
+      const user = currentUser;
+      setCurrentUser(user);
     }
   }, []);
 
   const handleSignIn = async (data) => {
-    const response = await SignIn(data);
-    if (response) {
-      const { user } = response;
-      setCurrentUser(user.email);
-      localStorage.setItem("currentUser", user.email);
-    }
+    const { user } = await SignIn(data);
+    setCurrentUser(user.email);
+    localStorage.setItem("currentUser", user.email);
   };
 
   const handleSignOut = async () => {

@@ -15,12 +15,12 @@ const Login = (props) => {
     }
   }, [currentUser]);
 
-  const onSubmit = async (query) => {
+  const onSubmit = (query) => {
     handleSignIn(query);
   };
 
   return currentUser ? (
-    router.push("/admin")
+    ""
   ) : (
     <Container>
       <Title>Login</Title>
