@@ -20,7 +20,7 @@ const Login = (props) => {
   };
 
   return currentUser ? (
-    ""
+    router.push("/admin")
   ) : (
     <Container>
       <Title>Login</Title>
