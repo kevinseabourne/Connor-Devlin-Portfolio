@@ -7,6 +7,7 @@ import AppContext from "../context/appContext";
 import { useRouter } from "next/router";
 import Header from "../components/header";
 import { SignIn, SignOut } from "./api/auth";
+import "react-day-picker/lib/style.css";
 
 const theme = {
   colors: {
