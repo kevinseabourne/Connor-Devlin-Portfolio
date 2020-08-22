@@ -127,4 +127,34 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
+.css-2b097c-container {
+  width: 100%;
+  border: none;
+  border-radius: 9px;
+}
+
+.css-yk16xz-control {
+  border: none !important;
+  border-radius: 9px !important;
+  font-size: 1rem !important;
+  padding: 7px 5px;
+}
+
+ .css-1pahdxg-control {
+     border-radius: 9px !important;
+     font-size: 1rem !important;
+     padding: 7px 5px;
+     border: none !important;
+     box-shadow: none !important;
+ }
+
+ .css-1pahdxg-control:hover {
+     border: none;
+     box-shadow: none;
+ }
+
+ .css-26l3qy-menu {
+     font-size: 1rem;
+ }
+
 `;
