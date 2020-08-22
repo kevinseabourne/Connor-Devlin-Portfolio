@@ -28,7 +28,7 @@ const Contact = (props) => {
         message: "A valid email is required !",
       },
     },
-    message: {
+    enquiry: {
       required: "A message is required !",
       minLength: { value: 3, message: "message is too short !" },
     },
@@ -88,10 +88,10 @@ const Contact = (props) => {
         </InnerContainer>
 
         <TextArea
-          name="message"
-          label="Message"
-          ref={register(schema.message)}
-          error={errors.message}
+          name="enquiry"
+          label="Enquiry"
+          ref={register(schema.enquiry)}
+          error={errors.enquiry}
         />
         <SubmitButton type="submit">Send</SubmitButton>
       </Form>
