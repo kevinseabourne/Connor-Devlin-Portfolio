@@ -107,4 +107,24 @@ export const GlobalStyle = createGlobalStyle`
     color: white !important;
     display: none;
   }
+
+
+  .DayPickerInput {
+    width: 100%;
+  }
+
+  .DayPickerInput > input {
+    padding: 14px 54px 14px 12px;
+    font-size: 1rem;
+    border-radius: 9px;
+    outline: none;
+    box-sizing: border-box;
+    font-weight: 500;
+    font-family: inherit;
+    color: grey;
+    width: 100%;
+    border: none;
+  }
+
+
 `;
