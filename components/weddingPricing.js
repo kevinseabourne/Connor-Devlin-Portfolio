@@ -80,34 +80,34 @@ const WeddingPricing = (props) => {
             <Button onClick={handleClick}>Contact</Button>
           </Package>
         ))}
-        <AddOnsContainer>
-          <Name>Add Ons</Name>
-          <Description>If you need a little extra</Description>
-          <ListItem>
-            <ListItemLabel>Additional hour of footage</ListItemLabel>
-            <AddOnPrice>$120</AddOnPrice>
-          </ListItem>
-          <ListItem>
-            <ListItemLabel>Vows</ListItemLabel> <AddOnPrice>$150</AddOnPrice>
-          </ListItem>
-          <ListItem>
-            <ListItemLabel>Full Speeches Video</ListItemLabel>
-            <AddOnPrice>$250</AddOnPrice>
-          </ListItem>
-          <ListItem>
-            <ListItemLabel>Full Ceremony Video</ListItemLabel>
-            <AddOnPrice>$350</AddOnPrice>
-          </ListItem>
-          <ListItem>
-            <ListItemLabel>Drone Footage</ListItemLabel>
-            <AddOnPrice>$200</AddOnPrice>
-          </ListItem>
-          <ListItem>
-            <ListItemLabel>Couple Engagement Session</ListItemLabel>
-            <AddOnPrice>$150</AddOnPrice>
-          </ListItem>
-        </AddOnsContainer>
       </PackagesContainer>
+      <AddOnsContainer>
+        <Name>Add Ons</Name>
+        <Description>If you need a little extra</Description>
+        <ListItem>
+          <ListItemLabel>Additional hour of footage</ListItemLabel>
+          <AddOnPrice>$120</AddOnPrice>
+        </ListItem>
+        <ListItem>
+          <ListItemLabel>Vows</ListItemLabel> <AddOnPrice>$150</AddOnPrice>
+        </ListItem>
+        <ListItem>
+          <ListItemLabel>Full Speeches Video</ListItemLabel>
+          <AddOnPrice>$250</AddOnPrice>
+        </ListItem>
+        <ListItem>
+          <ListItemLabel>Full Ceremony Video</ListItemLabel>
+          <AddOnPrice>$350</AddOnPrice>
+        </ListItem>
+        <ListItem>
+          <ListItemLabel>Drone Footage</ListItemLabel>
+          <AddOnPrice>$200</AddOnPrice>
+        </ListItem>
+        <ListItem>
+          <ListItemLabel>Couple Engagement Session</ListItemLabel>
+          <AddOnPrice>$150</AddOnPrice>
+        </ListItem>
+      </AddOnsContainer>
       <BottomWave src={topWave} />
       <FAQContainer>
         <FAQTitle>FAQ</FAQTitle>
@@ -262,7 +262,7 @@ const AddOnsContainer = styled.div`
   padding: 0px 20px;
   box-sizing: border-box;
   width: 100%;
-  max-width: 360px;
+  max-width: 540px;
   margin: 30px;
   margin-right: 0px;
   border-radius: 9px;
