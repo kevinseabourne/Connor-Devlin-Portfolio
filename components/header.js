@@ -162,7 +162,8 @@ const LinkTitle = styled.span`
   &:hover {
     cursor: pointer;
     opacity: 1;
-    background-color: ${({ theme }) => theme.colors.secondary};
+    color: black;
+    ${"" /* background-color: ${({ theme }) => theme.colors.secondary}; */}
   }
   @media (max-width: 1024px) {
     display: none;

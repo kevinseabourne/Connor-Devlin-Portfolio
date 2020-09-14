@@ -28,7 +28,7 @@ export const ReactSelect = React.forwardRef(
         rules={validation}
         name={name}
         defaultValue=""
-        render={({ onChange, onBlur, value, rules }) => (
+        render={({ onChange, value, rules }) => (
           <Container>
             <Label>{label}</Label>
             <InputContainer>
@@ -36,6 +36,8 @@ export const ReactSelect = React.forwardRef(
                 onChange={onChange}
                 value={value}
                 ref={ref}
+                id="select"
+                value={value}
                 rules={rules}
                 options={options}
               />
@@ -74,6 +76,9 @@ const Container = styled.div`
   width: 100%;
   flex-direction: column;
   margin-bottom: 22px;
+  @media (max-width: 420px) {
+    margin-left: 0px;
+  }
 `;
 
 const Label = styled.label`

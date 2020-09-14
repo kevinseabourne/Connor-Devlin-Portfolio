@@ -16,7 +16,7 @@ const VideoOverlay = ({
 }) => {
   const spinnerRef = useRef(null);
   const videoRef = useRef(null);
-  const [videoLoaded, setVideLoaded] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {};
@@ -49,11 +49,10 @@ const VideoOverlay = ({
             unmountOnExit
           >
             <Overlay>
-              {!videoLoaded && <Spinner ref={spinnerRef} />}
-              <VideoContainer ref={videoRef}>
+              <VideoContainer maxWidth={maxWidth} ref={videoRef}>
                 <VideoLoader
                   src={src}
-                  maxWidth={maxWidth}
+                  maxWidth="inherit"
                   alt={alt}
                   borderRadius={borderRadius}
                   width={width}
@@ -121,7 +120,7 @@ const Trailer = styled.iframe`
 `;
 
 const VideoContainer = styled.div`
-  width: 1500px;
+  width: ${({ maxWidth }) => (maxWidth ? maxWidth : "100%")};
   @media (max-height: 1000px) {
     width: 1200px;
   }

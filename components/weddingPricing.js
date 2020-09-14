@@ -25,7 +25,7 @@ const WeddingPricing = (props) => {
       price: "$1300",
       description: "The Complete Package. We capture everything on the day",
       packageItems: [
-        "One Videographers",
+        "One Videographer",
         "Full day of coverage",
         "Highlights Video (10mins)",
         "Sneak Peak Highlight Video (2mins) (recieved 5 - 7 days after wedding)",
@@ -36,6 +36,24 @@ const WeddingPricing = (props) => {
   ]);
 
   const [questions] = useState([
+    {
+      question:
+        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
+      answer:
+        "we can cover any part of the wedding from pre ceremony to reception",
+    },
+    {
+      question:
+        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
+      answer:
+        "we can cover any part of the wedding from pre ceremony to reception",
+    },
+    {
+      question:
+        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
+      answer:
+        "we can cover any part of the wedding from pre ceremony to reception",
+    },
     {
       question:
         "If i choose the standard package what parts of the wedding can be part of the coverage ?",
@@ -170,9 +188,6 @@ const Package = styled.div`
   &:first-child {
     margin-left: 0px;
   }
-  &:last-child {
-    margin-right: 0px;
-  }
   @media (max-width: 852px) {
     margin: 0px;
     margin-left: auto;
@@ -275,7 +290,8 @@ const AddOnsContainer = styled.div`
     margin-top: 30px;
   }
   @media (max-width: 852px) {
-    max-width: 500px;
+    max-width: 349px;
+    padding: 0 20px;
   }
 `;
 
@@ -318,7 +334,7 @@ const FAQContainer = styled.div`
 
 const FAQTitle = styled.h1`
   font-size: 2.3rem;
-  margin-bottom: 60px;
+  margin-bottom: 120px;
 `;
 
 const FAQInnerContainer = styled.div`
@@ -328,7 +344,7 @@ const FAQInnerContainer = styled.div`
   align-items: center;
   grid-auto-flow: row;
   grid-column-end: auto;
-  grid-gap: 60px;
+  grid-gap: 120px;
   @media (max-width: 852px) {
     grid-template-columns: repeat(1, minmax(30px, 360px));
   }
@@ -352,7 +368,8 @@ const Answer = styled.p`
   font-weight: 200;
   margin: 0px;
   text-align: center;
-  color: #5b6b7f;
+  color: #6c6c6c;
+  max-width: 80%;
 `;
 
 const Wave = styled.img`
