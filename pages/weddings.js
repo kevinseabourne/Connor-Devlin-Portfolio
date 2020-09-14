@@ -9,63 +9,29 @@ import VideoOverlay from "../components/common/videoOverlay";
 import downWave from "../public/images/wave3.svg";
 import topWave from "../public/images/wave4.svg";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { getAllWeddings } from "./api/weddings";
 
-const Weddings = (props) => {
-  const [weddings, setWeddings] = useState([
-    {
-      id: 1,
-      coverPhoto:
-        "https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true",
-      names: [
-        { firstName: "Bri", lastName: "Jones" },
-        { firstName: "Kai", lastName: "Jones" },
-      ],
-      location: "Donnybrook, WA",
-      video: "https://player.vimeo.com/video/447477898?autoplay=1",
-      review: "",
-    },
-    {
-      id: 2,
-      coverPhoto:
-        "https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true",
-      names: [
-        { firstName: "Teagan", lastName: "Roberts" },
-        { firstName: "Stephen", lastName: "Ball" },
-      ],
-      location: "Middle Swan WA",
-      video: "https://player.vimeo.com/video/447465658?autoplay=1",
-      review: "",
-    },
-    {
-      id: 3,
-      coverPhoto:
-        "https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true",
-      names: [
-        { firstName: "Megan", lastName: "Spectre" },
-        { firstName: "Tom", lastName: "Harper" },
-      ],
-      location: "Fremantle, WA",
-      video: "https://player.vimeo.com/video/447459730?autoplay=1",
-      review: "",
-    },
-  ]);
-
+const Weddings = ({ data }) => {
+  const [weddings, setWeddings] = useState([]);
   const [selectedWedding, setSelectedWedding] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [weddingNames, setWeddingNames] = useState([]);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    const weddingsClone = _.cloneDeep(weddings);
+    handleWeddingNames();
+  }, []);
 
-    const namesArray = weddingsClone.map((wedding) => {
+  const handleWeddingNames = async () => {
+    const weddingsClone = _.cloneDeep(await data);
+    const updatedWeddings = weddingsClone.map((wedding) => {
       let weddingNamesArray = [];
-      wedding.names.map((name) => weddingNamesArray.push(name.firstName));
+      wedding.partners.map((name) => weddingNamesArray.push(name.firstName));
       wedding.displayNames = weddingNamesArray.join(" & ");
       return wedding;
     });
-    setWeddings(namesArray);
-  }, []);
+    setWeddings(updatedWeddings);
+  };
 
   const handleClick = (id) => {
     const weddingsClone = _.cloneDeep(weddings);
@@ -83,7 +49,7 @@ const Weddings = (props) => {
     setImageLoaded(true);
   };
 
-  return (
+  return weddings.length > 0 ? (
     <Container>
       <TopContainer>
         <Title>Weddings</Title>
@@ -99,11 +65,13 @@ const Weddings = (props) => {
                 hover={true}
                 boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
                 lazyLoad={true}
+                borderRadius={"9px"}
+                delay={weddings.indexOf(wedding) * 120}
                 handleOnLoadOutside={handleOnLoadOutside}
               />
               <PlayIcon imageLoaded={imageLoaded}>
                 <ImageLoader
-                  maxWidth="15%"
+                  maxWidth="100%"
                   placeholderSize="100%"
                   src={playIcon}
                   hover={true}
@@ -128,11 +96,8 @@ const Weddings = (props) => {
       <QuotesContainer>
         <Quote>
           <Wave src={downWave} />
-          <WeddingPartners>Bri & Kai</WeddingPartners>
-          <Description>
-            "The Wedding video was amazing. Thank you so much I love re watching
-            this amazing day !"
-          </Description>
+          <WeddingPartners>{weddings[0].displayNames}</WeddingPartners>
+          <Description>{weddings[0].review}</Description>
         </Quote>
         <TopWave src={topWave} />
       </QuotesContainer>
@@ -142,8 +107,17 @@ const Weddings = (props) => {
         </Link>
       </Pricing>
     </Container>
+  ) : (
+    <Container></Container>
   );
 };
+
+export async function getStaticProps() {
+  const data = await getAllWeddings();
+  return {
+    props: { data },
+  };
+}
 
 export default Weddings;
 
@@ -165,7 +139,7 @@ const TopContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  margin: 50px 0px;
+  margin: 70px 0px;
 `;
 
 const InnerContainer = styled.div`
@@ -192,12 +166,22 @@ const ImageContainer = styled.div`
 
 const PlayIcon = styled.div`
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 0;
-  bottom: 50%;
+  bottom: 0;
   right: 0;
+  max-width: 45px;
+  max-height: 45px;
+  width: 100%;
+  height: 100%;
+  margin: auto;
   transition: all 0.15s ease-in-out;
+  transform: scale(0.9);
   opacity: ${({ imageLoaded }) => (imageLoaded ? 1 : 0)};
+  @media (max-width: 750px) {
+    max-width: 30px;
+    max-height: 30px;
+  }
 `;
 
 const Item = styled.div`
@@ -207,8 +191,8 @@ const Item = styled.div`
   transition: all 0.15s ease-in-out;
   &:hover {
     cursor: pointer;
-    transform: scale(1.02);
     ${PlayIcon} {
+      transform: scale(1);
     }
   }
 `;
@@ -219,6 +203,12 @@ const Names = styled.label`
   margin-left: auto;
   margin-right: auto;
   white-space: nowrap;
+  &:hover {
+    cursor: pointer;
+  }
+  @media (max-width: 1100px) {
+    font-size: 1rem;
+  }
 `;
 
 const Wave = styled.img`
@@ -253,7 +243,7 @@ const WeddingPartners = styled.span`
 const QuotesContainer = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 1200px;
+  padding: 20% 0px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -282,7 +272,7 @@ const ContactButton = styled.button`
   margin: 135px;
   font-size: 1.1rem;
   display: flex;
-  z-index: 1;
+  z-index: 0;
   font-weight: 700;
   transition: all 0.2s;
   background-color: ${({ theme }) => theme.colors.secondary};
