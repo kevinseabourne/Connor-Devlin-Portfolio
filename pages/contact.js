@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import bottomWave from "../public/images/top-wave.svg";
 import { useForm } from "react-hook-form";
@@ -5,11 +6,24 @@ import { DayPicker } from "../components/common/dayPicker";
 import { Input } from "../components/common/input";
 import { ReactSelect } from "../components/common/select";
 import { TextArea } from "../components/common/textArea";
+import { sendEmail } from "./api/email";
+import { LoadingSpinner } from "../components/loading-spinner";
 
 const Contact = (props) => {
-  const { register, handleSubmit, watch, control, errors } = useForm();
+  const [status, setStatus] = useState("idle");
+  const {
+    register,
+    handleSubmit,
+    control,
+    errors,
+    reset,
+    setValue,
+  } = useForm();
 
   const schema = {
+    pricing: {
+      required: "A price is required !",
+    },
     name: {
       required: "A name is required !",
       minLength: {
@@ -17,7 +31,7 @@ const Contact = (props) => {
         message: "Name should be greater than 1 character !",
       },
       pattern: {
-        value: /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/g,
+        value: /^[a-zA-Z '.-]*$/,
         message: "Letters only !",
       },
     },
@@ -40,13 +54,38 @@ const Contact = (props) => {
     },
   };
 
-  const options = [
-    { value: "Wedding Package One", label: "Wedding" },
-    { value: "vanilla", label: "Corporate" },
+  const topicOptions = [
+    {
+      label: "Wedding",
+      options: [
+        { value: "Wedding Standard Package", label: "Standard Package" },
+        { value: "Wedding Deluxe Package", label: "Deluxe Package" },
+      ],
+    },
+    {
+      label: "Corporate",
+      options: [
+        { value: "Corporate Interviews", label: "Interviews" },
+        { value: "Corporate Events", label: "Events" },
+      ],
+    },
+    {
+      label: "Other",
+      options: [{ value: "Other", label: "Other" }],
+    },
   ];
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    setStatus("pending");
+    const response = await sendEmail(data);
+    if (response.status === 200) {
+      setStatus("resolved");
+
+      // clear inputs
+      setValue("dayPicker", "");
+      setValue("topic", "");
+      reset();
+    }
   };
 
   return (
@@ -81,7 +120,7 @@ const Contact = (props) => {
             ref={register}
             label="Topic"
             name="topic"
-            options={options}
+            options={topicOptions}
             validation={schema.topic}
             error={errors.topic}
           />
@@ -93,7 +132,9 @@ const Contact = (props) => {
           ref={register(schema.enquiry)}
           error={errors.enquiry}
         />
-        <SubmitButton type="submit">Send</SubmitButton>
+        <SubmitButton type="submit">
+          {status !== "pending" ? "Send" : <LoadingSpinner size="30px" />}
+        </SubmitButton>
       </Form>
       <BottomWave src={bottomWave} />
     </Container>
@@ -134,24 +175,36 @@ const Form = styled.form`
 const InnerContainer = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   flex-direction: row;
+  @media (max-width: 420px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const SubmitButton = styled.button`
   margin-top: 10px;
   font-size: 1rem;
+  min-height: 54px;
+  min-width: 200px;
   padding: 18px 80px;
   border-radius: 9px;
   border: none;
   color: white;
+  position: relative;
   font-weight: 600;
   transition: all 0.2s ease;
+  outline: none;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   &:hover {
     cursor: pointer;
+  }
+  &:focus {
+    outline: none;
   }
   &:active {
     transform: scale(0.95);
