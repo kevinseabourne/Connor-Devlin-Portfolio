@@ -1,5 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import http from "./httpService";
+import jwtDecode from "jwt-decode";
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,23 +16,29 @@ if (!firebase.apps.length) {
   firebase.initializeApp(config);
 }
 
-export async function SignIn(data) {
+export async function signIn(formData) {
+  const { data } = await http.post(
+    process.env.NEXT_PUBLIC_FIREBASE_SIGNIN_ENDPOINT +
+      process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    {
+      email: formData.username,
+      password: formData.password,
+      returnSecureToken: true,
+    }
+  );
+  localStorage.setItem("tokenKey", data.idToken);
+  return data;
+}
+
+export function getCurrentUser() {
   try {
-    const response = firebase
-      .auth()
-      .signInWithEmailAndPassword(data.username, data.password);
-    return response;
-  } catch (error) {
-    console.log(error);
-    return error;
+    const jwt = localStorage.getItem("tokenKey");
+    return jwtDecode(jwt);
+  } catch (ex) {
+    return null;
   }
 }
 
-export async function SignOut() {
-  try {
-    const response = firebase.auth().signOut();
-    return response;
-  } catch (error) {
-    return error;
-  }
+export function signOut() {
+  localStorage.removeItem("tokenKey");
 }
