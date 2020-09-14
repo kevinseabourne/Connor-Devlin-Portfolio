@@ -1,13 +1,17 @@
 import App from "next/app";
 import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
+import logger from "../pages/api/logger";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { GlobalStyle } from "../globalStyle";
 import AppContext from "../context/appContext";
-import { useRouter } from "next/router";
 import Header from "../components/header";
-import { SignIn, SignOut } from "./api/auth";
+import { signIn, getCurrentUser, signOut } from "./api/auth";
 import "react-day-picker/lib/style.css";
+import "rc-slider/assets/index.css";
+
+logger.init();
 
 const theme = {
   colors: {
@@ -24,22 +28,19 @@ const MyApp = ({ Component, pageProps }) => {
 
   useEffect(() => {
     if (localStorage.getItem("currentUser") && !currentUser) {
-      const currentUser = window.localStorage.getItem("currentUser");
-      const user = currentUser;
+      const user = getCurrentUser();
       setCurrentUser(user);
     }
   }, []);
 
-  const handleSignIn = async (data) => {
-    const { user } = await SignIn(data);
-    setCurrentUser(user.email);
-    localStorage.setItem("currentUser", user.email);
+  const handleSignIn = async (formData) => {
+    const user = await signIn(formData);
+    setCurrentUser(user);
   };
 
-  const handleSignOut = async () => {
-    const response = await SignOut();
+  const handleSignOut = () => {
+    signOut();
     setCurrentUser(null);
-    localStorage.setItem("currentUser", null);
   };
 
   return (

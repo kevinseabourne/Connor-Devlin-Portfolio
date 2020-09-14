@@ -93,14 +93,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 3.2px !important;
     border-top-right-radius: 200px;
     border-bottom-right-radius: 200px;
-    background-image: linear-gradient(
-      115deg,
-      #4fcf70,
-      #fad648,
-      #a767e5,
-      #12bcfe,
-      #44ce7b
-    );
+    background-image: white;
   }
 
   .Toastify__close-button {
