@@ -60,10 +60,19 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+  @media (max-width: 1024px) {
+  }
+  @media (max-height: 1034px) {
+    ${"" /* height: 100%; */}
+  }
 `;
 
 const Title = styled.h1`
   margin: 50px 0px;
+  @media (max-width: 425px) {
+    margin: 10% 0px;
+    font-size: 1.4rem;
+  }
 `;
 
 const InnerContainer = styled.div`
@@ -74,13 +83,20 @@ const InnerContainer = styled.div`
   flex-direction: row;
   box-sizing: border-box;
   padding: 0px 9%;
+  margin-bottom: 2%;
   @media (max-width: 1024px) {
     flex-direction: column;
+  }
+  @media (max-width: 768px) {
+    margin-bottom: 9%;
+  }
+  @media (max-width: 425px) {
+    margin-bottom: 5%;
   }
 `;
 
 const PricingContainer = styled.div`
-  max-width: 800px;
+  max-width: 850px;
   width: 100%;
   text-align: center;
   position: relative;
@@ -97,31 +113,46 @@ const PricingContainer = styled.div`
     margin-left: 3%;
   }
   @media (max-width: 1024px) {
-    max-width: 500px;
+    max-width: 580px;
     &:first-child {
-      margin-bottom: 30px;
+      margin-bottom: 7%;
       margin-right: 0px;
     }
     &:last-child {
-      margin-top: 30px;
+      margin-top: 7%;
+      margin-left: 0px;
+    }
+  }
+  @media (max-width: 425px) {
+    max-width: 580px;
+    &:first-child {
+      margin-bottom: 9%;
+      margin-right: 0px;
+    }
+    &:last-child {
+      margin-top: 9%;
       margin-left: 0px;
     }
   }
 `;
 
 const Label = styled.div`
+  color: white;
   font-size: 2rem;
   position: absolute;
   bottom: 5%;
   left: 50%;
   transform: translate(-50%);
+  @media (max-width: 425px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const BottomWave = styled.img`
-  margin-top: auto;
   object-position: center;
   object-fit: cover;
-  bottom: 0px;
+  margin-top: auto;
+  bottom: -20px;
   left: -1px;
   width: 100%;
   z-index: -100;
