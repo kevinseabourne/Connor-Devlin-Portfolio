@@ -9,7 +9,6 @@ import AppContext from "../context/appContext";
 import Header from "../components/header";
 import { signIn, getCurrentUser, signOut } from "./api/auth";
 import "react-day-picker/lib/style.css";
-import "rc-slider/assets/index.css";
 
 logger.init();
 
