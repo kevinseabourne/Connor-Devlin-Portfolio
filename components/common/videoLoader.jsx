@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import LazyLoad from "react-lazy-load";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { LoadingSpinner } from "../loading-spinner";
 
 const VideoLoader = ({
   src,
@@ -21,9 +22,16 @@ const VideoLoader = ({
   lazyLoad,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const timeout = useRef(null);
+  const timeoutTwo = useRef(null);
+
+  useEffect(() => {
+    return () => clearTimeout(timeout.current);
+  }, []);
 
   const handleOnLoad = () => {
-    setIsLoaded(true);
+    // video loaded to early, added one second delay
+    timeout.current = setTimeout(() => setIsLoaded(true), 1000);
   };
 
   return (
@@ -33,6 +41,7 @@ const VideoLoader = ({
         placeholderSize={placeholderSize}
         borderRadius={borderRadius}
       />
+      {!isLoaded && <LoadingSpinner size="80px" />}
       {lazyLoad && (
         <LazyLoad
           width="inherit"

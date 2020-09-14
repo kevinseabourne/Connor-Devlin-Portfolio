@@ -3,11 +3,12 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import AppContext from "../context/appContext";
 import { useForm } from "react-hook-form";
+import { getCurrentUser } from "../pages/api/auth";
 
-const Login = (props) => {
+const Login = () => {
   const { handleSignIn, currentUser } = useContext(AppContext);
   const router = useRouter();
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm();
 
   useEffect(() => {
     if (currentUser) {
@@ -19,9 +20,7 @@ const Login = (props) => {
     handleSignIn(query);
   };
 
-  return currentUser ? (
-    ""
-  ) : (
+  return currentUser ? null : (
     <Container>
       <Title>Login</Title>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
