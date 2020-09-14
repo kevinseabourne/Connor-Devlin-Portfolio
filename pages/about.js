@@ -9,8 +9,12 @@ const About = (props) => {
         <ImageContainer>
           <ImageLoader
             maxWidth="inherit"
-            placeholderSize="66.7%"
-            borderRadius="8px"
+            placeholderSize="66.66%"
+            borderRadius="19px"
+            blur="5px"
+            opacity="0"
+            scale="0.99"
+            transitionTime="0.4s ease"
             src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
           />
         </ImageContainer>
@@ -25,49 +29,23 @@ const About = (props) => {
       <Wrapper>
         <InfoContainer>
           <Description>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed
-            vulputate odio ut enim blandit volutpat maecenas volutpat blandit.
-            Accumsan tortor posuere ac ut consequat semper. Mauris commodo quis
-            imperdiet massa tincidunt nunc. In tellus integer feugiat
-            scelerisque varius morbi enim. Nisi lacus sed viverra tellus in hac.
-            Quam adipiscing vitae proin sagittis nisl. Risus at ultrices mi
-            tempus imperdiet. Diam volutpat commodo sed egestas egestas
-            fringilla phasellus. Tristique senectus et netus et malesuada fames
-            ac. <br /> <br />
-            Nisl rhoncus mattis rhoncus urna neque viverra. Et odio pellentesque
-            diam volutpat commodo. Tortor at risus viverra adipiscing at in
-            tellus integer. Gravida arcu ac tortor dignissim convallis. Eget
-            velit aliquet sagittis id consectetur purus ut. Quis commodo odio
-            aenean sed. Non consectetur a erat nam at. Dictum at tempor commodo
-            ullamcorper a lacus vestibulum sed. Nunc congue nisi vitae suscipit
-            tellus mauris a diam. Est velit egestas dui id ornare arcu odio. Sed
-            libero enim sed faucibus turpis in eu mi bibendum. Dignissim
-            suspendisse in est ante in nibh mauris cursus mattis. Risus pretium
-            quam vulputate dignissim suspendisse. Imperdiet sed euismod nisi
-            porta lorem mollis aliquam ut. Sed velit dignissim sodales ut. Purus
-            sit amet luctus venenatis lectus. Senectus et netus et malesuada
-            fames. Pharetra et ultrices neque ornare aenean euismod elementum
-            nisi. <br /> <br />
-            Tortor aliquam nulla facilisi cras fermentum odio eu feugiat. Sem
-            viverra aliquet eget sit amet tellus cras adipiscing enim. Sociis
-            natoque penatibus et magnis dis parturient. Aenean sed adipiscing
-            diam donec adipiscing tristique risus. Enim ut tellus elementum
-            sagittis vitae et leo duis. Odio ut sem nulla pharetra diam sit amet
-            nisl. Ultrices mi tempus imperdiet nulla malesuada. Tempus egestas
-            sed sed risus pretium quam vulputate dignissim. Nisl suscipit
-            adipiscing bibendum est ultricies. Venenatis lectus magna fringilla
-            urna porttitor. Erat nam at lectus urna duis convallis convallis
-            tellus. <br /> <br />
-            Iaculis nunc sed augue lacus viverra vitae congue. Et odio
-            pellentesque diam volutpat commodo sed egestas egestas fringilla. Id
-            eu nisl nunc mi ipsum faucibus. Quam elementum pulvinar etiam non
-            quam lacus suspendisse faucibus interdum. Varius quam quisque id
-            diam vel quam elementum. Mattis enim ut tellus elementum sagittis.
-            Ac turpis egestas sed tempus urna et pharetra pharetra massa. Dui
-            accumsan sit amet nulla facilisi morbi. Risus pretium quam vulputate
-            dignissim suspendisse in est ante. Suspendisse sed nisi lacus sed.
-            Accumsan lacus vel facilisis volutpat.
+            Hi! I’m Connor.
+            <br /> <br />
+            Videographer, photographer, editor all round creative. My passion
+            for getting behind the camera took-off at a young age growing up in
+            Kalgoorlie WA. I would film my brother and his friends skateboarding
+            and eventually became the towns go-to kid for producing skate
+            videos. Since then I have followed my passion by moving to Perth,
+            obtaining a Film and Photography degree and running my own small
+            business.
+            <br /> <br />
+            I strive for simplicity in my work, focusing on strong
+            cinematography, honest performances and precisely tuned audio. As a
+            passionate and versatile shooter I employ a creative approach to
+            weddings, corporate material and everything in-between. No matter
+            the project or occasion, I’d love to work with you. Drop me a
+            message down below! Let’s Create.
+            <br /> <br />
           </Description>
         </InfoContainer>
       </Wrapper>
@@ -109,7 +87,7 @@ const ImageWrapper = styled.div`
 const ImageContainer = styled.div`
   max-width: 700px;
   width: 100%;
-  margin-top: 28px;
+  margin-top: 90px;
   box-sizing: border-box;
   padding: 0px 20px;
 
