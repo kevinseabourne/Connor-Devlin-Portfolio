@@ -60,11 +60,6 @@ const Container = styled.div`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
-  @media (max-width: 1024px) {
-  }
-  @media (max-height: 1034px) {
-    ${"" /* height: 100%; */}
-  }
 `;
 
 const Title = styled.h1`
