@@ -11,14 +11,15 @@ const ImageLoader = ({
   keyValue,
   dataTestId,
   delay,
-  isFavourite,
+  blur,
+  opacity,
+  scale,
   onClick,
   borderRadius,
   hover,
-  hoverColor,
+  transitionTime,
   boxShadow,
   centerImage,
-  lazyLoad,
   handleOnLoadOutside,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -42,46 +43,30 @@ const ImageLoader = ({
         onClick={onClick}
         placeholderSize={placeholderSize}
       />
-      {lazyLoad && (
-        <LazyLoad
-          width="unset"
-          height="unset"
-          once={true}
-          offset={500}
-          debounce={false}
-        >
-          <Image
-            isLoaded={isLoaded}
-            onLoad={onLoad}
-            src={src}
-            alt={alt}
-            key={keyValue}
-            data-testid={dataTestId}
-            delay={delay}
-            isFavourite={isFavourite}
-            hover={hover}
-            borderRadius={borderRadius}
-            hoverColor={hoverColor}
-            boxShadow={boxShadow}
-          />
-        </LazyLoad>
-      )}
-      {!lazyLoad && (
+      <LazyLoad
+        width="unset"
+        height="unset"
+        once={true}
+        offset={500}
+        debounce={false}
+      >
         <Image
           isLoaded={isLoaded}
           onLoad={onLoad}
           src={src}
           alt={alt}
           key={keyValue}
+          blur={blur}
+          opacity={opacity}
+          scale={scale}
           data-testid={dataTestId}
+          transitionTime={transitionTime}
           delay={delay}
-          isFavourite={isFavourite}
           hover={hover}
           borderRadius={borderRadius}
-          hoverColor={hoverColor}
           boxShadow={boxShadow}
         />
-      )}
+      </LazyLoad>
     </ImageContainer>
   );
 };
@@ -111,23 +96,24 @@ const Placeholder = styled.div`
 const Image = styled.img`
   position: absolute;
   top: 0;
+  bottom: 0;
   left: 0;
+  right: 0;
+  margin: auto;
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center;
   box-shadow: ${({ boxShadow }) => (boxShadow ? boxShadow : "none")};
-border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
-  filter: ${({ isFavourite }) =>
-    isFavourite
-      ? "invert(43%) sepia(48%) saturate(1134%) hue-rotate(320deg) brightness(89%) contrast(105%)"
-      : "none"};
-  opacity: ${({ isLoaded }) => (isLoaded ? 1 : 0)};
-  transform: ${({ isLoaded }) => (isLoaded ? "scale(1)" : "scale(0.5)")};
-  transition: all 250ms;
+  border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
+  filter: ${({ isLoaded, blur }) => (isLoaded ? "blur(0px)" : `blur(${blur})`)};
+  opacity: ${({ isLoaded, opacity }) => (isLoaded ? 1 : opacity)};
+  transform: ${({ isLoaded, scale }) =>
+    isLoaded ? "scale(1)" : `scale(${scale})`};
+  transition: ${({ transitionTime }) =>
+    transitionTime ? `all ${transitionTime}` : "all 250ms"};
   transition-delay: ${({ delay }) => `${delay}ms`};
   &:hover {
     cursor: ${({ hover }) => (hover ? "pointer" : "default")};
-    filter ${({ hoverColor }) => (hoverColor ? hoverColor : "none")};
   }
 `;
