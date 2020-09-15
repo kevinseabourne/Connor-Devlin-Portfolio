@@ -26,7 +26,7 @@ const MyApp = ({ Component, pageProps }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    if (localStorage.getItem("currentUser") && !currentUser) {
+    if (localStorage.getItem("tokenKey") && !currentUser) {
       const user = getCurrentUser();
       setCurrentUser(user);
     }
