@@ -4,7 +4,6 @@ import Link from "next/link";
 import { cloneDeep } from "lodash";
 import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
-import VideoLoader from "./videoLoader";
 import VideoOverlay from "./videoOverlay";
 import downWave from "../../public/images/wave3.svg";
 import topWave from "../../public/images/wave4.svg";
@@ -22,10 +21,6 @@ const ContentPage = ({ data, page }) => {
       handleWeddingNames();
     }
   }, []);
-
-  useEffect(() => {
-    console.log(state);
-  }, [data]);
 
   const handleWeddingNames = () => {
     const stateClone = _.cloneDeep(state);
@@ -234,6 +229,7 @@ const Names = styled.label`
 `;
 
 const Wave = styled.img`
+  z-index: -20;
   position: absolute;
   top: -20px;
   left: -1px;
