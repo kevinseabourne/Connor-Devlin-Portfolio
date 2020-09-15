@@ -55,10 +55,11 @@ const About = (props) => {
 export default About;
 
 const Container = styled.div`
+  height: calc(100vh - 75px);
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
 `;
 
@@ -68,6 +69,7 @@ const Wrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   margin-bottom: 0px;
   background-image: ${({ theme }) =>
     `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
@@ -76,7 +78,6 @@ const Wrapper = styled.div`
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -84,9 +85,9 @@ const ImageWrapper = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  max-width: 700px;
+  max-width: 600px;
   width: 100%;
-  margin-top: 90px;
+  margin-top: 40px;
   box-sizing: border-box;
   padding: 0px 20px;
 
@@ -95,11 +96,14 @@ const ImageContainer = styled.div`
   @media (min-width: 1023px) and (max-height: 810px) {
     margin-bottom: 0px;
   }
+  @media (max-width: 750px) {
+    margin-top: 20px;
+  }
 `;
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -10px;
+  bottom: -70px;
   left: -1px;
   width: 100%;
   z-index: -100;
@@ -110,27 +114,20 @@ const BottomWave = styled.img`
 
 const InfoContainer = styled.div`
   display: flex;
+  height: 100%;
   max-width: 700px;
   width: 100%;
-  margin-top: -5%;
+  margin-top: 0px;
+  margin-bottom: 30px;
   box-sizing: border-box;
   padding: 0px 20px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
-
-  @media (max-width: 1024px) {
-  }
-  @media (min-width: 1023px) and (max-height: 810px) {
-    margin-bottom: 0px;
-  }
-  @media (max-width: 750px) {
-    margin-top: 10px;
-  }
 `;
 
 const SmallTitle = styled.span`
-  margin-top: 25px;
+  margin-top: 18px;
   font-size: 1rem;
   opacity: 0.7;
   @media (max-width: 424px) {
@@ -145,7 +142,10 @@ const Name = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 17%;
+  margin-bottom: 12%;
+  @media (max-width: 1624px) {
+    margin-bottom: 16%;
+  }
 `;
 
 const FirstName = styled.h1`
