@@ -146,6 +146,10 @@ const TopContainer = styled.div`
 
 const Title = styled.h1`
   margin: 70px 0px;
+  @media (max-width: 750px) {
+    margin: 10% 0px;
+    font-size: 1.4rem;
+  }
 `;
 
 const InnerContainer = styled.div`
@@ -161,6 +165,11 @@ const InnerContainer = styled.div`
   box-sizing: border-box;
   background-image: ${({ theme }) =>
     `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
+  @media (max-width: 750px) {
+    grid-template-columns: repeat(1, minmax(100px, 300px));
+    grid-gap: 5% 20px;
+    padding-bottom: 180px;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -212,8 +221,11 @@ const Names = styled.label`
   &:hover {
     cursor: pointer;
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 770px) {
     font-size: 1rem;
+  }
+  @media (max-width: 550px) {
+    font-size: 1.2rem;
   }
 `;
 
@@ -249,19 +261,34 @@ const WeddingPartners = styled.span`
 const QuotesContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding: 20% 0px;
+  padding: 20% 20px;
+  margin: auto;
+  box-sizing: border-box;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (max-width: 750px) {
+    padding: 25% 20px;
+  }
 `;
 
 const Description = styled.div`
   margin-top: 9px;
   font-family: exmouth;
   font-size: 3.5rem;
+  text-align: center;
   letter-spacing: 1px;
+  @media (max-width: 1024px) {
+    font-size: 3.2rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 3rem;
+  }
+  @media (max-width: 524px) {
+    font-size: 2.7rem;
+  }
 `;
 
 const Pricing = styled.div`
