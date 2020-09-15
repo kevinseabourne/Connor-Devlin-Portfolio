@@ -19,9 +19,10 @@ const Pricing = (props) => {
               opacity="0"
               scale="0.99"
               transitionTime="0.4s ease"
+              delay={120}
               hover={true}
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
-              src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
+              src="https://chpistel.sirv.com/Connor-Portfolio/wedding-pricing.jpeg?w=900"
             />
             <Label>Weddings</Label>
           </PricingContainer>
@@ -38,8 +39,9 @@ const Pricing = (props) => {
               scale="0.99"
               transitionTime="0.4s ease"
               hover={true}
+              delay={240}
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
-              src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
+              src="https://chpistel.sirv.com/Connor-Portfolio/corporate-pricing.jpeg?w=900"
             />
             <Label>Corporate</Label>
           </PricingContainer>
