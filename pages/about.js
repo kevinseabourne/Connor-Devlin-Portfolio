@@ -11,7 +11,6 @@ const About = (props) => {
             maxWidth="inherit"
             placeholderSize="66.66%"
             borderRadius="19px"
-            blur="5px"
             opacity="0"
             scale="0.99"
             transitionTime="0.4s ease"

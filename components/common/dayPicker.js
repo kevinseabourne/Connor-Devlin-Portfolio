@@ -51,6 +51,9 @@ export const DayPicker = React.forwardRef(
                   lazyLoad={true}
                   maxWidth="inherit"
                   placeholderSize="100%"
+                  opacity="0"
+                  scale="0.99"
+                  transitionTime="0.250s ease"
                   src="https://chpistel.sirv.com/Connor-Portfolio/time-and-date.png?w=50&png.optimize=true"
                 />
               </Icon>
@@ -68,6 +71,9 @@ export const DayPicker = React.forwardRef(
                       lazyLoad={true}
                       maxWidth="18px"
                       placeholderSize="100%"
+                      opacity="0"
+                      scale="0.99"
+                      transitionTime="0.250s ease"
                       src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                     />
                     <ErrorMessage>{error.message}</ErrorMessage>
