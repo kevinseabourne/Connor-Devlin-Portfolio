@@ -114,7 +114,6 @@ const Contact = (props) => {
             validation={schema.date}
             error={errors.dayPicker}
           />
-
           <ReactSelect
             control={control}
             ref={register}

@@ -1,4 +1,3 @@
-import http from "./httpService";
 import firebase from "firebase/app";
 import "firebase/firestore";
 
