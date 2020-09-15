@@ -1,27 +1,23 @@
 import styled from "styled-components";
-import ImageLoader from "../components/common/imageLoader";
+import ContentPage from "../components/common/contentPage";
+import { getAllCorporate } from "./api/corporate";
 
-const Corporate = (props) => {
-  return (
+const Corporate = ({ data }) => {
+  return data ? (
     <Container>
-      <Title>Corporate Videos</Title>
-      <Description></Description>
-      <InnerContainer>
-        <Item>
-          <ImageContainer>
-            <ImageLoader
-              maxWidth="430px"
-              placeholderSize="66.7%"
-              hover={true}
-              src="https://chpistel.sirv.com/Connor-Portfolio/wedding_photo.png?png.optimize=true"
-            />
-          </ImageContainer>
-          <CompanyTitle>TLG</CompanyTitle>
-        </Item>
-      </InnerContainer>
+      <ContentPage data={data} page="corporate" />
     </Container>
+  ) : (
+    <Container></Container>
   );
 };
+
+export async function getStaticProps() {
+  const data = await getAllCorporate();
+  return {
+    props: { data },
+  };
+}
 
 export default Corporate;
 
@@ -30,18 +26,3 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-
-const Title = styled.h1``;
-
-const Description = styled.p``;
-
-const InnerContainer = styled.div`
-  display: grid;
-  width: 100%;
-`;
-
-const Item = styled.div``;
-
-const ImageContainer = styled.div``;
-
-const CompanyTitle = styled.label``;
