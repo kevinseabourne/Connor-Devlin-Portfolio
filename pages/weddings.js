@@ -63,8 +63,11 @@ const Weddings = ({ data }) => {
                 placeholderSize="100%"
                 src={wedding.coverPhoto}
                 hover={true}
+                borderRadius="19px"
+                opacity="0"
+                scale="0.99"
+                transitionTime="0.4s ease"
                 boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
-                lazyLoad={true}
                 borderRadius={"9px"}
                 delay={weddings.indexOf(wedding) * 120}
                 handleOnLoadOutside={handleOnLoadOutside}
@@ -76,7 +79,10 @@ const Weddings = ({ data }) => {
                   src={playIcon}
                   hover={true}
                   centerImage={true}
-                  lazyLoad={true}
+                  opacity="0"
+                  scale="0.99"
+                  delay={weddings.indexOf(wedding) * 120}
+                  transitionTime="0.4s ease"
                 />
               </PlayIcon>
             </ImageContainer>
