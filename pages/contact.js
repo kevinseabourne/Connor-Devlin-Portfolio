@@ -213,7 +213,7 @@ const SubmitButton = styled.button`
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -90px;
+  bottom: 0px;
   left: -1px;
   width: 100%;
   z-index: -100;
