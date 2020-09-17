@@ -2,7 +2,7 @@ import styled from "styled-components";
 import ImageLoader from "../components/common/imageLoader";
 import topWave from "../public/images/wave4.svg";
 
-const About = (props) => {
+const About = () => {
   return (
     <Container>
       <ImageWrapper>
@@ -24,7 +24,6 @@ const About = (props) => {
         </Name>
         <BottomWave src={topWave} />
       </ImageWrapper>
-
       <Wrapper>
         <InfoContainer>
           <Description>
@@ -55,7 +54,8 @@ const About = (props) => {
 export default About;
 
 const Container = styled.div`
-  height: calc(100vh - 75px);
+  min-height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -65,11 +65,12 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
+  flex: 1;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  padding-top: 14px;
   margin-bottom: 0px;
   background-image: ${({ theme }) =>
     `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
@@ -79,6 +80,7 @@ const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
@@ -90,26 +92,16 @@ const ImageContainer = styled.div`
   margin-top: 40px;
   box-sizing: border-box;
   padding: 0px 20px;
-
-  @media (max-width: 1024px) {
-  }
-  @media (min-width: 1023px) and (max-height: 810px) {
-    margin-bottom: 0px;
-  }
-  @media (max-width: 750px) {
-    margin-top: 20px;
-  }
+  position: relative;
 `;
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -70px;
+  margin-top: auto;
+  bottom: calc(-100vw * 0.04);
   left: -1px;
   width: 100%;
   z-index: -100;
-  @media (max-width: 1624px) {
-    bottom: -10px;
-  }
 `;
 
 const InfoContainer = styled.div`
@@ -127,9 +119,10 @@ const InfoContainer = styled.div`
 `;
 
 const SmallTitle = styled.span`
-  margin-top: 18px;
+  margin-top: 30px;
   font-size: 1rem;
   opacity: 0.7;
+  position: relative;
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }
@@ -140,11 +133,13 @@ const SmallTitle = styled.span`
 
 const Name = styled.div`
   display: flex;
+  position: relative;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 12%;
-  @media (max-width: 1624px) {
-    margin-bottom: 16%;
+  margin-top: 0px;
+  margin-bottom: 10%;
+  @media (max-width: 1200px) {
+    margin-bottom: 18%;
   }
 `;
 
@@ -165,6 +160,7 @@ const FirstName = styled.h1`
     bottom: 0;
     left: 0;
   }
+
   @media (max-width: 450px) {
     font-size: 2.3rem;
   }
@@ -201,9 +197,6 @@ const Description = styled.p`
   letter-spacing: 1px;
   opacity: 0.7;
   margin-bottom: 90px;
-  @media (max-width: 1024px) {
-    margin-bottom: 40px;
-  }
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }
