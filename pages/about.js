@@ -70,8 +70,6 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   width: 100%;
-  padding-top: 14px;
-  margin-bottom: 0px;
   background-image: ${({ theme }) =>
     `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
 `;
@@ -80,14 +78,13 @@ const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  flex: 1;
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
 `;
 
 const ImageContainer = styled.div`
-  max-width: 600px;
+  max-width: 650px;
   width: 100%;
   margin-top: 40px;
   box-sizing: border-box;
@@ -98,10 +95,12 @@ const ImageContainer = styled.div`
 const BottomWave = styled.img`
   position: absolute;
   margin-top: auto;
-  bottom: calc(-100vw * 0.04);
-  left: -1px;
+  bottom: -5%;
   width: 100%;
   z-index: -100;
+  @media (max-width: 1200px) {
+    bottom: -10px;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -110,7 +109,6 @@ const InfoContainer = styled.div`
   max-width: 700px;
   width: 100%;
   margin-top: 0px;
-  margin-bottom: 30px;
   box-sizing: border-box;
   padding: 0px 20px;
   align-items: center;
@@ -137,7 +135,10 @@ const Name = styled.div`
   flex-direction: row;
   align-items: center;
   margin-top: 0px;
-  margin-bottom: 10%;
+  margin-bottom: 12%;
+  @media (max-width: 1600px) {
+    margin-bottom: 14%;
+  }
   @media (max-width: 1200px) {
     margin-bottom: 18%;
   }
@@ -196,7 +197,6 @@ const Description = styled.p`
   font-size: 1rem;
   letter-spacing: 1px;
   opacity: 0.7;
-  margin-bottom: 90px;
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }
