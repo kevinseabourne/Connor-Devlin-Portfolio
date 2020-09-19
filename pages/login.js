@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import AppContext from "../context/appContext";
@@ -8,19 +8,26 @@ import { getCurrentUser } from "../pages/api/auth";
 const Login = () => {
   const { handleSignIn, currentUser } = useContext(AppContext);
   const router = useRouter();
+  const [user, setUser] = useState(null);
   const { register, handleSubmit, errors } = useForm();
 
   useEffect(() => {
+    const currentUser = getCurrentUser();
+    setUser(currentUser);
+
     if (currentUser) {
       router.push("/admin");
     }
-  }, [currentUser]);
+  }, []);
 
-  const onSubmit = (query) => {
-    handleSignIn(query);
+  const onSubmit = async (query) => {
+    const response = await handleSignIn(query);
+    if (response) {
+      router.push("/admin");
+    }
   };
 
-  return currentUser ? null : (
+  return user ? null : (
     <Container>
       <Title>Login</Title>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
