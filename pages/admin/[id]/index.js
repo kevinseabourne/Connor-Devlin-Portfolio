@@ -24,19 +24,22 @@ const AdminRoute = ({ params, data }) => {
       }
     }
   };
-  const aboutRoute = params.id === "about";
-  const weddingsRoute = params.id === "weddings";
-  const corporateRoute = params.id === "corporate";
 
-  if (aboutRoute) {
-    return <AdminAbout />;
-  } else if (weddingsRoute || corporateRoute) {
-    return (
-      <AdminContentPage
-        data={data}
-        page={weddingsRoute ? "weddings" : "corporate"}
-      />
-    );
+  if (params) {
+    const aboutRoute = params.id === "about";
+    const weddingsRoute = params.id === "weddings";
+    const corporateRoute = params.id === "corporate";
+
+    if (aboutRoute) {
+      return <AdminAbout />;
+    } else if (weddingsRoute || corporateRoute) {
+      return (
+        <AdminContentPage
+          data={data}
+          page={weddingsRoute ? "weddings" : "corporate"}
+        />
+      );
+    }
   } else {
     <Container />;
   }
@@ -57,7 +60,7 @@ export async function getStaticProps({ params }) {
   const data =
     params.id === "weddings" ? await getAllWeddings() : await getAllCorporate();
   return {
-    props: { data, params }, // will be passed to the page component as props
+    props: { data, params },
   };
 }
 
