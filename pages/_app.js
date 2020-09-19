@@ -25,16 +25,11 @@ const theme = {
 const MyApp = ({ Component, pageProps }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    if (localStorage.getItem("tokenKey") && !currentUser) {
-      const user = getCurrentUser();
-      setCurrentUser(user);
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   const handleSignIn = async (formData) => {
     const user = await signIn(formData);
-    setCurrentUser(user);
+    return user;
   };
 
   const handleSignOut = () => {
