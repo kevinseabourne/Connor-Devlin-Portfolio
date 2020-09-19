@@ -41,7 +41,7 @@ const AdminRoute = ({ params, data }) => {
       );
     }
   } else {
-    <Container />;
+    return <Container />;
   }
 };
 
