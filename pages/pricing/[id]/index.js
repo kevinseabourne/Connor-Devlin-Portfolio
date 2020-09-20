@@ -1,35 +1,23 @@
 import styled from "styled-components";
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
 import WeddingPricing from "../../../components/weddingPricing";
 import CorporatePricing from "../../../components/corporatePricing";
 
-const Pricing = ({ query }) => {
-  const router = useRouter();
-  const routerr = router.query;
+const Pricing = ({ params }) => {
+  return params.id === "weddings" ? <WeddingPricing /> : <CorporatePricing />;
+};
 
-  useEffect(() => {
-    handleURLQuery();
-  }, [query]);
-
-  const handleURLQuery = () => {
-    if (query) {
-      if (query.id === "weddings" || query.id === "corporate") {
-      } else {
-        router.push("/404");
-      }
-    }
+export async function getStaticPaths() {
+  return {
+    paths: [{ params: { id: "weddings" } }, { params: { id: "corporate" } }],
+    fallback: false,
   };
+}
 
-  return query.id === "weddings" ? <WeddingPricing /> : <CorporatePricing />;
-};
-
-Pricing.getInitialProps = ({ query }) => {
-  return { query };
-};
+export async function getStaticProps({ params }) {
+  return {
+    props: { params },
+  };
+}
 
 export default Pricing;
-
-const Container = styled.div`
-  width: 100%;
-`;

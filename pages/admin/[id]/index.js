@@ -12,19 +12,6 @@ const AdminRoute = ({ params, data }) => {
   const router = useRouter();
   const [routes] = useState(["about", "weddings", "corporate"]);
 
-  useEffect(() => {
-    handleURLQuery();
-  }, [params]);
-
-  const handleURLQuery = () => {
-    if (params) {
-      const routeMatch = routes.find((route) => route === params.id);
-      if (!routeMatch) {
-        router.push("/404");
-      }
-    }
-  };
-
   if (params) {
     const aboutRoute = params.id === "about";
     const weddingsRoute = params.id === "weddings";
@@ -52,7 +39,7 @@ export async function getStaticPaths() {
       { params: { id: "weddings" } },
       { params: { id: "corporate" } },
     ],
-    fallback: true,
+    fallback: false,
   };
 }
 
