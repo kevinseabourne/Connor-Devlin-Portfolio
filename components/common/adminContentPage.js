@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Videos from "./videos";
 import { handleWeddingNames } from "./utils/handleWeddingName";
-import AdminSidebar from "../AdminSidebar";
 import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
@@ -19,7 +18,7 @@ const AdminContentPage = ({ data, page }) => {
 
   useEffect(() => {
     if (page === "weddings") {
-      const updatedWeddings = handleWeddingNames(data);
+      const updatedWeddings = handleWeddingNames(data, true);
       setState(updatedWeddings);
     } else {
       setState(data);
@@ -43,27 +42,24 @@ const AdminContentPage = ({ data, page }) => {
   };
 
   return state.length > 0 ? (
-    <React.Fragment>
-      <Container>
-        <AdminSidebar />
-        <Wrapper>
-          <Title>Wedding Videos</Title>
+    <Container>
+      <Wrapper>
+        <Title>Wedding Videos</Title>
 
-          <Videos
-            page={page}
-            data={state}
-            isOpen={isOpen}
-            closeOverlay={closeOverlay}
-            selectedVideo={selectedVideo}
-            handleClick={handleClick}
-            handleOnLoadOutside={handleOnLoadOutside}
-            imageLoaded={imageLoaded}
-            weddingNames={weddingNames}
-            ShowAdminContentData={true}
-          />
-        </Wrapper>
-      </Container>
-    </React.Fragment>
+        <Videos
+          page={page}
+          data={state}
+          isOpen={isOpen}
+          closeOverlay={closeOverlay}
+          selectedVideo={selectedVideo}
+          handleClick={handleClick}
+          handleOnLoadOutside={handleOnLoadOutside}
+          imageLoaded={imageLoaded}
+          weddingNames={weddingNames}
+          showAdminContentData={true}
+        />
+      </Wrapper>
+    </Container>
   ) : (
     <Container></Container>
   );

@@ -2,36 +2,26 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { cloneDeep } from "lodash";
-import playIcon from "../../public/images/playIcon.svg";
-import ImageLoader from "./imageLoader";
-import VideoOverlay from "./videoOverlay";
+import Videos from "./videos";
+import { handleWeddingNames } from "../common/utils/handleWeddingName";
 import downWave from "../../public/images/wave3.svg";
 import topWave from "../../public/images/wave4.svg";
 
 const ContentPage = ({ data, page }) => {
   const [state, setState] = useState(data || []);
   const [selectedVideo, setSelectedVideo] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
   const [weddingNames, setWeddingNames] = useState([]);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setState(data);
     if (page === "weddings") {
-      handleWeddingNames();
+      const updatedWeddings = handleWeddingNames(data);
+      setState(updatedWeddings);
+    } else {
+      setState(data);
     }
   }, []);
-
-  const handleWeddingNames = () => {
-    const stateClone = _.cloneDeep(state);
-    const updatedWeddings = stateClone.map((wedding) => {
-      let weddingNamesArray = [];
-      wedding.partners.map((name) => weddingNamesArray.push(name.firstName));
-      wedding.displayNames = weddingNamesArray.join(" & ");
-      return wedding;
-    });
-    setState(updatedWeddings);
-  };
 
   const handleClick = (id) => {
     const stateClone = _.cloneDeep(data);
@@ -54,53 +44,19 @@ const ContentPage = ({ data, page }) => {
       <TopContainer>
         <Title>{page === "weddings" ? "Weddings" : "Corporate"}</Title>
       </TopContainer>
-      <InnerContainer>
-        {state.map((item) => (
-          <Item onClick={() => handleClick(item.id)} key={item.id}>
-            <ImageContainer>
-              <ImageLoader
-                maxWidth="100%"
-                placeholderSize="56.2%"
-                src={item.coverPhoto}
-                hover={true}
-                borderRadius="19px"
-                opacity="0"
-                scale="0.99"
-                transitionTime="0.4s ease"
-                boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
-                borderRadius={"9px"}
-                delay={state.indexOf(item) * 120}
-                handleOnLoadOutside={handleOnLoadOutside}
-              />
-              <PlayIcon imageLoaded={imageLoaded}>
-                <ImageLoader
-                  maxWidth="100%"
-                  placeholderSize="100%"
-                  src={playIcon}
-                  hover={true}
-                  centerImage={true}
-                  opacity="0"
-                  scale="0.99"
-                  delay={state.indexOf(item) * 120}
-                  transitionTime="0.4s ease"
-                />
-              </PlayIcon>
-            </ImageContainer>
-            <Names>
-              {page === "weddings" ? item.displayNames : item.company}
-            </Names>
-          </Item>
-        ))}
-        <VideoOverlay
+      <VideoContainer>
+        <Videos
+          page={page}
+          data={state}
           isOpen={isOpen}
           closeOverlay={closeOverlay}
-          src={selectedVideo.video}
-          maxWidth={"900px"}
-          placeholderSize={"56.25%"}
-          alt={page === "weddings" ? weddingNames : selectedVideo.company}
-          centerVideo={true}
+          selectedVideo={selectedVideo}
+          handleClick={handleClick}
+          handleOnLoadOutside={handleOnLoadOutside}
+          imageLoaded={imageLoaded}
+          weddingNames={weddingNames}
         />
-      </InnerContainer>
+      </VideoContainer>
       <QuotesContainer>
         <Quote>
           <Wave src={downWave} />
@@ -143,88 +99,17 @@ const TopContainer = styled.div`
     `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
 `;
 
+const VideoContainer = styled.div`
+  width: 100%;
+  background-image: ${({ theme }) =>
+    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
+`;
+
 const Title = styled.h1`
   margin: 70px 0px;
   @media (max-width: 750px) {
     margin: 10% 0px;
     font-size: 1.4rem;
-  }
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(100px, 640px));
-  justify-content: center;
-  grid-auto-flow: row;
-  grid-column-end: auto;
-  grid-gap: 10% 3%;
-  padding: 50px 2%;
-  padding-top: 0px;
-  box-sizing: border-box;
-  background-image: ${({ theme }) =>
-    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
-  @media (max-width: 750px) {
-    grid-template-columns: repeat(1, minmax(100px, 1fr));
-    grid-gap: 5% 20px;
-    padding-bottom: 180px;
-  }
-`;
-
-const ImageContainer = styled.div`
-  margin-bottom: 7px;
-  z-index: 0;
-  position: relative;
-  border-radius: 10px;
-`;
-
-const PlayIcon = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  max-width: 45px;
-  max-height: 45px;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  transition: all 0.15s ease-in-out;
-  transform: scale(0.9);
-  opacity: ${({ imageLoaded }) => (imageLoaded ? 1 : 0)};
-  @media (max-width: 750px) {
-    max-width: 30px;
-    max-height: 30px;
-  }
-`;
-
-const Item = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  transition: all 0.15s ease-in-out;
-  &:hover {
-    cursor: pointer;
-    ${PlayIcon} {
-      transform: scale(1);
-    }
-  }
-`;
-
-const Names = styled.label`
-  font-size: 1.2rem;
-  letter-spacing: 0.8px;
-  margin-left: auto;
-  margin-right: auto;
-  white-space: nowrap;
-  &:hover {
-    cursor: pointer;
-  }
-  @media (max-width: 770px) {
-    font-size: 1rem;
-  }
-  @media (max-width: 550px) {
-    font-size: 1.2rem;
   }
 `;
 

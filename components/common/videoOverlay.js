@@ -38,7 +38,7 @@ const VideoOverlay = ({
   };
 
   return (
-    <React.Fragment>
+    <Container>
       <GlobalStyle isOpen={isOpen} />
       <TransitionGroup component={null}>
         {isOpen && (
@@ -46,7 +46,6 @@ const VideoOverlay = ({
             in={isOpen}
             classNames="overlayAnimation"
             timeout={300}
-            unmountOnExit
           >
             <Overlay>
               <VideoContainer maxWidth={maxWidth} ref={videoRef}>
@@ -65,7 +64,7 @@ const VideoOverlay = ({
           </CSSTransition>
         )}
       </TransitionGroup>
-    </React.Fragment>
+    </Container>
   );
 };
 
@@ -76,6 +75,8 @@ const GlobalStyle = createGlobalStyle`
    overflow: ${({ isOpen }) => (isOpen ? "hidden" : "scroll")};
   }
 `;
+
+const Container = styled.div``;
 
 const Overlay = styled.div`
   position: fixed;
@@ -93,6 +94,14 @@ const Overlay = styled.div`
   padding-right: 20px;
   box-sizing: border-box;
   transition: all 0.3s ease;
+
+  &.overlayAnimation-appear {
+    opacity: 0;
+  }
+  &.overlayAnimation-appear-active {
+    opacity: 1;
+    transition: all 0.3s;
+  }
 
   &.overlayAnimation-enter {
     opacity: 0;

@@ -19,11 +19,10 @@ const VideoLoader = ({
   hover,
   hoverColor,
   centerVideo,
-  lazyLoad,
+  lazyLoad, // turn lazyLoading off when using component inside react-transition-group as it messes with it's enter animation,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const timeout = useRef(null);
-  const timeoutTwo = useRef(null);
 
   useEffect(() => {
     return () => clearTimeout(timeout.current);
@@ -65,10 +64,10 @@ const VideoLoader = ({
             title="movie-trailer"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen;"
             frameBorder="0"
-            allowFullScreen="allowFullScreen"
           />
         </LazyLoad>
       )}
+
       {!lazyLoad && (
         <Video
           isLoaded={isLoaded}
@@ -85,7 +84,6 @@ const VideoLoader = ({
           title="movie-trailer"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen;"
           frameBorder="0"
-          allowFullScreen="allowFullScreen"
         />
       )}
     </VideoContainer>

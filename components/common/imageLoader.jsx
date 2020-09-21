@@ -82,7 +82,7 @@ const ImageContainer = styled.div`
   position: relative;
   background: transparent;
   margin: ${({ centerImage }) => (centerImage ? "auto" : "none")};
-  z-index: ${({ hoverColor }) => (hoverColor ? "auto" : "-1")};
+  z-index: ${({ hoverColor }) => (hoverColor ? "auto" : "0")};
 `;
 
 const Placeholder = styled.div`
@@ -107,7 +107,7 @@ const Image = styled.img`
   box-shadow: ${({ boxShadow }) => (boxShadow ? boxShadow : "none")};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
   filter: ${({ isLoaded, blur }) => (isLoaded ? "blur(0px)" : `blur(${blur})`)};
-  opacity: ${({ isLoaded, opacity }) => (isLoaded ? 1 : opacity)};
+  opacity: ${({ isLoaded, opacity }) => (isLoaded ? 1 : opacity ? opacity : 1)};
   transform: ${({ isLoaded, scale }) =>
     isLoaded ? "scale(1)" : `scale(${scale})`};
   transition: ${({ transitionTime }) =>

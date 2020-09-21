@@ -14,7 +14,7 @@ const Videos = ({
   isOpen,
   closeOverlay,
   weddingNames,
-  ShowAdminContentData,
+  showAdminContentData,
 }) => {
   const [state, setState] = useState([]);
 
@@ -25,8 +25,8 @@ const Videos = ({
   return (
     <Container>
       {state.map((item) => (
-        <Item onClick={() => handleClick(item.id)} key={item.id}>
-          <ImageContainer>
+        <Item key={item.id}>
+          <ImageContainer onClick={() => handleClick(item.id)}>
             <ImageLoader
               maxWidth="100%"
               placeholderSize="56.2%"
@@ -55,10 +55,10 @@ const Videos = ({
               />
             </PlayIcon>
           </ImageContainer>
-          <Names>
+          <Names onClick={() => handleClick(item.id)}>
             {page === "weddings" ? item.displayNames : item.company}
           </Names>
-          {ShowAdminContentData && (
+          {showAdminContentData && (
             <AdminVideoContent>
               <EventDate>
                 {page === "weddings" ? item.weddingDate : item.jobDate}
@@ -108,13 +108,6 @@ const Container = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
-  margin-bottom: 9px;
-  z-index: 0;
-  position: relative;
-  border-radius: 10px;
-`;
-
 const PlayIcon = styled.div`
   position: absolute;
   top: 0;
@@ -135,10 +128,11 @@ const PlayIcon = styled.div`
   }
 `;
 
-const Item = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+const ImageContainer = styled.div`
+  margin-bottom: 9px;
+  z-index: 0;
+  position: relative;
+  border-radius: 10px;
   transition: all 0.15s ease-in-out;
   &:hover {
     cursor: pointer;
@@ -148,14 +142,27 @@ const Item = styled.div`
   }
 `;
 
+const Item = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
 const Names = styled.label`
   font-size: 1.2rem;
   letter-spacing: 0.8px;
   margin-left: auto;
   margin-right: auto;
   white-space: nowrap;
+  transition: all 0.15s ease-in-out;
   &:hover {
     cursor: pointer;
+  }
+  &:hover {
+    cursor: pointer;
+    ${PlayIcon} {
+      transform: scale(1);
+    }
   }
   @media (max-width: 770px) {
     font-size: 1rem;
@@ -169,6 +176,11 @@ const AdminVideoContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  letter-spacing: 1px;
+  font-weight: 400;
+  &:hover {
+    cursor: default;
+  }
 `;
 
 const EventDate = styled.span``;
