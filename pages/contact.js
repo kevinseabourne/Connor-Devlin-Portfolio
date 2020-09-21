@@ -143,7 +143,8 @@ const Contact = (props) => {
 export default Contact;
 
 const Container = styled.div`
-  height: calc(100vh - 75px);
+  height: 100%;
+  min-height: calc(100vh - 75px);
   width: 100%;
   display: flex;
   box-sizing: border-box;
