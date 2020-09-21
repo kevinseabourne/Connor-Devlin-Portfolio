@@ -11,13 +11,13 @@ const AdminSidebar = (props) => {
   const router = useRouter();
   const [links] = useState([
     {
-      icon: "https://chpistel.sirv.com/Connor-Portfolio/dashboard.png?w=30",
+      icon:
+        "https://chpistel.sirv.com/Connor-Portfolio/speedometer%20(1).png?w=30",
       title: "Dashboard",
       route: "/admin",
     },
     {
-      icon:
-        "https://chpistel.sirv.com/Connor-Portfolio/personal-information.png?w=30",
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/2636907.svg?w=30",
       title: "About",
       route: "/admin/about",
     },
@@ -30,6 +30,26 @@ const AdminSidebar = (props) => {
       icon: "https://chpistel.sirv.com/Connor-Portfolio/husband.png?w=30",
       title: "Corporate",
       route: "/admin/corporate",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/price-tag.png?w=30",
+      title: "Pricing",
+      route: "/admin/pricing",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=30",
+      title: "Add Content",
+      route: "/admin/add-content",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/writing.png?w=30",
+      title: "Edit Content",
+      route: "/admin/edit-content",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=30",
+      title: "Delete Content",
+      route: "/admin/delete-content",
     },
   ]);
 
@@ -120,6 +140,8 @@ const LinkContainer = styled.div`
 
 const LinkTitle = styled.h3`
   margin-left: 18px;
+  font-size: 1.02rem;
+  letter-spacing: 0px;
 `;
 
 const SignOutContainer = styled.div`
@@ -147,7 +169,8 @@ const SignOutContainer = styled.div`
 const Signout = styled.span`
   margin-left: 18px;
   margin-bottom: 0.3px;
-  font-size: 1rem;
+  font-size: 1.02rem;
+  letter-spacing: 0px;
   white-space: nowrap;
   color: white;
 `;
