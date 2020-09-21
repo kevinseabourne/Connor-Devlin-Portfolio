@@ -3,10 +3,12 @@ import { getAllWeddings } from "./api/weddings";
 import ContentPage from "../components/common/contentPage";
 
 const Weddings = ({ data }) => {
-  return (
+  return data ? (
     <Container>
       <ContentPage data={data} page="weddings" />
     </Container>
+  ) : (
+    <Container></Container>
   );
 };
 
