@@ -117,7 +117,7 @@ const Icon = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 2;
+  z-index: 0;
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 14px;
