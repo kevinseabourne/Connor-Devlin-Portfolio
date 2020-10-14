@@ -61,7 +61,7 @@ const ContentPage = ({ data, page }) => {
         <Quote>
           <Wave src={downWave} />
           <WeddingPartners>{state[0].displayNames}</WeddingPartners>
-          <Description>{state[0].review}</Description>
+          <Description>{state[0].testimonial}</Description>
         </Quote>
         <TopWave src={topWave} />
       </QuotesContainer>

@@ -18,6 +18,8 @@ export const ReactSelect = React.forwardRef(
       doSubmit,
       value,
       control,
+      marginLeft,
+      marginRight,
       ...rest
     },
     ref
@@ -29,7 +31,7 @@ export const ReactSelect = React.forwardRef(
         name={name}
         defaultValue=""
         render={({ onChange, value, rules }) => (
-          <Container>
+          <Container marginLeft={marginLeft} marginRight={marginRight}>
             <Label>{label}</Label>
             <InputContainer>
               <Select
@@ -53,7 +55,7 @@ export const ReactSelect = React.forwardRef(
                   <ErrorContainer>
                     <ImageLoader
                       lazyLoad={true}
-                      maxWidth="18px"
+                      maxWidth="15px"
                       placeholderSize="100%"
                       src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                     />
@@ -71,11 +73,12 @@ export const ReactSelect = React.forwardRef(
 const Container = styled.div`
   font-size: 1.1rem;
   margin-bottom: 3px;
-  margin-left: 9px;
   display: flex;
   width: 100%;
   flex-direction: column;
   margin-bottom: 22px;
+  margin-left: ${({ marginLeft }) => marginLeft};
+  margin-right: ${({ marginRight }) => marginRight};
   @media (max-width: 420px) {
     margin-left: 0px;
   }
@@ -83,7 +86,7 @@ const Container = styled.div`
 
 const Label = styled.label`
   font-size: 1.1rem;
-  margin-bottom: 3px;
+  margin-bottom: 1px;
   margin-left: 9px;
 `;
 
@@ -117,12 +120,13 @@ const Image = styled.img``;
 const ErrorContainer = styled.div`
   margin-top: 12px;
   padding-left: 12px;
+  padding-right: 12px;
   display: flex;
   align-items: center;
   border: 1.2px solid red;
   border-radius: 9px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: row;
 
   &.errorAnimation-enter {
@@ -146,8 +150,8 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorMessage = styled.label`
-  margin-top: 3px;
+  margin-top: 1.9px;
   margin-left: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: red;
 `;

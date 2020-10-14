@@ -43,22 +43,20 @@ const AdminContentPage = ({ data, page }) => {
 
   return state.length > 0 ? (
     <Container>
-      <Wrapper>
-        <Title>Wedding Videos</Title>
+      <Title>Wedding Videos</Title>
 
-        <Videos
-          page={page}
-          data={state}
-          isOpen={isOpen}
-          closeOverlay={closeOverlay}
-          selectedVideo={selectedVideo}
-          handleClick={handleClick}
-          handleOnLoadOutside={handleOnLoadOutside}
-          imageLoaded={imageLoaded}
-          weddingNames={weddingNames}
-          showAdminContentData={true}
-        />
-      </Wrapper>
+      <Videos
+        page={page}
+        data={state}
+        isOpen={isOpen}
+        closeOverlay={closeOverlay}
+        selectedVideo={selectedVideo}
+        handleClick={handleClick}
+        handleOnLoadOutside={handleOnLoadOutside}
+        imageLoaded={imageLoaded}
+        weddingNames={weddingNames}
+        showAdminContentData={true}
+      />
     </Container>
   ) : (
     <Container></Container>
@@ -68,13 +66,21 @@ const AdminContentPage = ({ data, page }) => {
 export default AdminContentPage;
 
 const Container = styled.div`
-  width: 100%;
+  min-height: calc(100vh - 75px);
+  height: 100%;
+  margin-left: auto;
+  width: calc(100% - 280px);
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   background-image: ${({ theme }) =>
     `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
+  @media (max-width: 1250px) {
+    width: calc(100% - 200px);
+  }
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -84,6 +90,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-image: inherit;
 `;
 
 const TopContainer = styled.div`

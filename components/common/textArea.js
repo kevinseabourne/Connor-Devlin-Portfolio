@@ -45,7 +45,7 @@ export const TextArea = React.forwardRef(
               <ErrorContainer>
                 <ImageLoader
                   lazyLoad={true}
-                  maxWidth="18px"
+                  maxWidth="15px"
                   placeholderSize="100%"
                   src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                 />
@@ -95,12 +95,13 @@ const TextAreaInput = styled.textarea`
 const ErrorContainer = styled.div`
   margin-top: 12px;
   padding-left: 12px;
+  padding-right: 12px;
   display: flex;
   align-items: center;
   border: 1.2px solid red;
   border-radius: 9px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: row;
 
   &.errorAnimation-enter {
@@ -124,8 +125,8 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorMessage = styled.label`
-  margin-top: 3px;
+  margin-top: 1.9px;
   margin-left: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: red;
 `;

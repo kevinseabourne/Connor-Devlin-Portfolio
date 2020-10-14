@@ -14,12 +14,14 @@ export const Input = React.forwardRef(
       name,
       doSubmit,
       value,
+      marginLeft,
+      marginRight,
       ...rest
     },
     ref
   ) => {
     return (
-      <Container>
+      <Container marginLeft={marginLeft} marginRight={marginRight}>
         <Label>{label}</Label>
         <InputContainer>
           <TextInput
@@ -46,7 +48,7 @@ export const Input = React.forwardRef(
               <ErrorContainer>
                 <ImageLoader
                   lazyLoad={true}
-                  maxWidth="18px"
+                  maxWidth="15px"
                   placeholderSize="100%"
                   src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                 />
@@ -63,6 +65,12 @@ export const Input = React.forwardRef(
 const Container = styled.div`
   width: 100%;
   margin-bottom: 22px;
+  margin-left: ${({ marginLeft }) => marginLeft};
+  margin-right: ${({ marginRight }) => marginRight};
+  @media (max-width: 609px) {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 `;
 
 const Label = styled.label`
@@ -96,13 +104,14 @@ const TextInput = styled.input`
 const ErrorContainer = styled.div`
   margin-top: 12px;
   padding-left: 12px;
+  padding-right: 12px;
   display: flex;
   align-items: center;
   border: 1.2px solid red;
   border-radius: 9px;
-  padding-top: 6px;
   letter-spacing: 1px;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: row;
 
   &.errorAnimation-enter {
@@ -126,8 +135,8 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorMessage = styled.label`
-  margin-top: 3px;
+  margin-top: 1.9px;
   margin-left: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: red;
 `;
