@@ -15,7 +15,7 @@ const Weddings = ({ data }) => {
 export async function getStaticProps() {
   const data = await getAllWeddings();
   return {
-    props: { data },
+    props: data ? { data } : { data: null },
   };
 }
 

@@ -15,7 +15,7 @@ const Corporate = ({ data }) => {
 export async function getStaticProps() {
   const data = await getAllCorporate();
   return {
-    props: { data },
+    props: data ? { data } : { data: null },
   };
 }
 
