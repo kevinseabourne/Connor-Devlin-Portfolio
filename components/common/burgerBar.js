@@ -1,51 +1,87 @@
 import styled, { createGlobalStyle } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Link from "next/link";
+import React, { useState, useRef, useEffect } from "react";
+import { getCurrentUser } from "../../pages/api/auth";
 
-const BurgerBar = React.forwardRef(({ burgerOpen, onClick, links }, ref) => {
-  return (
-    <React.Fragment>
-      <Container ref={ref}>
-        <GlobalStyle burgerOpen={burgerOpen} />
-        <Burger
-          burgerOpen={burgerOpen}
-          onClick={onClick}
-          id="burgerOpen"
-          data-testid="burgerOpen"
-        >
-          <BurgerInner burgerOpen={burgerOpen} />
-        </Burger>
-        <Content burgerOpen={burgerOpen}>
-          {links.map((link) => (
-            <Link key={links.indexOf(link)} href={link.link}>
-              <BurgerLinkTitle onClick={onClick}>{link.title}</BurgerLinkTitle>
-            </Link>
-          ))}
-        </Content>
-      </Container>
-      <TransitionGroup component={null}>
-        {burgerOpen && (
-          <CSSTransition
-            in={burgerOpen}
-            classNames="overlayAnimation"
-            timeout={300}
-            unmountOnExit
+const BurgerBar = React.forwardRef(
+  ({ burgerOpen, handleBurgerClick, links, adminLinks }, ref) => {
+    const contentRef = useRef(null);
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+      const currentUser = getCurrentUser();
+      setUser(currentUser);
+    }, []);
+
+    const onClick = () => {
+      handleBurgerClick();
+      contentRef.current.scrollTop = 0;
+    };
+
+    return (
+      <React.Fragment>
+        <Container ref={ref}>
+          <GlobalStyle burgerOpen={burgerOpen} />
+          <Burger
+            burgerOpen={burgerOpen}
+            onClick={onClick}
+            id="burgerOpen"
+            data-testid="burgerOpen"
           >
-            <Overlay burgerOpen={burgerOpen} />
-          </CSSTransition>
-        )}
-      </TransitionGroup>
-    </React.Fragment>
-  );
-});
+            <BurgerInner burgerOpen={burgerOpen} />
+          </Burger>
+          <Content ref={contentRef} burgerOpen={burgerOpen}>
+            {links.map((link) => (
+              <Link key={links.indexOf(link)} href={link.link}>
+                <BurgerLinkTitle onClick={onClick}>
+                  {link.title}
+                </BurgerLinkTitle>
+              </Link>
+            ))}
+            {user && <BurgerSubTitle>Admin</BurgerSubTitle>}
+            {user &&
+              adminLinks.map((link) => (
+                <Link key={link.route} href="/admin/[id]" as={link.route}>
+                  <BurgerLinkTitle onClick={onClick} user={user}>
+                    {link.title}
+                  </BurgerLinkTitle>
+                </Link>
+              ))}
+          </Content>
+        </Container>
+        <TransitionGroup component={null}>
+          {burgerOpen && (
+            <CSSTransition
+              in={burgerOpen}
+              classNames="overlayAnimation"
+              timeout={300}
+              unmountOnExit
+            >
+              <Overlay burgerOpen={burgerOpen} />
+            </CSSTransition>
+          )}
+        </TransitionGroup>
+      </React.Fragment>
+    );
+  }
+);
 
 export default BurgerBar;
+
+const GlobalStyle = createGlobalStyle`
+ body {
+   overflow: ${({ burgerOpen }) =>
+     burgerOpen ? "hidden !important" : "scroll"};
+   overscroll-behavior: none;
+  }
+`;
 
 const Container = styled.div`
   display: none;
   align-items: center;
   justify-content: center;
   margin-left: auto;
+  z-index: 100;
   @media (max-width: 1024px) {
     display: flex;
   }
@@ -164,7 +200,7 @@ const Content = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   position: fixed;
-  overflow: hidden;
+  overflow: scroll;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   transition: width 0.3s ease;
@@ -194,13 +230,24 @@ const BurgerLinkTitle = styled.span`
   &:first-child {
     border-top: none;
   }
+  &:nth-child(5) {
+    border-bottom: ${({ user, theme }) =>
+      user ? `1px solid ${theme.colors.fontColor}` : "none"};
+  }
   &:last-child {
     border-bottom: 1px solid ${({ theme }) => theme.colors.fontColor};
+    margin-bottom: 70px;
   }
 `;
 
-const GlobalStyle = createGlobalStyle`
- body {
-   overflow: ${({ burgerOpen }) => (burgerOpen ? "hidden" : "scroll")};
+const BurgerSubTitle = styled.h4`
+  margin-top: 55px;
+  margin-bottom: 5.5px;
+  font-size: 0.8rem;
+  padding-left: 10px;
+  font-weight: bold;
+  text-align: left;
+  &:hover {
+    cursor: default;
   }
 `;
