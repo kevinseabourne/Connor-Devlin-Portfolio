@@ -6,12 +6,55 @@ import BurgerBar from "./common/burgerBar";
 
 const Header = (props) => {
   const ref = useRef(null);
-  const [links, setLinks] = useState([
+  const [links] = useState([
     { title: "About", link: "/about" },
     { title: "Weddings", link: "/weddings" },
     { title: "Corporate", link: "/corporate" },
     { title: "Pricing", link: "/pricing" },
     { title: "Contact", link: "/contact" },
+  ]);
+  const [adminLinks] = useState([
+    {
+      icon:
+        "https://chpistel.sirv.com/Connor-Portfolio/speedometer%20(1).png?w=30",
+      title: "Dashboard",
+      route: "/admin",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/2636907.svg?w=30",
+      title: "About",
+      route: "/admin/about",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/bride.png?w=30",
+      title: "Weddings",
+      route: "/admin/weddings",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/husband.png?w=30",
+      title: "Corporate",
+      route: "/admin/corporate",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/price-tag.png?w=30",
+      title: "Pricing",
+      route: "/admin/pricing",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=30",
+      title: "Add Content",
+      route: "/admin/add-content",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/writing.png?w=30",
+      title: "Edit Content",
+      route: "/admin/edit-content",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=30",
+      title: "Delete Content",
+      route: "/admin/delete-content",
+    },
   ]);
   const [burgerOpen, setBurgerOpen] = useState(false);
 
@@ -56,7 +99,8 @@ const Header = (props) => {
       </LinksContainer>
       <BurgerBar
         ref={ref}
-        onClick={handleBurgerClick}
+        adminLinks={adminLinks}
+        handleBurgerClick={handleBurgerClick}
         burgerOpen={burgerOpen}
         links={links}
       />
