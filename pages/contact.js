@@ -76,15 +76,17 @@ const Contact = (props) => {
   ];
 
   const onSubmit = async (data) => {
-    setStatus("pending");
-    const response = await sendEmail(data);
-    if (response.status === 200) {
-      setStatus("resolved");
+    if (status !== "pending") {
+      setStatus("pending");
+      const response = await sendEmail(data);
+      if (response.status === 200) {
+        setStatus("resolved");
 
-      // clear inputs
-      setValue("dayPicker", "");
-      setValue("topic", "");
-      reset();
+        // clear inputs
+        setValue("dayPicker", "");
+        setValue("topic", "");
+        reset();
+      }
     }
   };
 

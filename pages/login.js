@@ -9,6 +9,7 @@ const Login = () => {
   const { handleSignIn, currentUser } = useContext(AppContext);
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [status, setStatus] = useState("idle");
   const { register, handleSubmit, errors } = useForm();
 
   useEffect(() => {
@@ -21,9 +22,13 @@ const Login = () => {
   }, []);
 
   const onSubmit = async (query) => {
-    const response = await handleSignIn(query);
-    if (response) {
-      router.push("/admin");
+    if (status !== "pending") {
+      setStatus("pending");
+      const response = await handleSignIn(query);
+      if (response) {
+        router.push("/admin");
+      }
+      setStatus("resolved");
     }
   };
 

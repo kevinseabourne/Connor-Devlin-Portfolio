@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import lodash from "lodash";
 import { useForm } from "react-hook-form";
@@ -6,10 +6,8 @@ import { Input } from "../components/common/input";
 import { TextArea } from "../components/common/textArea";
 import { DayPicker } from "../components/common/dayPicker";
 import { ReactSelect } from "../components/common/select";
-import { UploadButton } from "../components/common/uploadButton";
 import { addWedding } from "../pages/api/weddings";
 import { addCorporate } from "../pages/api/corporate";
-import { getVimeoData } from "../pages/api/vimeo";
 import ImageLoader from "../components/common/imageLoader";
 
 const AdminAddContent = (props) => {
@@ -67,52 +65,56 @@ const AdminAddContent = (props) => {
   };
 
   const handleAddWeddingSubmit = async (data) => {
-    setStatus("pending");
-    const dataClone = _.cloneDeep(data);
+    if (status !== "pending") {
+      setStatus("pending");
+      const dataClone = _.cloneDeep(data);
 
-    // turn object to to array of key, value pairs
-    const array = _.toPairsIn(dataClone);
+      // turn object to to array of key, value pairs
+      const array = _.toPairsIn(dataClone);
 
-    let partnersArray = [];
-    array.map((partner) => {
-      for (let i of array) {
-        if (
-          // each key has its id on the end of the string. I return items that have the same id are not the same,
-          // to exclude dupliced of the same string
-          partner[0].split("_").pop() === i[0].split("_").pop() &&
-          partner[0] !== i[0]
-        ) {
-          partnersArray.push({
-            firstName: partner[1],
-            lastName: i[1],
-          });
+      let partnersArray = [];
+      array.map((partner) => {
+        for (let i of array) {
+          if (
+            // each key has its id on the end of the string. I return items that have the same id are not the same,
+            // to exclude dupliced of the same string
+            partner[0].split("_").pop() === i[0].split("_").pop() &&
+            partner[0] !== i[0]
+          ) {
+            partnersArray.push({
+              firstName: partner[1],
+              lastName: i[1],
+            });
+          }
         }
-      }
-    });
-    // filter out every second item in partners array
-    dataClone.partners = partnersArray.filter(
-      (partner) => partnersArray.indexOf(partner) % 2 === 0
-    );
-    const response = await addWedding(dataClone);
+      });
+      // filter out every second item in partners array
+      dataClone.partners = partnersArray.filter(
+        (partner) => partnersArray.indexOf(partner) % 2 === 0
+      );
+      const response = await addWedding(dataClone);
 
-    if (response) {
-      setValue("stateTerritory", "");
-      setValue("weddingDate", "");
-      reset();
-      setStatus("resolved");
+      if (response) {
+        setValue("stateTerritory", "");
+        setValue("weddingDate", "");
+        reset();
+        setStatus("resolved");
+      }
     }
   };
 
   const handleAddCorporateSubmit = async (data) => {
-    setStatus("pending");
-    const dataClone = _.cloneDeep(data);
+    if (status !== "pending") {
+      setStatus("pending");
+      const dataClone = _.cloneDeep(data);
 
-    const response = await addCorporate(dataClone);
+      const response = await addCorporate(dataClone);
 
-    if (response) {
-      setValue("jobDate", "");
-      reset();
-      setStatus("resolved");
+      if (response) {
+        setValue("jobDate", "");
+        reset();
+        setStatus("resolved");
+      }
     }
   };
 
