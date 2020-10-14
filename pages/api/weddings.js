@@ -1,5 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import moment from "moment";
+import { getVimeoData } from "./vimeo";
 
 // async function getToken() {
 //   const { data } = await http.post(
@@ -58,7 +60,7 @@ export async function getAllWeddings() {
           let data = [];
           querySnapshot.forEach(function (doc) {
             let item = doc.data();
-            item.weddingDate = item.weddingDate.toDate().toLocaleDateString();
+            item.date = item.date.toDate().toLocaleDateString();
             item.id = doc.id;
             data.push(item);
           });
@@ -101,4 +103,37 @@ export async function getAllWeddings() {
   //     console.log("Error getting document:", error);
   //   });
   // return weddings;
+}
+
+export async function addWedding(data) {
+  const updatedData = await getVimeoData(data);
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const weddings = await db
+        .collection("weddings")
+        .add({
+          coverPhoto: updatedData.coverPhoto,
+          location: {
+            state: updatedData.stateTerritory.value,
+            suburb: updatedData.suburb,
+          },
+          date: updatedData.date,
+          partners: updatedData.partners,
+          description: updatedData.description,
+          video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
+          duration: updatedData.duration,
+          testimonial: updatedData.testimonial,
+        })
+        .catch(function (error) {
+          console.log("Error adding document:", error);
+        });
+      return weddings;
+    });
+  return response;
 }

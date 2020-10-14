@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { getVimeoData } from "./vimeo";
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -30,7 +31,7 @@ export async function getAllCorporate() {
           let data = [];
           querySnapshot.forEach(function (doc) {
             let item = doc.data();
-            item.jobDate = item.jobDate.toDate().toLocaleDateString();
+            item.date = item.date.toDate().toLocaleDateString();
             item.id = doc.id;
             data.push(item);
           });
@@ -40,6 +41,35 @@ export async function getAllCorporate() {
           console.log("Error getting document:", error);
         });
       return weddings;
+    });
+  return response;
+}
+
+export async function addCorporate(data) {
+  const updatedData = await getVimeoData(data);
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const corporate = await db
+        .collection("corporate")
+        .add({
+          company: updatedData.company,
+          coverPhoto: updatedData.coverPhoto,
+          description: updatedData.description,
+          date: updatedData.date,
+          testimonial: updatedData.corporateTestimonial,
+          video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
+          duration: updatedData.duration,
+        })
+        .catch(function (error) {
+          console.log("Error adding document:", error);
+        });
+      return corporate;
     });
   return response;
 }
