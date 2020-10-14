@@ -11,12 +11,14 @@ const BurgerBar = React.forwardRef(
     useEffect(() => {
       const currentUser = getCurrentUser();
       setUser(currentUser);
-    }, []);
+    }, [burgerOpen]);
 
     const onClick = () => {
       handleBurgerClick();
       contentRef.current.scrollTop = 0;
     };
+
+    console.log(user);
 
     return (
       <React.Fragment>
@@ -33,7 +35,7 @@ const BurgerBar = React.forwardRef(
           <Content ref={contentRef} burgerOpen={burgerOpen}>
             {links.map((link) => (
               <Link key={links.indexOf(link)} href={link.link}>
-                <BurgerLinkTitle onClick={onClick}>
+                <BurgerLinkTitle onClick={onClick} user={user}>
                   {link.title}
                 </BurgerLinkTitle>
               </Link>
@@ -220,8 +222,6 @@ const BurgerLinkTitle = styled.span`
   opacity: 0.9;
   width: 100%;
   background-color: transparent;
-  &::after {
-  }
   &:hover {
     cursor: pointer;
     opacity: 1;
@@ -247,6 +247,7 @@ const BurgerSubTitle = styled.h4`
   padding-left: 10px;
   font-weight: bold;
   text-align: left;
+  border-left: ${({ user }) => (user ? "1px solid black" : "none")};
   &:hover {
     cursor: default;
   }
