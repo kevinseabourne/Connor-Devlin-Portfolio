@@ -3,6 +3,9 @@ import styled from "styled-components";
 import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
+import lodash from "lodash";
+import { motion } from "framer-motion";
+import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
 const Videos = ({
   page,
@@ -17,15 +20,53 @@ const Videos = ({
   showAdminContentData,
 }) => {
   const [state, setState] = useState([]);
+  const [reverseDelay, setReverseDelay] = useState(false);
+  const [mount, setMount] = useState(false);
 
   useEffect(() => {
     setState(data);
+    setMount(true);
   }, [data]);
 
+  const handleReverseDelay = () => {
+    setReverseDelay(!reverseDelay);
+  };
+
+  const container = {
+    show: {
+      transition: {
+        delayChildren: 0.4,
+        staggerChildren: 0.09,
+      },
+    },
+    exit: {
+      transition: {
+        staggerChildren: 0.07,
+        staggerDirection: -1,
+      },
+    },
+  };
+
+  const itemA = {
+    hidden: { scale: 0.96, opacity: 0, y: 12 },
+    show: { scale: 1, opacity: 1, y: 0 },
+  };
+
+  const itemB = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+  };
+
   return (
-    <Container>
+    <Container
+      variants={container}
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      key={mount}
+    >
       {state.map((item) => (
-        <Item key={item.id}>
+        <Item key={state.indexOf(item)} variants={itemA}>
           <ImageContainer onClick={() => handleClick(item.id)}>
             <ImageLoader
               maxWidth="100%"
@@ -35,34 +76,38 @@ const Videos = ({
               borderRadius="19px"
               opacity="0"
               scale="0.99"
-              transitionTime="0.4s ease"
+              transitionDuration={350}
+              handleReverseDelay={handleReverseDelay}
+              transitionTiming="ease"
               boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
               borderRadius={"9px"}
-              delay={state.indexOf(item) * 120}
               handleOnLoadOutside={handleOnLoadOutside}
+              iconSrc={playIcon}
+              iconMaxWidth="45px"
+              iconMaxHeight="45px"
             />
-            <PlayIcon imageLoaded={imageLoaded}>
-              <ImageLoader
-                maxWidth="100%"
-                placeholderSize="100%"
-                src={playIcon}
-                hover={true}
-                centerImage={true}
-                opacity="0"
-                scale="0.99"
-                delay={state.indexOf(item) * 120}
-                transitionTime="0.4s ease"
-              />
-            </PlayIcon>
           </ImageContainer>
-          <Names onClick={() => handleClick(item.id)}>
-            {page === "weddings" ? item.displayNames : item.company}
-          </Names>
+          {!showAdminContentData && (
+            <Names
+              variants={itemB}
+              key={state.indexOf(item)}
+              onClick={() => handleClick(item.id)}
+            >
+              {page === "weddings" ? item.displayNames : item.company}
+            </Names>
+          )}
+
+          {showAdminContentData && (
+            <WrappedNames onClick={() => handleClick(item.id)}>
+              {item.displayNames
+                ? item.displayNames.replace("&", "\n")
+                : item.company}
+            </WrappedNames>
+          )}
+
           {showAdminContentData && (
             <AdminVideoContent>
-              <EventDate>
-                {page === "weddings" ? item.weddingDate : item.jobDate}
-              </EventDate>
+              <EventDate>{item.date}</EventDate>
               {page === "wedings" && (
                 <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
               )}
@@ -88,22 +133,28 @@ const Videos = ({
 
 export default Videos;
 
-const Container = styled.div`
+const Container = styled(motion.ul)`
   width: 100%;
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(3, minmax(100px, 640px));
   justify-content: center;
   align-items: flex-start;
   grid-auto-flow: row;
   grid-column-end: auto;
-  grid-gap: 10% 3%;
-  padding: 50px 2%;
+  grid-gap: calc(100vw * 0.04) 3%;
+  padding: 50px 3%;
   padding-top: 0px;
   box-sizing: border-box;
   background-color: transparent;
+  @media (max-width: 1250px) {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    grid-gap: calc(100vw * 0.05) 20px;
+    padding-bottom: 390px;
+  }
   @media (max-width: 750px) {
     grid-template-columns: repeat(1, minmax(100px, 1fr));
-    grid-gap: 5% 20px;
+    grid-gap: calc(100vw * 0.1) 20px;
     padding-bottom: 180px;
   }
 `;
@@ -142,18 +193,23 @@ const ImageContainer = styled.div`
   }
 `;
 
-const Item = styled.div`
+const Item = styled(motion.li)`
   display: flex;
   justify-content: center;
   flex-direction: column;
 `;
 
-const Names = styled.label`
+const Img = styled(motion.img)`
+  width: 100%;
+  max-width: 500px;
+`;
+
+const Names = styled(motion.label)`
   font-size: 1.2rem;
   letter-spacing: 0.8px;
   margin-left: auto;
   margin-right: auto;
-  white-space: nowrap;
+  white-space: normal;
   transition: all 0.15s ease-in-out;
   &:hover {
     cursor: pointer;
@@ -170,6 +226,14 @@ const Names = styled.label`
   @media (max-width: 550px) {
     font-size: 1.2rem;
   }
+`;
+
+const WrappedNames = styled.div`
+  display: flex;
+  flex-direction: column;
+  white-space: pre-line;
+  align-items: center;
+  text-align: center;
 `;
 
 const AdminVideoContent = styled.div`
