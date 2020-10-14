@@ -13,52 +13,52 @@ const AdminRoute = ({ params, data }) => {
   switch (params.id) {
     case "about":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
           <AdminAbout />
-        </React.Fragment>
+        </Container>
       );
     case "weddings":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
-          <AdminContentPage data={data} page="weddings" />;
-        </React.Fragment>
+          <AdminContentPage data={data} page="weddings" />
+        </Container>
       );
     case "corporate":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
-          <AdminContentPage data={data} page="corporate" />;
-        </React.Fragment>
+          <AdminContentPage data={data} page="corporate" />
+        </Container>
       );
     case "pricing":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
-          <AdminPricing />;
-        </React.Fragment>
+          <AdminPricing />
+        </Container>
       );
     case "add-content":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
-          <AdminAddContent />;
-        </React.Fragment>
+          <AdminAddContent />
+        </Container>
       );
     case "edit-content":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
-          <AdminEditContent />;
-        </React.Fragment>
+          <AdminEditContent />
+        </Container>
       );
     case "delete-content":
       return (
-        <React.Fragment>
+        <Container>
           <AdminSidebar />
-          <AdminDeleteContent />;
-        </React.Fragment>
+          <AdminDeleteContent />
+        </Container>
       );
     default:
       return <Container />;
@@ -86,8 +86,9 @@ export async function getStaticProps({ params }) {
       params.id === "weddings"
         ? await getAllWeddings()
         : await getAllCorporate();
+
     return {
-      props: { data, params },
+      props: data ? { data, params } : { data: null, params },
     };
   } else {
     return {
@@ -98,4 +99,7 @@ export async function getStaticProps({ params }) {
 
 export default AdminRoute;
 
-const Container = styled.div``;
+const Container = styled.div`
+  height: 100%;
+  min-height: calc(100vh - 75px);
+`;

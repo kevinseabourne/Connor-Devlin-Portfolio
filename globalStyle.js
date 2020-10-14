@@ -130,13 +130,13 @@ export const GlobalStyle = createGlobalStyle`
   border: none !important;
   border-radius: 9px !important;
   font-size: 1rem !important;
-  padding: 7px 5px;
+  padding: 5.33px 5px;
 }
 
  .css-1pahdxg-control {
      border-radius: 9px !important;
      font-size: 1rem !important;
-     padding: 7px 5px;
+     padding: 5.33px 5px;
      border: none !important;
      box-shadow: none !important;
  }

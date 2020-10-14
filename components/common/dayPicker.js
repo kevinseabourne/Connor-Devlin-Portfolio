@@ -19,6 +19,8 @@ export const DayPicker = React.forwardRef(
       doSubmit,
       value,
       control,
+      marginLeft,
+      marginRight,
       ...rest
     },
     ref
@@ -30,7 +32,7 @@ export const DayPicker = React.forwardRef(
         name={name}
         defaultValue=""
         render={({ onChange, onBlur, value, rules }) => (
-          <Container>
+          <Container marginLeft={marginLeft} marginRight={marginRight}>
             <Label>{label}</Label>
             <InputContainer>
               <DayPickerInput
@@ -69,7 +71,7 @@ export const DayPicker = React.forwardRef(
                   <ErrorContainer>
                     <ImageLoader
                       lazyLoad={true}
-                      maxWidth="18px"
+                      maxWidth="15px"
                       placeholderSize="100%"
                       opacity="0"
                       scale="0.99"
@@ -94,6 +96,8 @@ const Container = styled.div`
   width: 100%;
   flex-direction: column;
   margin-bottom: 22px;
+  margin-left: ${({ marginLeft }) => marginLeft};
+  margin-right: ${({ marginRight }) => marginRight};
 `;
 
 const Label = styled.label`
@@ -132,12 +136,13 @@ const Image = styled.img``;
 const ErrorContainer = styled.div`
   margin-top: 12px;
   padding-left: 12px;
+  padding-right: 12px;
   display: flex;
   align-items: center;
   border: 1.2px solid red;
   border-radius: 9px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   flex-direction: row;
 
   &.errorAnimation-enter {
@@ -161,8 +166,8 @@ const ErrorContainer = styled.div`
 `;
 
 const ErrorMessage = styled.label`
-  margin-top: 3px;
+  margin-top: 1.9px;
   margin-left: 8px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: red;
 `;

@@ -68,9 +68,11 @@ const AdminSidebar = (props) => {
                 maxWidth="30px"
                 placeholderSize="100%"
                 opacity="0"
-                transitionTime="300ms ease"
+                transitionDuration={300}
+                transitionTiming="ease"
                 hover={true}
                 src={link.icon}
+                delay={links.indexOf(link) * 62}
               />
               <LinkTitle>{link.title}</LinkTitle>
             </LinkContainer>
@@ -102,7 +104,7 @@ const Sidebar = styled.div`
   position: fixed;
   height: calc(100vh - 75px);
   margin-top: 75px;
-  overflow: hidden;
+  overflow: scroll;
   width: 280px;
   display: flex;
   flex-direction: column;
@@ -113,10 +115,18 @@ const Sidebar = styled.div`
     rgb(50, 172, 109) 0%,
     rgb(209, 251, 155) 100.2%
   );
+  @media (max-width: 1250px) {
+    width: 200px;
+    padding: 0 25px;
+  }
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const LinksContainer = styled.div`
   margin-top: 70px;
+  margin-bottom: 30px;
 `;
 
 const LinkContainer = styled.div`
@@ -142,6 +152,9 @@ const LinkTitle = styled.h3`
   margin-left: 18px;
   font-size: 1.02rem;
   letter-spacing: 0px;
+  @media (max-width: 750px) {
+    display: none;
+  }
 `;
 
 const SignOutContainer = styled.div`
@@ -173,4 +186,7 @@ const Signout = styled.span`
   letter-spacing: 0px;
   white-space: nowrap;
   color: white;
+  @media (max-width: 750px) {
+    display: none;
+  }
 `;
