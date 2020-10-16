@@ -54,6 +54,12 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 
+/* safari support to clear random 1px margin in inputs */
+  input {
+    margin: 0;
+    font-family: inherit;
+  }
+
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -107,7 +113,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .DayPickerInput > input {
-    padding: 14px 54px 14px 12px;
+    padding: 13px 54px 14px 12px;
     font-size: 1rem;
     border-radius: 9px;
     outline: none;
@@ -131,6 +137,7 @@ export const GlobalStyle = createGlobalStyle`
   border-radius: 9px !important;
   font-size: 1rem !important;
   padding: 5.33px 5px;
+  font-family: inherit;
 }
 
  .css-1pahdxg-control {
