@@ -4,6 +4,9 @@ import Videos from "./common/videos";
 import { getAllWeddings } from ".././pages/api/weddings";
 import { getAllCorporate } from ".././pages/api/corporate";
 import lodash from "lodash";
+import { motion } from "framer-motion";
+import { AnimateSharedLayout } from "framer-motion";
+import { LoadingSpinner } from "../components/loading-spinner";
 import { handleWeddingNames } from "./common/utils/handleWeddingName";
 
 const AdminEditContent = (props) => {
@@ -46,52 +49,89 @@ const AdminEditContent = (props) => {
     }
   };
 
+  const loaderAnimation = {
+    hidden: { opacity: 0, transform: "scale(0)" },
+    show: {
+      opacity: 1,
+      transform: "scale(1)",
+      trasition: {
+        type: "spring",
+        stiffness: 2000,
+      },
+    },
+  };
+
   return (
-    <Container page={page}>
-      <Title>Choose Which section you would like to edit ?</Title>
-      <ButtonsContainer>
-        <WeddingsFormButton page={page} onClick={showWeddingContent}>
-          Weddings
-        </WeddingsFormButton>
-        <CorporateFormButton page={page} onClick={showCorporateContent}>
-          Corporate
-        </CorporateFormButton>
-      </ButtonsContainer>
-      {page && <Title>Choose a {page} video to edit</Title>}
-      {page === "weddings" && (
-        <Videos
-          page={page}
-          data={state}
-          selectedVideo={selectedVideo}
-          handleClick={handleClick}
-          showAdminContentData={true}
-          editDeleteContent={true}
-        />
-      )}
-      {page === "corporate" && (
-        <Videos
-          page={page}
-          data={state}
-          selectedVideo={selectedVideo}
-          handleClick={handleClick}
-          showAdminContentData={true}
-          editDeleteContent={true}
-        />
-      )}
+    <Container>
+      <AnimateSharedLayout>
+        <InnerContainer>
+          <ButtonsContainer
+            initial={{ marginTop: "400px" }}
+            animate={
+              page
+                ? { marginTop: "0px" }
+                : {
+                    marginTop: "400px",
+                    trasition: {
+                      type: "spring",
+                      stiffness: 500,
+                    },
+                  }
+            }
+          >
+            <Title>Choose a section to edit ?</Title>
+            <ButtonsInnerContainer>
+              <WeddingsFormButton page={page} onClick={showWeddingContent}>
+                Weddings
+              </WeddingsFormButton>
+              <CorporateFormButton page={page} onClick={showCorporateContent}>
+                Corporate
+              </CorporateFormButton>
+            </ButtonsInnerContainer>
+          </ButtonsContainer>
+
+          {status === "pending" && (
+            <LoadingContainer variants={loaderAnimation}>
+              <LoadingSpinner variants={loaderAnimation} />
+            </LoadingContainer>
+          )}
+
+          {page && <Title>Choose a {page} video to edit</Title>}
+          {page === "weddings" && (
+            <Videos
+              page={page}
+              data={state}
+              selectedVideo={selectedVideo}
+              handleClick={handleClick}
+              showAdminContentData={true}
+              editDeleteContent={true}
+            />
+          )}
+          {page === "corporate" && (
+            <Videos
+              page={page}
+              data={state}
+              selectedVideo={selectedVideo}
+              handleClick={handleClick}
+              showAdminContentData={true}
+              editDeleteContent={true}
+            />
+          )}
+        </InnerContainer>
+      </AnimateSharedLayout>
     </Container>
   );
 };
 
 export default AdminEditContent;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: calc(100% - 280px);
-  min-height: 100vh;
+  min-height: calc(100vh - 75px);
   transition: all 0.5s ease;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: ${({ page }) => (page ? "flex-start" : "center")};
   flex-direction: column;
   margin-left: auto;
   background-image: ${({ theme }) =>
@@ -99,6 +139,12 @@ const Container = styled.div`
   @media (max-width: 1024px) {
     width: 100%;
   }
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const Title = styled.h1`
@@ -109,15 +155,32 @@ const Title = styled.h1`
   }
 `;
 
-const ButtonsContainer = styled.div`
+const ButtonsContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px;
+  margin-bottom: 50px;
+`;
+
+const ButtonsInnerContainer = styled(motion.div)`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin: 0 20px;
   @media (max-width: 390px) {
     flex-direction: column;
   }
+`;
+
+const LoadingContainer = styled(motion.div)`
+  display: flex;
+  position: relative;
+  width: 55px;
+  height: 55px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const WeddingsFormButton = styled.button`
