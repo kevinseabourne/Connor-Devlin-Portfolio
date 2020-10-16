@@ -17,6 +17,7 @@ const Videos = ({
   isOpen,
   closeOverlay,
   weddingNames,
+  editDeleteContent,
   showAdminContentData,
 }) => {
   const [state, setState] = useState([]);
@@ -57,6 +58,19 @@ const Videos = ({
     show: { opacity: 1 },
   };
 
+  const dot = {
+    hidden: { backgroundColor: "white", opacity: 0, transform: "scale(0)" },
+    show: {
+      backgroundColor: "rgba(50,172,109,1)",
+      opacity: 1,
+      transform: "scale(1)",
+      transition: {
+        type: "spring",
+        stiffness: 800,
+      },
+    },
+  };
+
   return (
     <Container
       variants={container}
@@ -82,10 +96,18 @@ const Videos = ({
               boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
               borderRadius={"9px"}
               handleOnLoadOutside={handleOnLoadOutside}
-              iconSrc={playIcon}
+              iconSrc={editDeleteContent ? null : playIcon}
               iconMaxWidth="45px"
+              editDeleteContent={editDeleteContent}
               iconMaxHeight="45px"
             />
+            {editDeleteContent && (
+              <SelectedVideoButton>
+                <Dot
+                  animate={selectedVideo.id === item.id ? dot.show : dot.hidden}
+                />
+              </SelectedVideoButton>
+            )}
           </ImageContainer>
           {!showAdminContentData && (
             <Names
@@ -192,6 +214,34 @@ const ImageContainer = styled.div`
     }
   }
 `;
+
+const SelectedVideoButton = styled(motion.div)`
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  object-fit: contain;
+  object-position: left;
+  border-radius: 50%;
+  left: 15px;
+  top: 15px;
+  background-color: white;
+  position: absolute;
+`;
+
+const Dot = styled(motion.div)`
+  z-index: 14;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  margin: auto;
+`;
+
+const Overlay = styled.div``;
 
 const Item = styled(motion.li)`
   display: flex;

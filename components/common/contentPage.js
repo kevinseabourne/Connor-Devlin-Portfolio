@@ -6,11 +6,11 @@ import Videos from "./videos";
 import { handleWeddingNames } from "../common/utils/handleWeddingName";
 import downWave from "../../public/images/wave3.svg";
 import topWave from "../../public/images/wave4.svg";
+import Clients from "../clients";
 
 const ContentPage = ({ data, page }) => {
   const [state, setState] = useState(data || []);
   const [selectedVideo, setSelectedVideo] = useState({});
-  const [weddingNames, setWeddingNames] = useState([]);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -54,17 +54,19 @@ const ContentPage = ({ data, page }) => {
           handleClick={handleClick}
           handleOnLoadOutside={handleOnLoadOutside}
           imageLoaded={imageLoaded}
-          weddingNames={weddingNames}
         />
       </VideoContainer>
-      <QuotesContainer>
-        <Quote>
-          <Wave src={downWave} />
-          <WeddingPartners>{state[0].displayNames}</WeddingPartners>
-          <Description>{state[0].testimonial}</Description>
-        </Quote>
-        <TopWave src={topWave} />
-      </QuotesContainer>
+      {page === "corporate" && <Clients />}
+      {page === "weddings" && (
+        <QuotesContainer>
+          <Quote>
+            <Wave src={downWave} />
+            <WeddingPartners>{state[0].displayNames}</WeddingPartners>
+            <Description>{state[0].testimonial}</Description>
+          </Quote>
+          <TopWave src={topWave} />
+        </QuotesContainer>
+      )}
       <Pricing>
         <Link
           href="/pricing/[id]"
