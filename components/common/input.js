@@ -74,8 +74,7 @@ const Container = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 1.1rem;
-  margin-bottom: 3px;
+  font-size: 1rem;
   margin-left: 9px;
 `;
 
@@ -92,6 +91,7 @@ const TextInput = styled.input`
   font-size: 1rem;
   border-radius: 9px;
   outline: none;
+  margin: 0px;
   box-sizing: border-box;
   font-weight: 500;
   font-family: inherit;

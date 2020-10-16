@@ -85,8 +85,7 @@ const Container = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 1.1rem;
-  margin-bottom: 1px;
+  font-size: 1rem;
   margin-left: 9px;
 `;
 

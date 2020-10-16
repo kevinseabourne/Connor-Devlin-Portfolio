@@ -43,7 +43,6 @@ export default Clients;
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
   display: flex;
   padding: 20% 20px;
   box-sizing: border-box;
@@ -56,14 +55,11 @@ const Container = styled.div`
     padding: 40% 20px;
   }
   @media (min-width: 681px) and (max-height: 1200px) {
-    min-height: 900px;
+    min-height: 600px;
   }
   @media (max-width: 355px) {
     padding: 140px 20px;
   }
-  ${"" /* @media (max-height: 1024px) {
-    height: 570px;
-  } */}
 `;
 
 const Title = styled.h1`

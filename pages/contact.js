@@ -115,6 +115,7 @@ const Contact = (props) => {
             name="dayPicker"
             validation={schema.date}
             error={errors.dayPicker}
+            marginRight="5px"
           />
           <ReactSelect
             control={control}
@@ -124,6 +125,7 @@ const Contact = (props) => {
             options={topicOptions}
             validation={schema.topic}
             error={errors.topic}
+            marginLeft="5px"
           />
         </InnerContainer>
 
