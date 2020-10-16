@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Videos from "./videos";
+import lodash from "lodash";
 import { handleWeddingNames } from "./utils/handleWeddingName";
 import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
@@ -13,7 +14,6 @@ const AdminContentPage = ({ data, page }) => {
   const [state, setState] = useState(data || []);
   const [selectedVideo, setSelectedVideo] = useState({});
   const [isOpen, setIsOpen] = useState(false);
-  const [weddingNames, setWeddingNames] = useState([]);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
@@ -54,7 +54,6 @@ const AdminContentPage = ({ data, page }) => {
         handleClick={handleClick}
         handleOnLoadOutside={handleOnLoadOutside}
         imageLoaded={imageLoaded}
-        weddingNames={weddingNames}
         showAdminContentData={true}
       />
     </Container>

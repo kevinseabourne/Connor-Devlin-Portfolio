@@ -18,8 +18,6 @@ const BurgerBar = React.forwardRef(
       contentRef.current.scrollTop = 0;
     };
 
-    console.log(user);
-
     return (
       <React.Fragment>
         <Container ref={ref}>
