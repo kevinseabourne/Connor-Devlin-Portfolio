@@ -60,7 +60,9 @@ export async function getAllWeddings() {
           let data = [];
           querySnapshot.forEach(function (doc) {
             let item = doc.data();
-            item.date = item.date.toDate().toLocaleDateString();
+            const dateString = item.date.toDate();
+            item.date = moment(dateString).format("DD/MM/YYYY");
+
             item.id = doc.id;
             data.push(item);
           });
@@ -129,6 +131,42 @@ export async function addWedding(data) {
           video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
           duration: updatedData.duration,
           testimonial: updatedData.testimonial,
+          videoId: updatedData.weddingVideoId,
+        })
+        .catch(function (error) {
+          console.log("Error adding document:", error);
+        });
+      return weddings;
+    });
+  return response;
+}
+
+export async function editWedding(data) {
+  const updatedData = await getVimeoData(data);
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const weddings = await db
+        .collection("weddings")
+        .doc(updatedData.id)
+        .update({
+          coverPhoto: updatedData.coverPhoto,
+          location: {
+            state: updatedData.stateTerritory.value,
+            suburb: updatedData.suburb,
+          },
+          date: updatedData.date,
+          partners: updatedData.partners,
+          description: updatedData.description,
+          video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
+          duration: updatedData.duration,
+          testimonial: updatedData.testimonial,
+          videoId: updatedData.weddingVideoId,
         })
         .catch(function (error) {
           console.log("Error adding document:", error);

@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import moment from "moment";
 import { getVimeoData } from "./vimeo";
 
 const config = {
@@ -31,7 +32,8 @@ export async function getAllCorporate() {
           let data = [];
           querySnapshot.forEach(function (doc) {
             let item = doc.data();
-            item.date = item.date.toDate().toLocaleDateString();
+            const dateString = item.date.toDate();
+            item.date = moment(dateString).format("DD/MM/YYYY");
             item.id = doc.id;
             data.push(item);
           });
@@ -65,6 +67,38 @@ export async function addCorporate(data) {
           testimonial: updatedData.corporateTestimonial,
           video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
           duration: updatedData.duration,
+          videoId: updatedData.corporateVideoId,
+        })
+        .catch(function (error) {
+          console.log("Error adding document:", error);
+        });
+      return corporate;
+    });
+  return response;
+}
+
+export async function editCorporate(data) {
+  const updatedData = await getVimeoData(data);
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const corporate = await db
+        .collection("corporate")
+        .doc(updatedData.id)
+        .update({
+          company: updatedData.company,
+          coverPhoto: updatedData.coverPhoto,
+          description: updatedData.description,
+          date: updatedData.date,
+          testimonial: updatedData.corporateTestimonial,
+          video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
+          duration: updatedData.duration,
+          videoId: updatedData.corporateVideoId,
         })
         .catch(function (error) {
           console.log("Error adding document:", error);
