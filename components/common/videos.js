@@ -4,8 +4,7 @@ import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
 import lodash from "lodash";
-import { motion } from "framer-motion";
-import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Videos = ({
   page,
@@ -27,23 +26,27 @@ const Videos = ({
   useEffect(() => {
     setState(data);
     setMount(true);
+    return () => setMount(false);
   }, [data]);
 
   const handleReverseDelay = () => {
     setReverseDelay(!reverseDelay);
   };
 
+  // Framer Motion Animation
+
   const container = {
-    show: {
+    hidden: {
       transition: {
-        delayChildren: 0.4,
         staggerChildren: 0.09,
+        delayChildren: 0.7,
+        staggerDirection: -1,
       },
     },
-    exit: {
+    show: {
       transition: {
-        staggerChildren: 0.07,
-        staggerDirection: -1,
+        delayChildren: 0.7,
+        staggerChildren: 0.1,
       },
     },
   };
@@ -59,7 +62,11 @@ const Videos = ({
   };
 
   const dot = {
-    hidden: { backgroundColor: "white", opacity: 0, transform: "scale(0)" },
+    hidden: {
+      backgroundColor: "rgba(255, 255, 255, 1)",
+      opacity: 0,
+      transform: "scale(0)",
+    },
     show: {
       backgroundColor: "rgba(50,172,109,1)",
       opacity: 1,
@@ -76,7 +83,7 @@ const Videos = ({
       variants={container}
       initial="hidden"
       animate="show"
-      exit="exit"
+      exit="hidden"
       key={mount}
     >
       {state.map((item) => (
@@ -172,12 +179,10 @@ const Container = styled(motion.ul)`
   @media (max-width: 1250px) {
     grid-template-columns: repeat(2, minmax(100px, 1fr));
     grid-gap: calc(100vw * 0.05) 20px;
-    padding-bottom: 390px;
   }
   @media (max-width: 750px) {
     grid-template-columns: repeat(1, minmax(100px, 1fr));
     grid-gap: calc(100vw * 0.1) 20px;
-    padding-bottom: 180px;
   }
 `;
 
@@ -284,6 +289,9 @@ const WrappedNames = styled.div`
   white-space: pre-line;
   align-items: center;
   text-align: center;
+  @media (max-width: 1500px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const AdminVideoContent = styled.div`
@@ -297,8 +305,20 @@ const AdminVideoContent = styled.div`
   }
 `;
 
-const EventDate = styled.span``;
+const EventDate = styled.span`
+  @media (max-width: 1500px) {
+    font-size: 0.9rem;
+  }
+`;
 
-const Location = styled.span``;
+const Location = styled.span`
+  @media (max-width: 1500px) {
+    font-size: 0.9rem;
+  }
+`;
 
-const Description = styled.p``;
+const Description = styled.p`
+  @media (max-width: 1500px) {
+    font-size: 0.9rem;
+  }
+`;
