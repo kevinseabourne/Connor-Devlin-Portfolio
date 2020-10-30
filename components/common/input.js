@@ -16,6 +16,7 @@ export const Input = React.forwardRef(
       value,
       marginLeft,
       marginRight,
+      defaultValue,
       ...rest
     },
     ref
@@ -32,6 +33,7 @@ export const Input = React.forwardRef(
             onChange={onChange}
             placeholder={label}
             value={value}
+            defaultValue=""
             maxLength={maxLength}
             data-testid={`${name}-input`}
             id="innerLabel"

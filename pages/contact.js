@@ -4,6 +4,7 @@ import bottomWave from "../public/images/top-wave.svg";
 import { useForm } from "react-hook-form";
 import { DayPicker } from "../components/common/dayPicker";
 import { Input } from "../components/common/input";
+import { InputWithIcon } from "../components/common/inputWithIcon";
 import { ReactSelect } from "../components/common/select";
 import { TextArea } from "../components/common/textArea";
 import { sendEmail } from "./api/email";
@@ -106,7 +107,6 @@ const Contact = (props) => {
           ref={register(schema.email)}
           error={errors.email}
         />
-
         <InnerContainer>
           <DayPicker
             control={control}

@@ -20,6 +20,7 @@ export const ReactSelect = React.forwardRef(
       control,
       marginLeft,
       marginRight,
+      defaultValue,
       ...rest
     },
     ref
@@ -36,7 +37,6 @@ export const ReactSelect = React.forwardRef(
             <InputContainer>
               <Select
                 onChange={onChange}
-                value={value}
                 ref={ref}
                 id="select"
                 value={value}

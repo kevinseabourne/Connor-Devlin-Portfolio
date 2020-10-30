@@ -14,6 +14,7 @@ export const TextArea = React.forwardRef(
       name,
       doSubmit,
       value,
+      defaultValue,
       ...rest
     },
     ref
@@ -30,6 +31,7 @@ export const TextArea = React.forwardRef(
             onChange={onChange}
             placeholder={label}
             value={value}
+            defaultValue={defaultValue}
             maxLength={maxLength}
             data-testid={`${name}-input`}
           />

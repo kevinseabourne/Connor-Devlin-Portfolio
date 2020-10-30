@@ -20,6 +20,7 @@ export const DayPicker = React.forwardRef(
       value,
       control,
       marginLeft,
+      defaultValue,
       marginRight,
       ...rest
     },
