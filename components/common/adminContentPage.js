@@ -44,18 +44,32 @@ const AdminContentPage = ({ data, page }) => {
   return state.length > 0 ? (
     <Container>
       <Title>Wedding Videos</Title>
-
-      <Videos
-        page={page}
-        data={state}
-        isOpen={isOpen}
-        closeOverlay={closeOverlay}
-        selectedVideo={selectedVideo}
-        handleClick={handleClick}
-        handleOnLoadOutside={handleOnLoadOutside}
-        imageLoaded={imageLoaded}
-        showAdminContentData={true}
-      />
+      {page === "weddings" && (
+        <Videos
+          page={page}
+          data={state}
+          isOpen={isOpen}
+          closeOverlay={closeOverlay}
+          selectedVideo={selectedVideo}
+          handleClick={handleClick}
+          handleOnLoadOutside={handleOnLoadOutside}
+          imageLoaded={imageLoaded}
+          showAdminContentData={true}
+        />
+      )}
+      {page === "corporate" && (
+        <Videos
+          page={page}
+          data={state}
+          isOpen={isOpen}
+          closeOverlay={closeOverlay}
+          selectedVideo={selectedVideo}
+          handleClick={handleClick}
+          handleOnLoadOutside={handleOnLoadOutside}
+          imageLoaded={imageLoaded}
+          showAdminContentData={true}
+        />
+      )}
     </Container>
   ) : (
     <Container></Container>
