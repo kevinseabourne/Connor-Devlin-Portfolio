@@ -32,7 +32,7 @@ const BurgerBar = React.forwardRef(
           </Burger>
           <Content ref={contentRef} burgerOpen={burgerOpen}>
             {links.map((link) => (
-              <Link key={links.indexOf(link)} href={link.link}>
+              <Link key={links.indexOf(link)} href={link.link} passHref>
                 <BurgerLinkTitle onClick={onClick} user={user}>
                   {link.title}
                 </BurgerLinkTitle>
@@ -41,7 +41,12 @@ const BurgerBar = React.forwardRef(
             {user && <BurgerSubTitle>Admin</BurgerSubTitle>}
             {user &&
               adminLinks.map((link) => (
-                <Link key={link.route} href="/admin/[id]" as={link.route}>
+                <Link
+                  key={link.route}
+                  href="/admin/[id]"
+                  as={link.route}
+                  passHref
+                >
                   <BurgerLinkTitle onClick={onClick} user={user}>
                     {link.title}
                   </BurgerLinkTitle>
@@ -210,7 +215,7 @@ const Content = styled.div`
   }
 `;
 
-const BurgerLinkTitle = styled.span`
+const BurgerLinkTitle = styled.a`
   white-space: nowrap;
   padding: 20px 20px;
   padding-left: 10px;

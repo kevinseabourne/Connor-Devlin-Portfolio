@@ -76,7 +76,7 @@ const Header = (props) => {
   };
   return (
     <Container>
-      <Link href="/">
+      <Link href="/" passHref>
         <NameContainer>
           <Logo>
             <ImageLoader
@@ -92,7 +92,7 @@ const Header = (props) => {
 
       <LinksContainer>
         {links.map((link) => (
-          <Link key={links.indexOf(link)} href={link.link}>
+          <Link key={links.indexOf(link)} href={link.link} passHref>
             <LinkTitle>{link.title}</LinkTitle>
           </Link>
         ))}
@@ -124,7 +124,7 @@ const Container = styled.div`
   box-shadow: 0px 0px 6px 1px rgba(50, 172, 109, 0.7);
 `;
 
-const NameContainer = styled.div`
+const NameContainer = styled.a`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,7 +195,7 @@ const LinksContainer = styled.div`
   }
 `;
 
-const LinkTitle = styled.span`
+const LinkTitle = styled.a`
   white-space: nowrap;
   margin: 0 15px;
   transition: all 0.3s ease;

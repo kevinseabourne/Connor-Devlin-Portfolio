@@ -62,7 +62,12 @@ const AdminSidebar = (props) => {
     <Sidebar>
       <LinksContainer>
         {links.map((link) => (
-          <Link href="/admin/[id]" as={link.route} key={links.indexOf(link)}>
+          <Link
+            href="/admin/[id]"
+            as={link.route}
+            key={links.indexOf(link)}
+            passHref
+          >
             <LinkContainer>
               <ImageLoader
                 maxWidth="30px"
@@ -80,7 +85,7 @@ const AdminSidebar = (props) => {
         ))}
       </LinksContainer>
 
-      <SignOutContainer onClick={handleSignOut}>
+      <SignOutContainer onClick={signOut}>
         <ImageLoader
           width="30px"
           placeholderSize="100%"
@@ -129,7 +134,7 @@ const LinksContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-const LinkContainer = styled.div`
+const LinkContainer = styled.a`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -157,14 +162,16 @@ const LinkTitle = styled.h3`
   }
 `;
 
-const SignOutContainer = styled.div`
+const SignOutContainer = styled.button`
   margin-bottom: 60px;
   display: flex;
+  border: none;
   align-items: center;
   margin-top: auto;
   justify-content: center;
   flex-direction: row;
   padding: 15px 15px;
+  font-family: inherit;
   box-sizing: border-box;
   background-image: radial-gradient(
     circle farthest-corner at 10% 20%,
@@ -176,6 +183,9 @@ const SignOutContainer = styled.div`
   border-radius: 15px;
   &:hover {
     cursor: pointer;
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
   }
 `;
 

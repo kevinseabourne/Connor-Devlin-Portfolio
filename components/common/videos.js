@@ -206,8 +206,12 @@ const PlayIcon = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled.button`
   margin-bottom: 9px;
+  background-color: transparent !important;
+  border: none;
+  padding: 0px;
+  border: none;
   z-index: 0;
   position: relative;
   border-radius: 10px;
@@ -217,6 +221,9 @@ const ImageContainer = styled.div`
     ${PlayIcon} {
       transform: scale(1);
     }
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
   }
 `;
 
