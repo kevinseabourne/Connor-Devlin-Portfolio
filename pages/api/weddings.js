@@ -62,7 +62,6 @@ export async function getAllWeddings() {
             let item = doc.data();
             const dateString = item.date.toDate();
             item.date = moment(dateString).format("DD/MM/YYYY");
-
             item.id = doc.id;
             data.push(item);
           });
@@ -125,7 +124,7 @@ export async function addWedding(data) {
             state: updatedData.stateTerritory.value,
             suburb: updatedData.suburb,
           },
-          date: updatedData.date,
+          date: moment(updatedData.date, "DD-MM-YYYY").toDate(),
           partners: updatedData.partners,
           description: updatedData.description,
           video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
@@ -160,7 +159,7 @@ export async function editWedding(data) {
             state: updatedData.stateTerritory.value,
             suburb: updatedData.suburb,
           },
-          date: updatedData.date,
+          date: moment(updatedData.date, "DD-MM-YYYY").toDate(),
           partners: updatedData.partners,
           description: updatedData.description,
           video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
