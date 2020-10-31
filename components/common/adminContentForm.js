@@ -35,6 +35,13 @@ const AdminContentForm = ({
     }
   }, [selectedVideo]);
 
+  useEffect(() => {
+    if (status === "resolved") {
+      const timer = setTimeout(() => setStatus("idle"), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
   const schema = {
     videoId: {
       required: "A video ID is required !",
@@ -186,11 +193,9 @@ const AdminContentForm = ({
     const response = handleWeddingSubmit(data);
 
     if (response) {
-      const resetValues = _.mapValues(data, (i) => {
-        i = "";
-        return i;
-      });
-      reset(resetValues);
+      if (operation === "Add") {
+        resetValues(data);
+      }
       setStatus("resolved");
     }
   };
@@ -200,13 +205,19 @@ const AdminContentForm = ({
     const response = handleCorporateSubmit(data);
 
     if (response) {
-      const resetValues = _.mapValues(data, (i) => {
-        i = "";
-        return i;
-      });
-      reset(resetValues);
+      if (operation === "Add") {
+        resetValues(data);
+      }
       setStatus("resolved");
     }
+  };
+
+  const resetValues = (data) => {
+    const resetValues = _.mapValues(data, (i) => {
+      i = "";
+      return i;
+    });
+    reset(resetValues);
   };
 
   const stateTerritoryOptions = [
@@ -346,7 +357,13 @@ const AdminContentForm = ({
             error={errors.testimonial}
           />
           <SubmitButton type="submit">
-            {status !== "pending" ? operation : "Loading..."}
+            {status !== "pending"
+              ? status === "resolved"
+                ? "Success"
+                : operation === "Edit"
+                ? "Update"
+                : operation
+              : "Loading..."}
           </SubmitButton>
         </AddWeddingForm>
       )}
@@ -492,15 +509,24 @@ const NameInnerContainer = styled.div`
   }
 `;
 
-const AddPartnerButton = styled.div`
+const AddPartnerButton = styled.button`
   width: 20px;
   display: flex;
   margin-right: 10px;
   position: absolute;
   left: -40px;
+  top: 35px;
+  padding: 0px;
+  border: none;
+  background: none;
+  height: 20px;
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
   @media (max-width: 609px) {
     order: 4;
     bottom: 22px;
+    top: unset;
     width: 23px;
     left: 90px;
   }
@@ -509,14 +535,23 @@ const AddPartnerButton = styled.div`
   }
 `;
 
-const DeletePartnerButton = styled.div`
+const DeletePartnerButton = styled.button`
   width: 20px;
   margin-left: 10px;
   position: absolute;
   right: -40px;
+  top: 35px;
+  padding: 0px;
+  border: none;
+  background: none;
+  height: 20px;
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
   @media (max-width: 609px) {
     position: absolute;
     bottom: 22px;
+    top: unset;
     width: 23px;
     right: 90px;
   }
@@ -549,18 +584,16 @@ const SubmitButton = styled.button`
   position: relative;
   font-weight: 600;
   transition: all 0.2s ease;
-  outline: none;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   &:hover {
     cursor: pointer;
   }
-  &:focus {
-    outline: none;
-  }
   &:active {
     transform: scale(0.95);
-    outline: 0;
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
   }
   @media (max-width: 609px) {
     margin-bottom: 60px;
