@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
+import popSound from "../../public/sounds/pop_waterdrip_hi.mp3";
+import useSound from "use-sound";
 
 export const InputWithIcon = React.forwardRef(
   (
@@ -31,6 +33,7 @@ export const InputWithIcon = React.forwardRef(
     ref
   ) => {
     const [toolTipOpen, setToolTipOpen] = useState(false);
+    const [play] = useSound(popSound, { volume: 0.5 });
     return (
       <Container marginLeft={marginLeft} marginRight={marginRight}>
         <Label>{label}</Label>
@@ -50,7 +53,10 @@ export const InputWithIcon = React.forwardRef(
           />
           {icon && (
             <IconBox
-              onMouseEnter={() => setToolTipOpen(true)}
+              onMouseEnter={() => {
+                play();
+                setToolTipOpen(true);
+              }}
               onMouseLeave={() => setToolTipOpen(false)}
             >
               <ImageLoader
