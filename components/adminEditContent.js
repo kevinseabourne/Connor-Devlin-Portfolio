@@ -26,7 +26,7 @@ const AdminEditContent = (props) => {
     const stateClone = _.cloneDeep(state);
 
     const selected = stateClone.find((item) => item.id === id);
-    if (selected.id !== selectedVideo.id) {
+    if (_.isEmpty(selectedVideo) || selected.id !== selectedVideo.id) {
       play();
       setSelectedVideo(selected);
     }
@@ -65,6 +65,10 @@ const AdminEditContent = (props) => {
     const updatedData = bundlePartnersIntoObj(data);
     updatedData.id = selectedVideo.id;
     const response = await editWedding(updatedData);
+    if (response) {
+      showWeddingContent();
+      updateSelectedVideo();
+    }
     return response;
   };
 
@@ -72,7 +76,20 @@ const AdminEditContent = (props) => {
     const updatedData = bundlePartnersIntoObj(data);
     updatedData.id = selectedVideo.id;
     const response = await editCorporate(updatedData);
+    if (response) {
+      showCorporateContent();
+      updateSelectedVideo();
+    }
     return response;
+  };
+
+  const updateSelectedVideo = () => {
+    const updatedSelectedVideo = stateClone.find(
+      (item) => item.id === selectedVideo.id
+    );
+    if (!_.isEqual(selectedVideo, updatedSelectedVideo)) {
+      setSelectedVideo(updatedSelectedVideo);
+    }
   };
 
   const defaultValues = !_.isEmpty(selectedVideo)
@@ -279,7 +296,7 @@ const WeddingsFormButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-  &:focus {
+  &:focus:not(:focus-visible) {
     outline: none;
   }
   @media (max-width: 750px) {
@@ -310,7 +327,7 @@ const CorporateFormButton = styled.button`
   &:hover {
     cursor: pointer;
   }
-  &:focus {
+  &:focus:not(:focus-visible) {
     outline: none;
   }
   @media (max-width: 750px) {
