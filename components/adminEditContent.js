@@ -41,6 +41,7 @@ const AdminEditContent = (props) => {
       if (response) {
         const updatedWeddings = handleWeddingNames(response, true);
         setState(updatedWeddings);
+        setSelectedVideo(response[0]);
         setStatus("resolved");
         setPage("weddings");
       }
@@ -55,6 +56,7 @@ const AdminEditContent = (props) => {
       const response = await getAllCorporate();
       if (response) {
         setState(response);
+        setSelectedVideo(response[0]);
         setStatus("resolved");
         setPage("corporate");
       }
