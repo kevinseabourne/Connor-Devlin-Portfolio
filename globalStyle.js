@@ -41,6 +41,11 @@ export const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
   }
 
+  a {
+      color: inherit;
+      text-decoration: none;
+  }
+
   code {
     font-family: "Source Sans Pro", source-code-pro, Menlo, Monaco, Consolas,
       "Courier New", monospace;
