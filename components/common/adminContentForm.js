@@ -10,6 +10,8 @@ import { ReactSelect } from "./select";
 import ImageLoader from "./imageLoader";
 import popSound from "../../public/sounds/pop_char.mp3";
 import popDownSound from "../../public/sounds/pop_down.mp3";
+import successSound from "../../public/sounds/music_marimba_on_hi.mp3";
+import errorSound from "../../public/sounds/pad_soft_off.mp3";
 import useSound from "use-sound";
 
 const AdminContentForm = ({
@@ -25,9 +27,21 @@ const AdminContentForm = ({
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
   const [status, setStatus] = useState("idle");
-  const { register, handleSubmit, reset, control, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    errors,
+    unregister,
+    clearErrors,
+    formState,
+  } = useForm();
+  const { isSubmitting, isSubmitSuccessful } = formState;
   const [play] = useSound(popSound);
   const [playDown] = useSound(popDownSound);
+  const [playSuccessSound] = useSound(successSound, { volume: 0.2 });
+  const [playErrorSound] = useSound(errorSound, { volume: 0.2 });
 
   useEffect(() => {
     if (!_.isEmpty(defaultValues)) {
@@ -41,6 +55,13 @@ const AdminContentForm = ({
       return () => clearTimeout(timer);
     }
   }, [status]);
+
+  useEffect(() => {
+    // check that the error sound is not played on a successful post
+    if (!isSubmitSuccessful && !_.isEmpty(errors)) {
+      playErrorSound();
+    }
+  }, [errors]);
 
   const schema = {
     videoId: {
@@ -171,6 +192,10 @@ const AdminContentForm = ({
     playDown();
     const partnersInputLengthClone = _.cloneDeep(partnersInputLength);
     if (index > -1 && partnersInputLength.length > 2) {
+      if (page === "weddings") {
+        unregister(`partnerFirstName_${partnersInputLengthClone[index].id}`);
+        unregister(`partnerLastName_${partnersInputLengthClone[index].id}`);
+      }
       partnersInputLengthClone.splice(index, 1);
       setPartnersInputLength(partnersInputLengthClone);
     }
@@ -193,6 +218,7 @@ const AdminContentForm = ({
     const response = handleWeddingSubmit(data);
 
     if (response) {
+      playSuccessSound();
       if (operation === "Add") {
         resetValues(data);
       }
@@ -205,6 +231,7 @@ const AdminContentForm = ({
     const response = handleCorporateSubmit(data);
 
     if (response) {
+      playSuccessSound();
       if (operation === "Add") {
         resetValues(data);
       }
@@ -276,6 +303,12 @@ const AdminContentForm = ({
           {partnersInputLength.map((partner) => (
             <NameContainer key={partner.id}>
               <AddPartnerButton
+                tabIndex="0"
+                role="button"
+                onKeyDown={(e) => {
+                  const key = e.key === 13 || e.keyCode === 13;
+                  key && addPartner(partnersInputLength.indexOf(partner));
+                }}
                 onClick={() => addPartner(partnersInputLength.indexOf(partner))}
               >
                 <ImageLoader
@@ -306,6 +339,12 @@ const AdminContentForm = ({
                 />
               </NameInnerContainer>
               <DeletePartnerButton
+                tabIndex="0"
+                role="button"
+                onKeyDown={(e) => {
+                  const key = e.key === 13 || e.keyCode === 13;
+                  key && deletePartner(partnersInputLength.indexOf(partner));
+                }}
                 onClick={() =>
                   deletePartner(partnersInputLength.indexOf(partner))
                 }
@@ -509,7 +548,7 @@ const NameInnerContainer = styled.div`
   }
 `;
 
-const AddPartnerButton = styled.button`
+const AddPartnerButton = styled.div`
   width: 20px;
   display: flex;
   margin-right: 10px;
@@ -535,7 +574,7 @@ const AddPartnerButton = styled.button`
   }
 `;
 
-const DeletePartnerButton = styled.button`
+const DeletePartnerButton = styled.div`
   width: 20px;
   margin-left: 10px;
   position: absolute;
