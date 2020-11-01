@@ -53,11 +53,19 @@ export const InputWithIcon = React.forwardRef(
           />
           {icon && (
             <IconBox
+              tabIndex="0"
+              role="button"
               onMouseEnter={() => {
                 play();
                 setToolTipOpen(true);
               }}
               onMouseLeave={() => setToolTipOpen(false)}
+              onKeyDown={(e) => {
+                const key = e.key === 13 || e.keyCode === 13;
+                key && play();
+                setToolTipOpen(!toolTipOpen);
+              }}
+              onBlur={() => setToolTipOpen(false)}
             >
               <ImageLoader
                 {...rest}
@@ -72,7 +80,7 @@ export const InputWithIcon = React.forwardRef(
           {icon && (
             <ToolTipContainer
               toolTipOpen={toolTipOpen}
-              borderRadius={iconBorderRadius}
+              borderRadius={toolTipImageBorderRadius}
             >
               {toolTipImage && (
                 <ImageLoader
@@ -147,6 +155,9 @@ const ToolTipContainer = styled.div`
   margin-bottom: 10px;
   right: -179px;
   cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
+    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
+    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
   &::after {
     content: "";
     position: absolute;
@@ -201,6 +212,9 @@ const IconBox = styled.div`
   position: absolute;
   right: 0px;
   display: flex;
+  padding: 0px;
+  border: none;
+  background-color: transparent;
   align-items: center;
   justify-content: center;
   width: 46px;
