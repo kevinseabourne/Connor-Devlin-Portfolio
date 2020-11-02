@@ -32,45 +32,45 @@ const AdminEditContent = (props) => {
     }
   };
 
-  const showWeddingContent = async () => {
+  const handleWeddingPageChange = () => {
     setPage(null);
-    setSelectedVideo({});
-    if (status !== "pending") {
-      setStatus("pending");
-      const response = await getAllWeddings();
-      if (response) {
-        const updatedWeddings = handleWeddingNames(response, true);
-        setState(updatedWeddings);
-        setSelectedVideo(response[0]);
-        setStatus("resolved");
-        setPage("weddings");
-      }
-    }
+    showWeddingContent();
+  };
+
+  const handleCorporatePageChange = () => {
+    setPage(null);
+    showCorporateContent();
+  };
+
+  const showWeddingContent = async () => {
+    setStatus("pending");
+    const response = await getAllWeddings();
+    const updatedWeddings = handleWeddingNames(response, true);
+    setState(updatedWeddings);
+    setSelectedVideo(updatedWeddings[0]);
+    setPage("weddings");
+    setStatus("resolved");
   };
 
   const showCorporateContent = async () => {
-    setPage(null);
-    setSelectedVideo({});
-    if (status !== "pending") {
-      setStatus("pending");
-      const response = await getAllCorporate();
-      if (response) {
-        setState(response);
-        setSelectedVideo(response[0]);
-        setStatus("resolved");
-        setPage("corporate");
-      }
-    }
+    setStatus("pending");
+    const response = await getAllCorporate();
+    setState(response);
+    setSelectedVideo(response[0]);
+    setPage("corporate");
+    setStatus("resolved");
   };
 
   const handleEditWeddingSubmit = async (data) => {
     const updatedData = bundlePartnersIntoObj(data);
     updatedData.id = selectedVideo.id;
     const response = await editWedding(updatedData);
-    if (response) {
-      showWeddingContent();
-      updateSelectedVideo();
-    }
+
+    // get the latest data and update state with it.
+    const weddingData = await getAllWeddings();
+    const updatedWeddings = handleWeddingNames(weddingData, true);
+    setState(updatedWeddings);
+    updateSelectedVideo(weddingData);
     return response;
   };
 
@@ -78,18 +78,24 @@ const AdminEditContent = (props) => {
     const updatedData = bundlePartnersIntoObj(data);
     updatedData.id = selectedVideo.id;
     const response = await editCorporate(updatedData);
-    if (response) {
-      showCorporateContent();
-      updateSelectedVideo();
-    }
+
+    // get the latest data and update state with it.
+    const corporateData = await getAllCorporate();
+    setState(corporateData);
+
+    updateSelectedVideo(corporateData);
     return response;
   };
 
-  const updateSelectedVideo = () => {
-    const updatedSelectedVideo = stateClone.find(
+  const updateSelectedVideo = (data) => {
+    const dataClone = _.cloneDeep(data);
+    const updatedSelectedVideo = dataClone.find(
       (item) => item.id === selectedVideo.id
     );
-    if (!_.isEqual(selectedVideo, updatedSelectedVideo)) {
+    if (
+      updatedSelectedVideo &&
+      !_.isEqual(selectedVideo, updatedSelectedVideo)
+    ) {
       setSelectedVideo(updatedSelectedVideo);
     }
   };
@@ -153,10 +159,13 @@ const AdminEditContent = (props) => {
           <ButtonsContainer layout>
             <Title>Choose a section to edit ?</Title>
             <ButtonsInnerContainer>
-              <WeddingsFormButton page={page} onClick={showWeddingContent}>
+              <WeddingsFormButton page={page} onClick={handleWeddingPageChange}>
                 Weddings
               </WeddingsFormButton>
-              <CorporateFormButton page={page} onClick={showCorporateContent}>
+              <CorporateFormButton
+                page={page}
+                onClick={handleCorporatePageChange}
+              >
                 Corporate
               </CorporateFormButton>
             </ButtonsInnerContainer>
@@ -258,6 +267,12 @@ const ButtonsInnerContainer = styled(motion.div)`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  @media (max-width: 609px) {
+    padding: 0px 20px;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 100%;
+  }
   @media (max-width: 390px) {
     flex-direction: column;
   }
@@ -281,7 +296,7 @@ const LoadingContainer = styled(motion.div)`
 const WeddingsFormButton = styled.button`
   font-size: 1rem;
   color: ${({ page, theme }) =>
-    page === "weddings" ? "inherit" : theme.colors.gradient1};
+    page === "weddings" ? "white" : theme.colors.gradient1};
   min-height: 54px;
   padding: 14px 30px;
   border-radius: 9px;
@@ -291,6 +306,9 @@ const WeddingsFormButton = styled.button`
   border: none;
   font-weight: 600;
   transition: all 0.3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
+    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
+    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
   background-image: ${({ theme, page }) =>
     page === "weddings"
       ? `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`
@@ -304,7 +322,11 @@ const WeddingsFormButton = styled.button`
   @media (max-width: 750px) {
     font-size: 0.9rem;
   }
+  @media (max-width: 609px) {
+    width: 100%;
+  }
   @media (max-width: 390px) {
+    margin-right: 0px;
     margin-bottom: 15px;
   }
 `;
@@ -312,7 +334,7 @@ const WeddingsFormButton = styled.button`
 const CorporateFormButton = styled.button`
   font-size: 1rem;
   color: ${({ page, theme }) =>
-    page === "corporate" ? "inherit" : theme.colors.gradient1};
+    page === "corporate" ? "white" : theme.colors.gradient1};
   min-height: 54px;
   padding: 14px 30px;
   margin-left: 5px;
@@ -321,6 +343,9 @@ const CorporateFormButton = styled.button`
   border: none;
   transform: ${({ page }) =>
     page === "corporate" ? "scale(1)" : "scale(0.85)"};
+  box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
+    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
+    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
   transition: all 0.3s ease-in-out;
   background-image: ${({ theme, page }) =>
     page === "corporate"
@@ -334,6 +359,9 @@ const CorporateFormButton = styled.button`
   }
   @media (max-width: 750px) {
     font-size: 0.9rem;
+  }
+  @media (max-width: 609px) {
+    width: 100%;
   }
 `;
 
