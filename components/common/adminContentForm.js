@@ -83,7 +83,7 @@ const AdminContentForm = ({
       },
     },
     date: {
-      required: "A date is required !",
+      required: "A date is required ! (DD/MM/YYYY)",
     },
     suburb: {
       required: "A Suburb is required !",
@@ -395,7 +395,10 @@ const AdminContentForm = ({
             ref={register(schema.testimonial)}
             error={errors.testimonial}
           />
-          <SubmitButton type="submit">
+          <SubmitButton
+            type="submit"
+            disabled={status === "pending" ? true : false}
+          >
             {status !== "pending"
               ? status === "resolved"
                 ? "Success"
@@ -447,7 +450,10 @@ const AdminContentForm = ({
             ref={register(schema.testimonial)}
             error={errors.corporateTestimonial}
           />
-          <SubmitButton type="submit">
+          <SubmitButton
+            type="submit"
+            disabled={status === "pending" ? true : false}
+          >
             {status !== "pending"
               ? status === "resolved"
                 ? "Success"
@@ -616,12 +622,16 @@ const SubmitButton = styled.button`
   font-size: 1rem;
   min-height: 54px;
   min-width: 200px;
+  max-width: 214.23px;
   padding: 18px 80px;
   border-radius: 9px;
   border: none;
   color: white;
   position: relative;
   font-weight: 600;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
+    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
+    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
   transition: all 0.2s ease;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
@@ -636,5 +646,7 @@ const SubmitButton = styled.button`
   }
   @media (max-width: 609px) {
     margin-bottom: 60px;
+    max-width: 100%;
+    width: 100%;
   }
 `;
