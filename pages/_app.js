@@ -25,8 +25,6 @@ const theme = {
 const MyApp = ({ Component, pageProps }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {}, []);
-
   const handleSignIn = async (formData) => {
     const user = await signIn(formData);
     return user;
@@ -47,8 +45,8 @@ const MyApp = ({ Component, pageProps }) => {
     >
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <ToastContainer />
         <Header />
+        <ToastContainer />
         <Component {...pageProps} />
       </ThemeProvider>
     </AppContext.Provider>
