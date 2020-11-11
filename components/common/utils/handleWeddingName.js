@@ -1,7 +1,7 @@
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 export const handleWeddingNames = (state, showAdminContentData) => {
-  const stateClone = _.cloneDeep(state);
+  const stateClone = cloneDeep(state);
   const updatedWeddings = stateClone.map((wedding) => {
     let weddingNamesArray = [];
     wedding.partners.map((name) =>

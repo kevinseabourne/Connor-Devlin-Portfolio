@@ -47,7 +47,7 @@ const VideoOverlay = ({
             classNames="overlayAnimation"
             timeout={300}
           >
-            <Overlay>
+            <Overlay data-testid="videoOverlay">
               <VideoContainer maxWidth={maxWidth} ref={videoRef}>
                 <VideoLoader
                   src={src}

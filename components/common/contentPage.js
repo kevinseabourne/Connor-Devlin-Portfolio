@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import Videos from "./videos";
 import { handleWeddingNames } from "../common/utils/handleWeddingName";
 import downWave from "../../public/images/wave3.svg";
 import topWave from "../../public/images/wave4.svg";
 import Clients from "../clients";
+import { toast } from "react-toastify";
 
 const ContentPage = ({ data, page }) => {
   const [state, setState] = useState(data || []);
@@ -24,7 +25,7 @@ const ContentPage = ({ data, page }) => {
   }, []);
 
   const handleClick = (id) => {
-    const stateClone = _.cloneDeep(data);
+    const stateClone = cloneDeep(data);
 
     const selectedVideo = stateClone.find((item) => item.id === id);
     setSelectedVideo(selectedVideo);

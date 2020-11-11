@@ -88,7 +88,10 @@ const Videos = ({
     >
       {state.map((item) => (
         <Item key={state.indexOf(item)} variants={itemA}>
-          <ImageContainer onClick={() => handleClick(item.id)}>
+          <ImageContainer
+            onClick={() => handleClick(item.id)}
+            data-testid="item"
+          >
             <ImageLoader
               maxWidth="100%"
               placeholderSize="56.2%"
@@ -105,8 +108,10 @@ const Videos = ({
               handleOnLoadOutside={handleOnLoadOutside}
               iconSrc={editDeleteContent ? null : playIcon}
               iconMaxWidth="45px"
+              alt={page === "weddings" ? item.displayNames : item.company}
               editDeleteContent={editDeleteContent}
               iconMaxHeight="45px"
+              dataTestId="weddingPhoto"
             />
             {editDeleteContent && (
               <SelectedVideoButton>
@@ -118,6 +123,7 @@ const Videos = ({
           </ImageContainer>
           {!showAdminContentData && (
             <Names
+              data-testid="partnerNames"
               variants={itemB}
               key={state.indexOf(item)}
               onClick={() => handleClick(item.id)}

@@ -136,6 +136,7 @@ const ImageLoader = ({
           scale={scale}
           isLoaded={isLoaded}
           inView={inView}
+          data-testid="imageIcon"
           hover={hover}
           initial="hidden"
           onAnimationComplete={onComplete}

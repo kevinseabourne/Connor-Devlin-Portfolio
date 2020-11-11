@@ -3,7 +3,12 @@ import styled, { keyframes } from "styled-components";
 
 export const LoadingSpinner = React.forwardRef(({ size }, ref) => {
   return (
-    <Spinner ref={ref} viewBox="0 0 66 66" size={size}>
+    <Spinner
+      ref={ref}
+      viewBox="0 0 66 66"
+      size={size}
+      data-testid="loadingSpinner"
+    >
       <circle
         className="circle"
         strokeWidth="3"
