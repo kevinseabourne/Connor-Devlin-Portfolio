@@ -90,6 +90,10 @@ const Videos = ({
         <Item key={state.indexOf(item)} variants={itemA}>
           <ImageContainer
             onClick={() => handleClick(item.id)}
+            onKeyDown={(e) => {
+              const key = e.key === 27 || e.keyCode === 27;
+              key && handleClick(item.id);
+            }}
             data-testid="item"
           >
             <ImageLoader
