@@ -31,7 +31,7 @@ import { getVimeoData } from "./vimeo";
 //   return response;
 // }
 
-const config = {
+const config_ = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.NEXT_PUBLIC_FIREBASE_ENDPOINT,
@@ -41,7 +41,7 @@ const config = {
 };
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(config);
+  firebase.initializeApp(config_);
 }
 
 export async function getAllWeddings() {
