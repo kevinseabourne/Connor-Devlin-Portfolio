@@ -1,0 +1,1 @@
+{"processes":{"b14968f0-1236-4b1d-8d4c-bf248471295c":{"parent":null,"children":["cfe330fd-52bf-495f-a805-eb65b5f20ef1"]},"cfe330fd-52bf-495f-a805-eb65b5f20ef1":{"parent":"b14968f0-1236-4b1d-8d4c-bf248471295c","children":[]}},"files":{"/Users/User/Projects/connor-devlin-portfolio/cypress/plugins/index.js":["cfe330fd-52bf-495f-a805-eb65b5f20ef1"]},"externalIds":{}}
