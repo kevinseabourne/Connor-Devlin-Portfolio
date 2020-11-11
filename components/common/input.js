@@ -16,13 +16,18 @@ export const Input = React.forwardRef(
       value,
       marginLeft,
       marginRight,
+      tabIndex,
       defaultValue,
       ...rest
     },
     ref
   ) => {
     return (
-      <Container marginLeft={marginLeft} marginRight={marginRight}>
+      <Container
+        marginLeft={marginLeft}
+        marginRight={marginRight}
+        tabIndex={tabIndex}
+      >
         <Label>{label}</Label>
         <InputContainer>
           <TextInput
