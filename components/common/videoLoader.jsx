@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import LazyLoad from "react-lazy-load";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { LoadingSpinner } from "../loading-spinner";
+import { useInView } from "react-intersection-observer";
+import "intersection-observer";
 
 const VideoLoader = ({
   src,
@@ -12,6 +13,7 @@ const VideoLoader = ({
   alt,
   keyValue,
   dataTestId,
+  closeOverlayWhileLoading, // for use when in an overlay
   delay,
   isFavourite,
   onClick,
@@ -24,52 +26,40 @@ const VideoLoader = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const timeout = useRef(null);
 
+  const { ref, inView } = useInView({
+    rootMargin: "-500px",
+    triggerOnce: false,
+    threshold: 0, // a number between 0 - 1. 1 being the whole element must be in view for it to load if the root margin is 0px
+  });
+
   useEffect(() => {
     return () => clearTimeout(timeout.current);
   }, []);
 
   const handleOnLoad = () => {
-    // video loaded to early, added one second delay
+    // function is called before video has fully loaded, added one second delay
     timeout.current = setTimeout(() => setIsLoaded(true), 1000);
   };
 
+  const handleLoadingClick = () => {
+    !isLoaded && closeOverlayWhileLoading();
+  };
+
   return (
-    <VideoContainer width={width} maxWidth={maxWidth} centerVideo={centerVideo}>
+    <VideoContainer
+      width={width}
+      maxWidth={maxWidth}
+      centerVideo={centerVideo}
+      ref={ref}
+      onClick={handleLoadingClick}
+    >
       <Placeholder
         onClick={onClick}
         placeholderSize={placeholderSize}
         borderRadius={borderRadius}
       />
       {!isLoaded && <LoadingSpinner size="80px" />}
-      {lazyLoad && (
-        <LazyLoad
-          width="inherit"
-          height="inherit"
-          once={true}
-          offset={500}
-          debounce={true}
-        >
-          <Video
-            isLoaded={isLoaded}
-            onLoad={handleOnLoad}
-            src={src}
-            alt={alt}
-            data-testid="video"
-            key={keyValue}
-            data-testid={dataTestId}
-            delay={delay}
-            isFavourite={isFavourite}
-            hover={hover}
-            hoverColor={hoverColor}
-            borderRadius={borderRadius}
-            title="movie-trailer"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen;"
-            frameBorder="0"
-          />
-        </LazyLoad>
-      )}
-
-      {!lazyLoad && (
+      {inView && (
         <Video
           isLoaded={isLoaded}
           onLoad={handleOnLoad}
@@ -123,6 +113,7 @@ const Video = styled.iframe`
   object-fit: contain;
   object-position: center;
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
+  visibility: ${({ isLoaded }) => (isLoaded ? "visible" : "hidden")};
   opacity: ${({ isLoaded }) => (isLoaded ? 1 : 0)};
   transform: ${({ isLoaded }) => (isLoaded ? "scale(1)" : "scale(0.5)")};
   transition: all 250ms;
