@@ -1,6 +1,6 @@
-describe("Weddings Page Tests", () => {
+describe("Corporate Page Tests", () => {
   it("should show a video when clicking on each item and close it when clicking outside the container", () => {
-    cy.visit("/weddings");
+    cy.visit("/corporate");
 
     cy.get(".item").each((item) => {
       cy.wrap(item).scrollIntoView().wait(500).click();
@@ -15,12 +15,12 @@ describe("Weddings Page Tests", () => {
       cy.findByTestId("videoOverlay").should("not.be.visible");
     });
   });
-  it("should navigate to the wedding pricing page after clicking the pricing button", () => {
-    cy.visit("/weddings");
+  it("should navigate to the corporate pricing page after clicking the pricing button", () => {
+    cy.visit("/corporate");
 
     const pricingLink = cy.findByRole("button", { name: /pricing/i });
     pricingLink.scrollIntoView().wait(1000).click();
 
-    cy.url().should("include", "/pricing/weddings");
+    cy.url().should("include", "/pricing/corporate");
   });
 });

@@ -1,7 +1,7 @@
 import React from "react";
 import Weddings from "../.././pages/weddings";
 import { render } from ".././test-utils";
-import { fireEvent, waitFor, act, cleanup } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { getAllWeddings, mockWeddingData } from "../.././pages/api/weddings";
 import "@testing-library/jest-dom";
@@ -13,17 +13,25 @@ jest.mock("lodash/cloneDeep", () =>
   jest.fn().mockImplementation(() => mockWeddingData)
 );
 
-cleanup();
-
 describe("Weddings Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
+  it("should render a Weddings title above videos", async () => {
+    getAllWeddings.mockResolvedValue({ mockWeddingData });
+    const { findByRole } = render(<Weddings data={mockWeddingData} />);
+
+    const weddingTitle = await waitFor(() =>
+      findByRole("heading", { name: /weddings/i })
+    );
+    expect(weddingTitle).toBeVisible();
+  });
   it("should render partner names for each wedding in correct order", async () => {
     getAllWeddings.mockResolvedValue({ mockWeddingData });
-    const { getAllByTestId } = render(<Weddings data={mockWeddingData} />);
+    const { getAllByTitle } = render(<Weddings data={mockWeddingData} />);
 
-    const renderedWeddingPartners = getAllByTestId("partnerNames").map(
+    const renderedWeddingPartners = getAllByTitle("contentName").map(
       (item) => item.textContent
     );
 
@@ -52,7 +60,7 @@ describe("Weddings Page", () => {
     const fakeWeddingPhotos = mockWeddingData.map((item) => item.coverPhoto);
 
     expect(renderedWeddingPhotos).toEqual(fakeWeddingPhotos);
-    // chose a snapshot over map to cover the order in which it is rendered
+    // chose a snapshot over map to cover check the order in which it is rendered.
     expect(renderedWeddingPhotos).toMatchInlineSnapshot(`
       Array [
         "https://i.vimeocdn.com/video/939711593_960x540.jpg?r=pad",
@@ -62,37 +70,30 @@ describe("Weddings Page", () => {
     `);
   });
 
-  it("should render a play Icon for each wedding", async () => {
+  it("should render a play Icon for each wedding video", async () => {
     getAllWeddings.mockResolvedValue({ mockWeddingData });
     const { getAllByTestId } = render(<Weddings data={mockWeddingData} />);
 
-    // Chose to use map over a snapshot test because all the icons are the same so the order does not matter.
+    // Chose to use map over a snapshot test because all the icons are the same, so the order does not matter.
     const playIcons = await waitFor(() => getAllByTestId("imageIcon"));
     playIcons.map(async (icon) => await waitFor(() => icon.toBeVisible()));
   });
 
-  it("should play a video after clicking on each wedding video", async () => {
+  it("should render the a testimonial and the partners names from the first item in the data", () => {
     getAllWeddings.mockResolvedValue({ mockWeddingData });
-    const { getAllByTestId, getByTestId } = render(
+    const { getByText, getByTestId } = render(
       <Weddings data={mockWeddingData} />
     );
 
-    const weddingItems = await waitFor(() => getAllByTestId("item"));
+    const testimonialPartnersNames = getByTestId("testimonialPartners");
+    const testimonial = getByText("Amazing wedding");
 
-    weddingItems.map(async (item) => {
-      fireEvent.click(item);
-
-      const videoOverlay = getByTestId("videoOverlay");
-      const loadingSpinner = getByTestId("loadingSpinner");
-
-      expect(videoOverlay).toBeVisible();
-      expect(loadingSpinner).toBeVisible();
-
-      const video = getByTestId("video");
-
-      mockWeddingData.map((item) => expect(video.src).toEqual(item.video));
-      expect(video).toBeVisible();
-    });
+    expect(testimonialPartnersNames).toBeVisible();
+    expect(testimonial).toBeVisible();
+    expect(testimonialPartnersNames.textContent).toEqual(
+      mockWeddingData[0].displayNames
+    );
+    expect(testimonial.textContent).toEqual(mockWeddingData[0].testimonial);
   });
 
   it("should simulate a failed get request", async () => {
