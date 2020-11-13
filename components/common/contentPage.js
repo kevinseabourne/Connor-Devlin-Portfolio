@@ -62,8 +62,10 @@ const ContentPage = ({ data, page }) => {
         <QuotesContainer>
           <Quote>
             <Wave src={downWave} />
-            <WeddingPartners>{state[0].displayNames}</WeddingPartners>
             <Description>{state[0].testimonial}</Description>
+            <WeddingPartners data-testid="testimonialPartners">
+              {state[0].displayNames}
+            </WeddingPartners>
           </Quote>
           <TopWave src={topWave} />
         </QuotesContainer>
@@ -138,12 +140,21 @@ const TopWave = styled.img`
 `;
 
 const Quote = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   max-width: 600px;
 `;
 
-const WeddingPartners = styled.span`
+const WeddingPartners = styled.label`
   align-self: flex-start;
   font-size: 1rem;
+  margin-left: 75px;
+  @media (max-width: 750px) {
+    margin-left: 0px;
+    align-self: center;
+  }
 `;
 
 const QuotesContainer = styled.div`
@@ -167,6 +178,7 @@ const Description = styled.div`
   font-family: exmouth;
   font-size: 3.5rem;
   text-align: center;
+  margin-bottom: 21px;
   letter-spacing: 1px;
   @media (max-width: 1024px) {
     font-size: 3.2rem;
