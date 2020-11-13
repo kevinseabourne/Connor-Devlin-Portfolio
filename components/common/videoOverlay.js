@@ -37,6 +37,10 @@ const VideoOverlay = ({
     }
   };
 
+  const closeOverlayWhileLoading = () => {
+    closeOverlay();
+  };
+
   return (
     <Container>
       <GlobalStyle isOpen={isOpen} />
@@ -58,6 +62,7 @@ const VideoOverlay = ({
                   placeholderSize={placeholderSize}
                   centerVideo={centerVideo}
                   lazyLoad={false}
+                  closeOverlayWhileLoading={closeOverlayWhileLoading}
                 />
               </VideoContainer>
             </Overlay>
