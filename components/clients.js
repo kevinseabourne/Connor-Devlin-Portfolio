@@ -15,6 +15,7 @@ const Clients = (props) => {
           borderRadius="8px"
           centerImage={true}
           lazyLoad={true}
+          alt="teach learn grow"
           src="https://chpistel.sirv.com/Connor-Portfolio/tlg.png?cx=105&cy=109&cw=554&ch=493"
         />
         <ImageLoader
@@ -23,6 +24,7 @@ const Clients = (props) => {
           borderRadius="8px"
           centerImage={true}
           lazyLoad={true}
+          alt="edith cowan university"
           src="https://chpistel.sirv.com/Connor-Portfolio/Logo_ECU.png?w=700"
         />
         <ImageLoader
@@ -31,6 +33,7 @@ const Clients = (props) => {
           borderRadius="8px"
           centerImage={true}
           lazyLoad={true}
+          alt="city of kalamunda"
           src="https://chpistel.sirv.com/Connor-Portfolio/Kalamunda%20Logo%2001%20CMYK.png?cw=750&ch=563&w=750&h=563"
         />
       </IconsContainer>

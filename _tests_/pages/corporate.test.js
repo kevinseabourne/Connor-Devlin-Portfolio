@@ -82,33 +82,33 @@ describe("Corporate Page", () => {
     playIcons.map(async (icon) => await waitFor(() => icon.toBeVisible()));
   });
 
-  // it("should render the a testimonial and the partners names from the first item in the data", () => {
-  //   getAllCorporate.mockResolvedValue({ mockCorporateData });
-  //   const { getByText, getByTestId } = render(
-  //     <Corporate data={mockCorporateData} />
-  //   );
-  //
-  //   const testimonialPartnersNames = getByTestId("testimonialPartners");
-  //   const testimonial = getByText("Amazing wedding");
-  //
-  //   expect(testimonialPartnersNames).toBeVisible();
-  //   expect(testimonial).toBeVisible();
-  //   expect(testimonialPartnersNames.textContent).toEqual(
-  //     mockCorporateData[0].displayNames
-  //   );
-  //   expect(testimonial.textContent).toEqual(mockCorporateData[0].testimonial);
-  // });
+  it("should render three clients images", async () => {
+    getAllCorporate.mockResolvedValue({ mockCorporateData });
+    const { getByAltText } = render(<Corporate data={mockCorporateData} />);
 
-  // it("should simulate a failed get request", async () => {
-  //   getAllCorporate.mockImplementation(() =>
-  //     Promise.reject("error").catch((error) => {
-  //       expect(error).toEqual("error");
-  //     })
-  //   );
-  //   const data = null;
-  //   const { getByRole } = render(<Corporate data={data} />);
-  //   const errorMessage = await waitFor(() => getByRole("alert"));
-  //
-  //   await waitFor(() => expect(errorMessage).toBeVisible());
-  // });
+    const tlgImage = await waitFor(() => getByAltText("teach learn grow"));
+    const ecuImage = await waitFor(() =>
+      getByAltText("edith cowan university")
+    );
+    const kalamundaImage = await waitFor(() =>
+      getByAltText("city of kalamunda")
+    );
+
+    expect(tlgImage).toBeVisible();
+    expect(ecuImage).toBeVisible();
+    expect(kalamundaImage).toBeVisible();
+  });
+
+  it("should simulate a failed get request", async () => {
+    getAllCorporate.mockImplementation(() =>
+      Promise.reject("error").catch((error) => {
+        expect(error).toEqual("error");
+      })
+    );
+    const data = null;
+    const { getByRole } = render(<Corporate data={data} />);
+    const errorMessage = await waitFor(() => getByRole("alert"));
+
+    await waitFor(() => expect(errorMessage).toBeVisible());
+  });
 });
