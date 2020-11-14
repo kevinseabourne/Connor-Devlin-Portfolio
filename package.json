@@ -46,13 +46,17 @@
     "react-transition-group": "^4.4.1",
     "styled-components": "^5.2.0",
     "url-loader": "^4.1.1",
-    "use-sound": "^1.0.2"
+    "use-sound": "^1.0.2",
+    "wait-on": "^5.2.0"
   },
   "devDependencies": {
     "@cypress/code-coverage": "^3.8.3",
     "@cypress/instrument-cra": "^1.4.0",
+    "@cypress/snapshot": "^2.1.7",
+    "@testing-library/dom": "^7.26.3",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.2.2",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-styled-components": "^1.11.1",
     "file-loader": "^6.2.0",
