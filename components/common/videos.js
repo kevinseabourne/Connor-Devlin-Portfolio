@@ -85,9 +85,10 @@ const Videos = ({
       animate="show"
       exit="hidden"
       key={mount}
+      data-testid="videoContainer"
     >
       {state.map((item) => (
-        <Item key={state.indexOf(item)} variants={itemA}>
+        <Item key={state.indexOf(item)} variants={itemA} className="item">
           <ImageContainer
             onClick={() => handleClick(item.id)}
             onKeyDown={(e) => {
@@ -127,7 +128,7 @@ const Videos = ({
           </ImageContainer>
           {!showAdminContentData && (
             <Names
-              data-testid="partnerNames"
+              title="contentName"
               variants={itemB}
               key={state.indexOf(item)}
               onClick={() => handleClick(item.id)}
