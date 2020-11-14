@@ -7,6 +7,7 @@ import { InputWithIcon } from "./inputWithIcon";
 import { TextArea } from "./textArea";
 import { DayPicker } from "./dayPicker";
 import { ReactSelect } from "./select";
+import DeleteContent from "../deleteContent";
 import ImageLoader from "./imageLoader";
 import popSound from "../../public/sounds/pop_char.mp3";
 import popDownSound from "../../public/sounds/pop_down.mp3";
@@ -21,6 +22,8 @@ const AdminContentForm = ({
   defaultValues,
   operation,
   selectedVideo,
+  handleDeleteWeddingSubmit,
+  handleDeleteCorporateSubmit,
 }) => {
   const [partnersInputLength, setPartnersInputLength] = useState([
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
@@ -265,6 +268,13 @@ const AdminContentForm = ({
 
   return (
     <Container>
+      <DeleteContent
+        page={page}
+        selectedVideo={selectedVideo}
+        resetValues={resetValues}
+        handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
+        handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
+      />
       {page === "weddings" && (
         <AddWeddingForm onSubmit={handleSubmit(handleWedding)}>
           <Title>{operation} Wedding Content</Title>

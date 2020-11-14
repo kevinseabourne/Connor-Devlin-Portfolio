@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import moment from "moment";
 import { getVimeoData } from "./vimeo";
+import { toast } from "react-toastify";
 
 const config_ = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -25,7 +26,7 @@ export async function getAllCorporate() {
     )
     .then(async function () {
       const db = firebase.firestore();
-      const weddings = await db
+      const corporate = await db
         .collection("corporate")
         .get()
         .then(function (querySnapshot) {
@@ -42,7 +43,7 @@ export async function getAllCorporate() {
         .catch(function (error) {
           console.log("Error getting document:", error);
         });
-      return weddings;
+      return corporate;
     });
   return response;
 }
@@ -70,7 +71,14 @@ export async function addCorporate(data) {
           videoId: updatedData.corporateVideoId,
         })
         .catch(function (error) {
-          console.log("Error adding document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         });
       return corporate;
     });
@@ -101,7 +109,42 @@ export async function editCorporate(data) {
           videoId: updatedData.corporateVideoId,
         })
         .catch(function (error) {
-          console.log("Error adding document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        });
+      return corporate;
+    });
+  return response;
+}
+
+export async function deleteCorporate(data) {
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const corporate = await db
+        .collection("corporate")
+        .doc(data.id)
+        .delete()
+        .catch(function (error) {
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         });
       return corporate;
     });

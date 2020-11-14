@@ -70,7 +70,7 @@ const AdminEditContent = (props) => {
     const weddingData = await getAllWeddings();
     const updatedWeddings = handleWeddingNames(weddingData, true);
     setState(updatedWeddings);
-    updateSelectedVideo(weddingData);
+    updateSelectedVideo(updatedWeddings);
     return response;
   };
 
@@ -84,6 +84,24 @@ const AdminEditContent = (props) => {
     setState(corporateData);
 
     updateSelectedVideo(corporateData);
+    return response;
+  };
+
+  const handleDeleteWeddingSubmit = async () => {
+    // get the latest data and update state with it.
+    const weddingData = await getAllWeddings();
+    const updatedWeddings = handleWeddingNames(weddingData, true);
+    setState(updatedWeddings);
+    setSelectedVideo(updatedWeddings[0]);
+    return response;
+  };
+
+  const handleDeleteCorporateSubmit = async () => {
+    // get the latest data and update state with it.
+    const corporateData = await getAllCorporate();
+    setState(corporateData);
+
+    setSelectedVideo(corporateData[0]);
     return response;
   };
 
@@ -207,6 +225,8 @@ const AdminEditContent = (props) => {
             handleWeddingSubmit={handleEditWeddingSubmit}
             handleCorporateSubmit={handleEditCorporateSubmit}
             selectedVideo={selectedVideo}
+            handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
+            handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
             operation="Edit"
           />
         </FormContainer>
