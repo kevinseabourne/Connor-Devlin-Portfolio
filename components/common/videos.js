@@ -5,6 +5,7 @@ import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
 import lodash from "lodash";
 import { motion, AnimatePresence } from "framer-motion";
+import DeleteContent from "../deleteContent";
 
 const Videos = ({
   page,
@@ -18,6 +19,7 @@ const Videos = ({
   weddingNames,
   editDeleteContent,
   showAdminContentData,
+  handleDeleteContentPopUp,
 }) => {
   const [state, setState] = useState([]);
   const [reverseDelay, setReverseDelay] = useState(false);
@@ -61,7 +63,7 @@ const Videos = ({
     show: { opacity: 1 },
   };
 
-  const dot = {
+  const dotAnimation = {
     hidden: {
       backgroundColor: "rgba(255, 255, 255, 1)",
       opacity: 0,
@@ -78,96 +80,145 @@ const Videos = ({
     },
   };
 
+  const variants = {
+    hidden: { scale: 0, opacity: 0 },
+    show: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 800,
+        bounce: 1,
+        damping: 25,
+      },
+    },
+  };
+
   return (
-    <Container
-      variants={container}
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-      key={mount}
-      data-testid="videoContainer"
-    >
-      {state.map((item) => (
-        <Item key={state.indexOf(item)} variants={itemA} className="item">
-          <ImageContainer
-            onClick={() => handleClick(item.id)}
-            onKeyDown={(e) => {
-              const key = e.key === 27 || e.keyCode === 27;
-              key && handleClick(item.id);
-            }}
-            data-testid="item"
+    <AnimatePresence>
+      <Container
+        variants={container}
+        initial="hidden"
+        animate="show"
+        exit="hidden"
+        key={mount}
+        data-testid="videoContainer"
+      >
+        {state.map((item) => (
+          <Item
+            key={item.id}
+            variants={itemA}
+            layout
+            exit="hidden"
+            className="item"
           >
-            <ImageLoader
-              maxWidth="100%"
-              placeholderSize="56.2%"
-              src={item.coverPhoto}
-              hover={true}
-              borderRadius="19px"
-              opacity="0"
-              scale="0.99"
-              transitionDuration={350}
-              handleReverseDelay={handleReverseDelay}
-              transitionTiming="ease"
-              boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
-              borderRadius={"9px"}
-              handleOnLoadOutside={handleOnLoadOutside}
-              iconSrc={editDeleteContent ? null : playIcon}
-              iconMaxWidth="45px"
-              alt={page === "weddings" ? item.displayNames : item.company}
-              editDeleteContent={editDeleteContent}
-              iconMaxHeight="45px"
-              dataTestId="weddingPhoto"
-            />
-            {editDeleteContent && (
-              <SelectedVideoButton>
-                <Dot
-                  animate={selectedVideo.id === item.id ? dot.show : dot.hidden}
-                />
-              </SelectedVideoButton>
-            )}
-          </ImageContainer>
-          {!showAdminContentData && (
-            <Names
-              title="contentName"
-              variants={itemB}
-              key={state.indexOf(item)}
+            <ImageContainer
               onClick={() => handleClick(item.id)}
+              onKeyDown={(e) => {
+                const key = e.key === 27 || e.keyCode === 27;
+                key && handleClick(item.id);
+              }}
+              data-testid="item"
             >
-              {page === "weddings" ? item.displayNames : item.company}
-            </Names>
-          )}
-
-          {showAdminContentData && (
-            <WrappedNames onClick={() => handleClick(item.id)}>
-              {item.displayNames
-                ? item.displayNames.replace("&", "\n")
-                : item.company}
-            </WrappedNames>
-          )}
-
-          {showAdminContentData && (
-            <AdminVideoContent>
-              <EventDate>{item.date}</EventDate>
-              {page === "wedings" && (
-                <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
+              <ImageLoader
+                maxWidth="100%"
+                placeholderSize="56.2%"
+                src={item.coverPhoto}
+                hover={true}
+                borderRadius="19px"
+                opacity="0"
+                scale="0.99"
+                transitionDuration={350}
+                handleReverseDelay={handleReverseDelay}
+                transitionTiming="ease"
+                boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
+                borderRadius={"9px"}
+                handleOnLoadOutside={handleOnLoadOutside}
+                iconSrc={editDeleteContent ? null : playIcon}
+                iconMaxWidth="45px"
+                alt={page === "weddings" ? item.displayNames : item.company}
+                editDeleteContent={editDeleteContent}
+                iconMaxHeight="45px"
+                dataTestId="weddingPhoto"
+              />
+              {editDeleteContent && (
+                <EditDeleteContainer>
+                  <SelectedVideoButton>
+                    <Dot
+                      variants={dotAnimation}
+                      animate={selectedVideo.id === item.id ? "show" : "hidden"}
+                    />
+                  </SelectedVideoButton>
+                  <AnimatePresence>
+                    <DeleteIconContainer
+                      onClick={() => {
+                        handleDeleteContentPopUp();
+                        // play();
+                      }}
+                      variants={variants}
+                      animate={selectedVideo.id === item.id ? "show" : "hidden"}
+                    >
+                      <ImageLoader
+                        maxWidth="20px"
+                        placeholderSize="100%"
+                        opacity="0"
+                        transitionTime="300ms ease"
+                        hover={true}
+                        alt="delete"
+                        src={
+                          "https://chpistel.sirv.com/Connor-Portfolio/clear.png?colorlevel.white=0&w=40"
+                        }
+                        centerImage={true}
+                      />
+                    </DeleteIconContainer>
+                  </AnimatePresence>
+                </EditDeleteContainer>
               )}
-              {page === "corporate" && (
-                <Description>{item.description}</Description>
-              )}
-            </AdminVideoContent>
-          )}
-        </Item>
-      ))}
-      <VideoOverlay
-        isOpen={isOpen}
-        closeOverlay={closeOverlay}
-        src={selectedVideo.video}
-        maxWidth={"900px"}
-        placeholderSize={"56.25%"}
-        alt={page === "weddings" ? weddingNames : selectedVideo.company}
-        centerVideo={true}
-      />
-    </Container>
+            </ImageContainer>
+            {!showAdminContentData && (
+              <Names
+                title="contentName"
+                variants={itemB}
+                key={state.indexOf(item)}
+                onClick={() => handleClick(item.id)}
+              >
+                {page === "weddings" ? item.displayNames : item.company}
+              </Names>
+            )}
+
+            {showAdminContentData && (
+              <WrappedNames onClick={() => handleClick(item.id)}>
+                {item.displayNames
+                  ? item.displayNames.replace("&", "\n")
+                  : item.company}
+              </WrappedNames>
+            )}
+
+            {showAdminContentData && (
+              <AdminVideoContent>
+                <EventDate>{item.date}</EventDate>
+                {page === "wedings" && (
+                  <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
+                )}
+                {page === "corporate" && (
+                  <Description>{item.description}</Description>
+                )}
+              </AdminVideoContent>
+            )}
+          </Item>
+        ))}
+
+        <VideoOverlay
+          isOpen={isOpen}
+          closeOverlay={closeOverlay}
+          src={selectedVideo.video}
+          maxWidth={"900px"}
+          placeholderSize={"56.25%"}
+          alt={page === "weddings" ? weddingNames : selectedVideo.company}
+          centerVideo={true}
+        />
+      </Container>
+    </AnimatePresence>
   );
 };
 
@@ -245,11 +296,13 @@ const SelectedVideoButton = styled(motion.div)`
   object-fit: contain;
   object-position: left;
   border-radius: 50%;
-  left: 15px;
-  top: 15px;
+  left: 20px;
+  top: 20px;
   background-color: white;
   position: absolute;
 `;
+
+const EditDeleteContainer = styled(motion.div)``;
 
 const Dot = styled(motion.div)`
   z-index: 14;
@@ -262,6 +315,16 @@ const Dot = styled(motion.div)`
   top: 0px;
   bottom: 0px;
   margin: auto;
+`;
+
+const DeleteIconContainer = styled(motion.div)`
+  position: absolute;
+  max-width: 30px;
+  width: 100%;
+  top: 0px;
+  right: 0px;
+  padding-top: 20px;
+  padding-right: 20px;
 `;
 
 const Overlay = styled.div``;

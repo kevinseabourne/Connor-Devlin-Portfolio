@@ -1,12 +1,21 @@
-import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import styled, { createGlobalStyle } from "styled-components";
+import React, { useState, useEffect, useRef } from "react";
 import Videos from "./common/videos";
-import { getAllWeddings, editWedding } from ".././pages/api/weddings";
-import { getAllCorporate, editCorporate } from ".././pages/api/corporate";
+import {
+  getAllWeddings,
+  editWedding,
+  deleteWedding,
+} from ".././pages/api/weddings";
+import {
+  getAllCorporate,
+  editCorporate,
+  deleteCorporate,
+} from ".././pages/api/corporate";
 import _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
-import { motion } from "framer-motion";
-import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { useForm } from "react-hook-form";
 import { LoadingSpinner } from "../components/loading-spinner";
 import { handleWeddingNames } from "./common/utils/handleWeddingName";
 import { bundlePartnersIntoObj } from "./common/utils/bundlePartnersIntoObj";
@@ -14,13 +23,28 @@ import AdminContentForm from "./common/adminContentForm";
 import downWave from ".././public/images/wave3.svg";
 import popSound from ".././public/sounds/pop.mp3";
 import useSound from "use-sound";
+import { DeletePopupOverlay } from "./deletePopupOverlay";
 
 const AdminEditContent = (props) => {
   const [state, setState] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState({});
   const [status, setStatus] = useState("idle");
+  const [popUpOpen, setPopUpOpen] = useState(false);
   const [page, setPage] = useState(null);
+  const timeout = useRef(null);
+  const timeoutThird = useRef(null);
+  const popUpRef = useRef(null);
+
   const [play] = useSound(popSound, { volume: 0.2 });
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      clearTimeout(timeout.current);
+      clearTimeout(timeoutThird.current);
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleClick = (id) => {
     const stateClone = _.cloneDeep(state);
@@ -50,6 +74,9 @@ const AdminEditContent = (props) => {
     setSelectedVideo(updatedWeddings[0]);
     setPage("weddings");
     setStatus("resolved");
+    timeoutThird.current = setTimeout(() => {
+      setStatus("idle");
+    }, 1000);
   };
 
   const showCorporateContent = async () => {
@@ -59,6 +86,9 @@ const AdminEditContent = (props) => {
     setSelectedVideo(response[0]);
     setPage("corporate");
     setStatus("resolved");
+    timeoutThird.current = setTimeout(() => {
+      setStatus("idle");
+    }, 1000);
   };
 
   const handleEditWeddingSubmit = async (data) => {
@@ -88,21 +118,38 @@ const AdminEditContent = (props) => {
   };
 
   const handleDeleteWeddingSubmit = async () => {
-    // get the latest data and update state with it.
+    await deleteWedding(selectedVideo);
+
     const weddingData = await getAllWeddings();
     const updatedWeddings = handleWeddingNames(weddingData, true);
+
+    if (state.length === state.indexOf(selectedVideo)) {
+      setSelectedVideo(updatedWeddings[updatedWeddings.length]);
+    } else {
+      setSelectedVideo(state.indexOf(selectedVideo) + 1);
+    }
     setState(updatedWeddings);
-    setSelectedVideo(updatedWeddings[0]);
-    return response;
+    return;
   };
 
   const handleDeleteCorporateSubmit = async () => {
     // get the latest data and update state with it.
+    await deleteCorporate(selectedVideo);
     const corporateData = await getAllCorporate();
     setState(corporateData);
 
-    setSelectedVideo(corporateData[0]);
-    return response;
+    const corporateDataClone = cloneDeep(state);
+
+    const selectedVideoInState = corporateDataClone.find(
+      (item) => item.id === selectedVideo.id
+    );
+
+    const index =
+      corporateDataClone.length === index
+        ? corporateDataClone.indexOf(selectedVideoInState) - 1
+        : corporateDataClone.indexOf(selectedVideoInState) + 1;
+
+    setSelectedVideo(corporateDataClone[index]);
   };
 
   const updateSelectedVideo = (data) => {
@@ -116,6 +163,16 @@ const AdminEditContent = (props) => {
     ) {
       setSelectedVideo(updatedSelectedVideo);
     }
+  };
+
+  const handleClickOutside = (e) => {
+    if (popUpRef.current && !popUpRef.current.contains(e.target)) {
+      setPopUpOpen(false);
+    }
+  };
+
+  const handleDeleteContentPopUp = () => {
+    setPopUpOpen(!popUpOpen);
   };
 
   const defaultValues = !_.isEmpty(selectedVideo)
@@ -178,13 +235,29 @@ const AdminEditContent = (props) => {
             <Title>Choose a section to edit ?</Title>
             <ButtonsInnerContainer>
               <WeddingsFormButton page={page} onClick={handleWeddingPageChange}>
-                Weddings
+                {status === "pending" ? (
+                  page === "weddings" ? (
+                    <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
+                  ) : (
+                    "Weddings"
+                  )
+                ) : (
+                  "Weddings"
+                )}
               </WeddingsFormButton>
               <CorporateFormButton
                 page={page}
                 onClick={handleCorporatePageChange}
               >
-                Corporate
+                {status === "pending" ? (
+                  page === "corporate" ? (
+                    <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
+                  ) : (
+                    "Corporate"
+                  )
+                ) : (
+                  "Corporate"
+                )}
               </CorporateFormButton>
             </ButtonsInnerContainer>
           </ButtonsContainer>
@@ -210,6 +283,9 @@ const AdminEditContent = (props) => {
                 handleClick={handleClick}
                 showAdminContentData={true}
                 editDeleteContent={true}
+                handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
+                handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
+                handleDeleteContentPopUp={handleDeleteContentPopUp}
               />
             )}
           </AnimatePresence>
@@ -225,12 +301,19 @@ const AdminEditContent = (props) => {
             handleWeddingSubmit={handleEditWeddingSubmit}
             handleCorporateSubmit={handleEditCorporateSubmit}
             selectedVideo={selectedVideo}
-            handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
-            handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
             operation="Edit"
           />
         </FormContainer>
       )}
+      <DeletePopupOverlay
+        popUpOpen={popUpOpen}
+        closePopup={handleDeleteContentPopUp}
+        selectedVideo={selectedVideo}
+        page={page}
+        handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
+        handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
+        ref={popUpRef}
+      />
     </Container>
   );
 };
@@ -324,6 +407,7 @@ const WeddingsFormButton = styled.button`
     page === "weddings" ? "scale(1)" : "scale(0.85)"};
   margin-right: 5px;
   border: none;
+  min-width: ${({ page }) => (page === "weddings" ? "136.16px" : "115.73px")};
   font-weight: 600;
   transition: all 0.3s ease-in-out;
   box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
@@ -361,6 +445,7 @@ const CorporateFormButton = styled.button`
   border-radius: 9px;
   font-weight: 600;
   border: none;
+  min-width: ${({ page }) => (page === "corporate" ? "136.16px" : "115.73px")};
   transform: ${({ page }) =>
     page === "corporate" ? "scale(1)" : "scale(0.85)"};
   box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,

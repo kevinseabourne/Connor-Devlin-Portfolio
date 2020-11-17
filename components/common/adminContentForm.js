@@ -268,13 +268,6 @@ const AdminContentForm = ({
 
   return (
     <Container>
-      <DeleteContent
-        page={page}
-        selectedVideo={selectedVideo}
-        resetValues={resetValues}
-        handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
-        handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
-      />
       {page === "weddings" && (
         <AddWeddingForm onSubmit={handleSubmit(handleWedding)}>
           <Title>{operation} Wedding Content</Title>
