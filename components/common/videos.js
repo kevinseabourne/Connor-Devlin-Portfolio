@@ -4,7 +4,7 @@ import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
 import lodash from "lodash";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import DeleteContent from "../deleteContent";
 
 const Videos = ({
@@ -95,130 +95,128 @@ const Videos = ({
   };
 
   return (
-    <AnimatePresence>
-      <Container
-        variants={container}
-        initial="hidden"
-        animate="show"
-        exit="hidden"
-        key={mount}
-        data-testid="videoContainer"
-      >
-        {state.map((item) => (
-          <Item
-            key={item.id}
-            variants={itemA}
-            layout
-            exit="hidden"
-            className="item"
+    <Container
+      variants={container}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+      key={mount}
+      data-testid="videoContainer"
+    >
+      {state.map((item) => (
+        <Item
+          key={item.id}
+          variants={itemA}
+          layoutId={item.id}
+          exit="hidden"
+          className="item"
+        >
+          <ImageContainer
+            onClick={() => handleClick(item.id)}
+            onKeyDown={(e) => {
+              const key = e.key === 27 || e.keyCode === 27;
+              key && handleClick(item.id);
+            }}
+            data-testid="item"
           >
-            <ImageContainer
-              onClick={() => handleClick(item.id)}
-              onKeyDown={(e) => {
-                const key = e.key === 27 || e.keyCode === 27;
-                key && handleClick(item.id);
-              }}
-              data-testid="item"
-            >
-              <ImageLoader
-                maxWidth="100%"
-                placeholderSize="56.2%"
-                src={item.coverPhoto}
-                hover={true}
-                borderRadius="19px"
-                opacity="0"
-                scale="0.99"
-                transitionDuration={350}
-                handleReverseDelay={handleReverseDelay}
-                transitionTiming="ease"
-                boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
-                borderRadius={"9px"}
-                handleOnLoadOutside={handleOnLoadOutside}
-                iconSrc={editDeleteContent ? null : playIcon}
-                iconMaxWidth="45px"
-                alt={page === "weddings" ? item.displayNames : item.company}
-                editDeleteContent={editDeleteContent}
-                iconMaxHeight="45px"
-                dataTestId="weddingPhoto"
-              />
-              {editDeleteContent && (
-                <EditDeleteContainer>
-                  <SelectedVideoButton>
-                    <Dot
-                      variants={dotAnimation}
-                      animate={selectedVideo.id === item.id ? "show" : "hidden"}
+            <ImageLoader
+              maxWidth="100%"
+              placeholderSize="56.2%"
+              src={item.coverPhoto}
+              hover={true}
+              borderRadius="19px"
+              opacity="0"
+              scale="0.99"
+              transitionDuration={350}
+              handleReverseDelay={handleReverseDelay}
+              transitionTiming="ease"
+              boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
+              borderRadius={"9px"}
+              handleOnLoadOutside={handleOnLoadOutside}
+              iconSrc={editDeleteContent ? null : playIcon}
+              iconMaxWidth="45px"
+              alt={page === "weddings" ? item.displayNames : item.company}
+              editDeleteContent={editDeleteContent}
+              iconMaxHeight="45px"
+              dataTestId="weddingPhoto"
+            />
+            {editDeleteContent && (
+              <EditDeleteContainer>
+                <SelectedVideoButton>
+                  <Dot
+                    variants={dotAnimation}
+                    animate={selectedVideo.id === item.id ? "show" : "hidden"}
+                  />
+                </SelectedVideoButton>
+                <AnimatePresence>
+                  <DeleteIconContainer
+                    onClick={() => {
+                      handleDeleteContentPopUp();
+                      // play();
+                    }}
+                    variants={variants}
+                    animate={selectedVideo.id === item.id ? "show" : "hidden"}
+                  >
+                    <ImageLoader
+                      maxWidth="20px"
+                      placeholderSize="100%"
+                      opacity="0"
+                      transitionTime="300ms ease"
+                      hover={true}
+                      alt="delete"
+                      src={
+                        "https://chpistel.sirv.com/Connor-Portfolio/clear.png?colorlevel.white=0&w=40"
+                      }
+                      centerImage={true}
                     />
-                  </SelectedVideoButton>
-                  <AnimatePresence>
-                    <DeleteIconContainer
-                      onClick={() => {
-                        handleDeleteContentPopUp();
-                        // play();
-                      }}
-                      variants={variants}
-                      animate={selectedVideo.id === item.id ? "show" : "hidden"}
-                    >
-                      <ImageLoader
-                        maxWidth="20px"
-                        placeholderSize="100%"
-                        opacity="0"
-                        transitionTime="300ms ease"
-                        hover={true}
-                        alt="delete"
-                        src={
-                          "https://chpistel.sirv.com/Connor-Portfolio/clear.png?colorlevel.white=0&w=40"
-                        }
-                        centerImage={true}
-                      />
-                    </DeleteIconContainer>
-                  </AnimatePresence>
-                </EditDeleteContainer>
+                  </DeleteIconContainer>
+                </AnimatePresence>
+              </EditDeleteContainer>
+            )}
+          </ImageContainer>
+          {!showAdminContentData && (
+            <Names
+              title="contentName"
+              variants={itemB}
+              key={state.indexOf(item)}
+              onClick={() => handleClick(item.id)}
+            >
+              {page === "weddings" ? item.displayNames : item.company}
+            </Names>
+          )}
+
+          {showAdminContentData && (
+            <WrappedNames onClick={() => handleClick(item.id)}>
+              {item.displayNames
+                ? item.displayNames.replace("&", "\n")
+                : item.company}
+            </WrappedNames>
+          )}
+
+          {showAdminContentData && (
+            <AdminVideoContent>
+              <EventDate>{item.date}</EventDate>
+              {page === "wedings" && (
+                <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
               )}
-            </ImageContainer>
-            {!showAdminContentData && (
-              <Names
-                title="contentName"
-                variants={itemB}
-                key={state.indexOf(item)}
-                onClick={() => handleClick(item.id)}
-              >
-                {page === "weddings" ? item.displayNames : item.company}
-              </Names>
-            )}
+              {page === "corporate" && (
+                <Description>{item.description}</Description>
+              )}
+            </AdminVideoContent>
+          )}
+        </Item>
+      ))}
 
-            {showAdminContentData && (
-              <WrappedNames onClick={() => handleClick(item.id)}>
-                {item.displayNames
-                  ? item.displayNames.replace("&", "\n")
-                  : item.company}
-              </WrappedNames>
-            )}
-
-            {showAdminContentData && (
-              <AdminVideoContent>
-                <EventDate>{item.date}</EventDate>
-                {page === "wedings" && (
-                  <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
-                )}
-                {page === "corporate" && (
-                  <Description>{item.description}</Description>
-                )}
-              </AdminVideoContent>
-            )}
-          </Item>
-        ))}
-
-        <VideoOverlay
-          isOpen={isOpen}
-          closeOverlay={closeOverlay}
-          src={selectedVideo.video}
-          maxWidth={"900px"}
-          placeholderSize={"56.25%"}
-          alt={page === "weddings" ? weddingNames : selectedVideo.company}
-          centerVideo={true}
-        />
-      </Container>
-    </AnimatePresence>
+      <VideoOverlay
+        isOpen={isOpen}
+        closeOverlay={closeOverlay}
+        src={selectedVideo.video}
+        maxWidth={"900px"}
+        placeholderSize={"56.25%"}
+        alt={page === "weddings" ? weddingNames : selectedVideo.company}
+        centerVideo={true}
+      />
+    </Container>
   );
 };
 
