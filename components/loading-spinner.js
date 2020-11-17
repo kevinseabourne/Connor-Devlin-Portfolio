@@ -1,13 +1,14 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-export const LoadingSpinner = React.forwardRef(({ size }, ref) => {
+export const LoadingSpinner = React.forwardRef(({ size, stroke }, ref) => {
   return (
     <Spinner
       ref={ref}
       viewBox="0 0 66 66"
       size={size}
       data-testid="loadingSpinner"
+      stroke={stroke}
     >
       <circle
         className="circle"
@@ -52,7 +53,7 @@ const turn = keyframes`
 `;
 
 const Spinner = styled.svg`
-  stroke: white;
+  stroke: ${({ stroke }) => (stroke ? stroke : "white")};
   fill: transparent;
   position: absolute;
   width: ${({ size }) => (size ? size : "100%")};
