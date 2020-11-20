@@ -5,25 +5,32 @@ import { addWedding } from "../pages/api/weddings";
 import { addCorporate } from "../pages/api/corporate";
 import AdminContentForm from "./common/adminContentForm";
 import { bundlePartnersIntoObj } from "./common/utils/bundlePartnersIntoObj";
+import AdminButtonsSection from "./common/adminButtonSections";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 
 const AdminAddContent = (props) => {
   const [page, setPage] = useState(null);
-  const [status, setStatus] = useState("idle");
+  const [weddingsStatus, setWeddingsStatus] = useState("idle");
+  const [corporateStatus, setCorporateStatus] = useState("idle");
 
   const handleAddWeddingSubmit = async (data) => {
+    setWeddingsStatus("pending");
     const updatedData = bundlePartnersIntoObj(data);
     const response = await addWedding(updatedData);
-
+    setWeddingsStatus("resolved");
     return response;
   };
 
   const handleAddCorporateSubmit = async (data) => {
+    setCorporateStatus("pending");
     const dataClone = _.cloneDeep(data);
     const response = await addCorporate(dataClone);
+    // if vimeo id is not valid it will fail, need an error message for that
 
     if (response) {
       setValue("jobDate", "");
       reset();
+      setCorporateStatus("resolved");
     }
   };
 
@@ -35,108 +42,72 @@ const AdminAddContent = (props) => {
     setPage("corporate");
   };
 
+  const variants = {
+    hidden: {
+      display: "flex",
+      justifyContent: "center",
+      transition: {
+        type: "spring",
+      },
+    },
+    show: {
+      display: "flex",
+      justifyContent: "flex-start",
+      transition: {
+        type: "spring",
+        delayChildren: 0.1,
+        staggerChildren: 0.7,
+      },
+    },
+  };
+
   return (
-    <Container>
-      <Title>Choose Which content you would like to add ?</Title>
-      <ButtonsContainer>
-        <WeddingsFormButton page={page} onClick={showWeddingForm}>
-          Weddings
-        </WeddingsFormButton>
-        <CorporateFormButton page={page} onClick={showCorporateForm}>
-          Corporate
-        </CorporateFormButton>
-      </ButtonsContainer>
-      <AdminContentForm
-        page={page}
-        handleWeddingSubmit={handleAddWeddingSubmit}
-        handleCorporateSubmit={handleAddCorporateSubmit}
-        operation="Add"
-      />
-    </Container>
+    <AnimateSharedLayout>
+      <Container
+        variants={variants}
+        initial="hidden"
+        animate={page ? "show" : "hidden"}
+        layout
+      >
+        <AdminButtonsSection
+          handleWeddingPageChange={showWeddingForm}
+          handleCorporatePageChange={showCorporateForm}
+          weddingsStatus={weddingsStatus}
+          corporateStatus={corporateStatus}
+          page={page}
+          operation="Add"
+        />
+        {page && (
+          <AdminContentForm
+            page={page}
+            handleWeddingSubmit={handleAddWeddingSubmit}
+            handleCorporateSubmit={handleAddCorporateSubmit}
+            operation="Add"
+          />
+        )}
+      </Container>
+    </AnimateSharedLayout>
   );
 };
 
 export default AdminAddContent;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
+  min-height: calc(100vh - 75px);
   width: calc(100% - 280px);
   margin-left: auto;
   display: flex;
+  background-image: ${({ theme }) =>
+    `linear-gradient(to right,  ${theme.colors.gradient1} 10%, ${theme.colors.gradient2} 100% )`};
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-bottom: 70px;
+  background-color: white;
   @media (max-width: 1250px) {
     width: calc(100% - 200px);
   }
   @media (max-width: 1024px) {
     width: 100%;
-    padding: 0px 20px;
     box-sizing: border-box;
-  }
-`;
-
-const Title = styled.h1`
-  margin: 70px 0px;
-  text-align: center;
-  @media (max-width: 750px) {
-    margin: 10% 0px;
-    font-size: 1.4rem;
-  }
-`;
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin: 0 20px;
-  @media (max-width: 390px) {
-    flex-direction: column;
-  }
-`;
-
-const WeddingsFormButton = styled.button`
-  font-size: 1rem;
-  color: ${({ page }) => (page === "weddings" ? "black" : "white")};
-  min-height: 54px;
-  padding: 14px 30px;
-  border-radius: 9px;
-  margin-right: 5px;
-  border: ${({ page }) =>
-    page === "weddings" ? "3px solid black" : "3px solid white"};
-  font-weight: 600;
-  transition: all 0.3s ease-in-out;
-  background-image: ${({ theme }) =>
-    `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
-  &:hover {
-    cursor: pointer;
-  }
-  &:focus {
-    outline: none;
-  }
-  @media (max-width: 390px) {
-    margin-bottom: 15px;
-  }
-`;
-
-const CorporateFormButton = styled.button`
-  font-size: 1rem;
-  color: ${({ page }) => (page === "corporate" ? "black" : "white")};
-  min-height: 54px;
-  padding: 14px 30px;
-  margin-left: 5px;
-  border: ${({ page }) =>
-    page === "corporate" ? "3px solid black" : "3px solid white"};
-  border-radius: 9px;
-  font-weight: 600;
-  transition: all 0.3s ease-in-out;
-  background-image: ${({ theme }) =>
-    `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
-  &:hover {
-    cursor: pointer;
-  }
-  &:focus {
-    outline: none;
   }
 `;
