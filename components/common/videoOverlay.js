@@ -19,9 +19,6 @@ const VideoOverlay = ({
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {};
-
-    // fetchData();
     window.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("mousedown", handleClickOutside);

@@ -7,8 +7,9 @@ import { InputWithIcon } from "./inputWithIcon";
 import { TextArea } from "./textArea";
 import { DayPicker } from "./dayPicker";
 import { ReactSelect } from "./select";
-import DeleteContent from "../deleteContent";
+import { motion } from "framer-motion";
 import ImageLoader from "./imageLoader";
+import downWave from "../../public/images/wave3.svg";
 import popSound from "../../public/sounds/pop_char.mp3";
 import popDownSound from "../../public/sounds/pop_down.mp3";
 import successSound from "../../public/sounds/music_marimba_on_hi.mp3";
@@ -22,8 +23,7 @@ const AdminContentForm = ({
   defaultValues,
   operation,
   selectedVideo,
-  handleDeleteWeddingSubmit,
-  handleDeleteCorporateSubmit,
+  dataResolved,
 }) => {
   const [partnersInputLength, setPartnersInputLength] = useState([
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
@@ -37,20 +37,19 @@ const AdminContentForm = ({
     control,
     errors,
     unregister,
-    clearErrors,
     formState,
   } = useForm();
-  const { isSubmitting, isSubmitSuccessful } = formState;
+  const { isSubmitSuccessful } = formState;
   const [play] = useSound(popSound);
   const [playDown] = useSound(popDownSound);
   const [playSuccessSound] = useSound(successSound, { volume: 0.2 });
   const [playErrorSound] = useSound(errorSound, { volume: 0.2 });
 
   useEffect(() => {
-    if (!_.isEmpty(defaultValues)) {
+    if (!_.isEmpty(defaultValues) && dataResolved) {
       handleDefaultValues();
     }
-  }, [selectedVideo]);
+  }, [dataResolved, selectedVideo]);
 
   useEffect(() => {
     if (status === "resolved") {
@@ -266,219 +265,271 @@ const AdminContentForm = ({
     },
   ];
 
+  const variants = {
+    hidden: {
+      opacity: 0,
+      y: 40,
+      transition: {
+        type: "spring",
+        bounce: 1,
+        damping: 20,
+      },
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
   return (
-    <Container>
-      {page === "weddings" && (
-        <AddWeddingForm onSubmit={handleSubmit(handleWedding)}>
-          <Title>{operation} Wedding Content</Title>
-          <InfoBox>
-            <InfoLabelContainer>
-              <ImageLoader
-                lazyLoad={true}
-                maxWidth="22px"
-                placeholderSize="100%"
-                src="https://chpistel.sirv.com/Connor-Portfolio/waringSign.png?w=22"
-              />
-              <InfoLabel>
-                To Change the description or display image go to the video on
-                your Vimeo account.
-              </InfoLabel>
-            </InfoLabelContainer>
-          </InfoBox>
-          <InputWithIcon
-            name="weddingVideoId"
-            label="video ID"
-            ref={register(schema.videoId)}
-            error={errors.weddingVideoId}
-            icon={
-              "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
-            }
-            iconMaxWidth="16px"
-            iconPlaceHolderSize="100%"
-            toolTipImage={
-              "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
-            }
-            toolTipImagePlaceHolderSize="58%"
-            toolTipImageBorderRadius="9px"
-            toolTipMaxWidth="450px"
-            toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
-          />
-          {partnersInputLength.map((partner) => (
-            <NameContainer key={partner.id}>
-              <AddPartnerButton
-                tabIndex="0"
-                role="button"
-                onKeyDown={(e) => {
-                  const key = e.key === 13 || e.keyCode === 13;
-                  key && addPartner(partnersInputLength.indexOf(partner));
-                }}
-                onClick={() => addPartner(partnersInputLength.indexOf(partner))}
-              >
+    <Container variants={variants} layout>
+      <Wave src={downWave} layout />
+      <InnerContainer layout>
+        {page === "weddings" && (
+          <AddWeddingForm onSubmit={handleSubmit(handleWedding)}>
+            <Title>{operation} Wedding Content</Title>
+            <InfoBox>
+              <InfoLabelContainer>
                 <ImageLoader
-                  maxWidth="inherit"
+                  lazyLoad={true}
+                  maxWidth="22px"
                   placeholderSize="100%"
-                  opacity="0"
-                  transitionTime="300ms ease"
-                  hover={true}
-                  src={
-                    "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
-                  }
+                  src="https://chpistel.sirv.com/Connor-Portfolio/waringSign.png?w=22"
                 />
-              </AddPartnerButton>
-              <NameInnerContainer>
-                <Input
-                  name={`partnerFirstName_${partner.id}`}
-                  label="First Name"
-                  ref={register(schema.name)}
-                  error={errors[`partnerFirstName_${partner.id}`]}
-                  marginRight="5px"
-                />
-                <Input
-                  name={`partnerLastName_${partner.id}`}
-                  label="Last Name"
-                  ref={register(schema.name)}
-                  error={errors[`partnerLastName_${partner.id}`]}
-                  marginLeft="5px"
-                />
-              </NameInnerContainer>
-              <DeletePartnerButton
-                tabIndex="0"
-                role="button"
-                onKeyDown={(e) => {
-                  const key = e.key === 13 || e.keyCode === 13;
-                  key && deletePartner(partnersInputLength.indexOf(partner));
-                }}
-                onClick={() =>
-                  deletePartner(partnersInputLength.indexOf(partner))
-                }
-              >
-                <ImageLoader
-                  maxWidth="inherit"
-                  placeholderSize="100%"
-                  opacity="0"
-                  transitionTime="300ms ease"
-                  hover={true}
-                  src={
-                    "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
-                  }
-                />
-              </DeletePartnerButton>
-            </NameContainer>
-          ))}
-          <LocationContainer>
-            <Input
-              name="suburb"
-              label="Suburb"
-              ref={register(schema.suburb)}
-              error={errors.suburb}
-              marginRight="5px"
+                <InfoLabel>
+                  To Change the description or display image go to the video on
+                  your Vimeo account.
+                </InfoLabel>
+              </InfoLabelContainer>
+            </InfoBox>
+            <InputWithIcon
+              name="weddingVideoId"
+              label="video ID"
+              ref={register(schema.videoId)}
+              error={errors.weddingVideoId}
+              icon={
+                "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
+              }
+              iconMaxWidth="16px"
+              iconPlaceHolderSize="100%"
+              toolTipImage={
+                "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
+              }
+              toolTipImagePlaceHolderSize="58%"
+              toolTipImageBorderRadius="9px"
+              toolTipMaxWidth="450px"
+              toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
             />
-            <ReactSelect
+            {partnersInputLength.map((partner) => (
+              <NameContainer key={partner.id}>
+                <AddPartnerButton
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={(e) => {
+                    const key = e.key === 13 || e.keyCode === 13;
+                    key && addPartner(partnersInputLength.indexOf(partner));
+                  }}
+                  onClick={() =>
+                    addPartner(partnersInputLength.indexOf(partner))
+                  }
+                >
+                  <ImageLoader
+                    maxWidth="inherit"
+                    placeholderSize="100%"
+                    opacity="0"
+                    transitionTime="300ms ease"
+                    hover={true}
+                    src={
+                      "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
+                    }
+                  />
+                </AddPartnerButton>
+                <NameInnerContainer>
+                  <Input
+                    name={`partnerFirstName_${partner.id}`}
+                    label="First Name"
+                    ref={register(schema.name)}
+                    error={errors[`partnerFirstName_${partner.id}`]}
+                    marginRight="5px"
+                  />
+                  <Input
+                    name={`partnerLastName_${partner.id}`}
+                    label="Last Name"
+                    ref={register(schema.name)}
+                    error={errors[`partnerLastName_${partner.id}`]}
+                    marginLeft="5px"
+                  />
+                </NameInnerContainer>
+                <DeletePartnerButton
+                  tabIndex="0"
+                  role="button"
+                  onKeyDown={(e) => {
+                    const key = e.key === 13 || e.keyCode === 13;
+                    key && deletePartner(partnersInputLength.indexOf(partner));
+                  }}
+                  onClick={() =>
+                    deletePartner(partnersInputLength.indexOf(partner))
+                  }
+                >
+                  <ImageLoader
+                    maxWidth="inherit"
+                    placeholderSize="100%"
+                    opacity="0"
+                    transitionTime="300ms ease"
+                    hover={true}
+                    src={
+                      "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
+                    }
+                  />
+                </DeletePartnerButton>
+              </NameContainer>
+            ))}
+            <LocationContainer>
+              <Input
+                name="suburb"
+                label="Suburb"
+                ref={register(schema.suburb)}
+                error={errors.suburb}
+                marginRight="5px"
+              />
+              <ReactSelect
+                control={control}
+                ref={register}
+                label="State/Territory"
+                name="stateTerritory"
+                options={stateTerritoryOptions}
+                validation={schema.stateTerritory}
+                error={errors.stateTerritory}
+                marginLeft="5px"
+              />
+            </LocationContainer>
+            <DayPicker
               control={control}
               ref={register}
-              label="State/Territory"
-              name="stateTerritory"
-              options={stateTerritoryOptions}
-              validation={schema.stateTerritory}
-              error={errors.stateTerritory}
-              marginLeft="5px"
+              label="Date"
+              name="weddingDate"
+              validation={schema.date}
+              error={errors.weddingDate}
             />
-          </LocationContainer>
-          <DayPicker
-            control={control}
-            ref={register}
-            label="Date"
-            name="weddingDate"
-            validation={schema.date}
-            error={errors.weddingDate}
-          />
-          <TextArea
-            name="testimonial"
-            label="Testimonial"
-            ref={register(schema.testimonial)}
-            error={errors.testimonial}
-          />
-          <SubmitButton
-            type="submit"
-            disabled={status === "pending" ? true : false}
-          >
-            {status !== "pending"
-              ? status === "resolved"
-                ? "Success"
-                : operation === "Edit"
-                ? "Update"
-                : operation
-              : "Loading..."}
-          </SubmitButton>
-        </AddWeddingForm>
-      )}
-      {page === "corporate" && (
-        <AddCorporateForm onSubmit={handleSubmit(handleCorporate)}>
-          <Title>Add Corporate Content</Title>
-          <InputWithIcon
-            name="corporateVideoId"
-            label="video ID"
-            ref={register(schema.videoId)}
-            error={errors.corporateVideoId}
-            icon={
-              "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
-            }
-            iconMaxWidth="16px"
-            iconPlaceHolderSize="100%"
-            toolTipImage={
-              "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
-            }
-            toolTipImagePlaceHolderSize="58%"
-            toolTipImageBorderRadius="9px"
-            toolTipMaxWidth="450px"
-            toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
-          />
-          <Input
-            name="company"
-            label="Company"
-            ref={register(schema.company)}
-            error={errors.company}
-          />
-          <DayPicker
-            control={control}
-            ref={register}
-            label="Date"
-            name="jobDate"
-            validation={schema.date}
-            error={errors.jobDate}
-          />
-          <TextArea
-            name="corporateTestimonial"
-            label="Testimonial"
-            ref={register(schema.testimonial)}
-            error={errors.corporateTestimonial}
-          />
-          <SubmitButton
-            type="submit"
-            disabled={status === "pending" ? true : false}
-          >
-            {status !== "pending"
-              ? status === "resolved"
-                ? "Success"
-                : operation === "Edit"
-                ? "Update"
-                : operation
-              : "Loading..."}
-          </SubmitButton>
-        </AddCorporateForm>
-      )}
+            <TextArea
+              name="testimonial"
+              label="Testimonial"
+              ref={register(schema.testimonial)}
+              error={errors.testimonial}
+            />
+            <SubmitButton
+              type="submit"
+              disabled={status === "pending" ? true : false}
+            >
+              {status !== "pending"
+                ? status === "resolved"
+                  ? "Success"
+                  : operation === "Edit"
+                  ? "Update"
+                  : operation
+                : "Loading..."}
+            </SubmitButton>
+          </AddWeddingForm>
+        )}
+        {page === "corporate" && (
+          <AddCorporateForm onSubmit={handleSubmit(handleCorporate)}>
+            <Title>{operation} Corporate Content</Title>
+            <InputWithIcon
+              name="corporateVideoId"
+              label="video ID"
+              ref={register(schema.videoId)}
+              error={errors.corporateVideoId}
+              icon={
+                "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
+              }
+              iconMaxWidth="16px"
+              iconPlaceHolderSize="100%"
+              toolTipImage={
+                "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
+              }
+              toolTipImagePlaceHolderSize="58%"
+              toolTipImageBorderRadius="9px"
+              toolTipMaxWidth="450px"
+              toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
+            />
+            <Input
+              name="company"
+              label="Company"
+              ref={register(schema.company)}
+              error={errors.company}
+            />
+            <DayPicker
+              control={control}
+              ref={register}
+              label="Date"
+              name="jobDate"
+              validation={schema.date}
+              error={errors.jobDate}
+            />
+            <TextArea
+              name="corporateTestimonial"
+              label="Testimonial"
+              ref={register(schema.testimonial)}
+              error={errors.corporateTestimonial}
+            />
+            <SubmitButton
+              type="submit"
+              disabled={status === "pending" ? true : false}
+            >
+              {status !== "pending"
+                ? status === "resolved"
+                  ? "Success"
+                  : operation === "Edit"
+                  ? "Update"
+                  : operation
+                : "Loading..."}
+            </SubmitButton>
+          </AddCorporateForm>
+        )}
+      </InnerContainer>
     </Container>
   );
 };
 
 export default AdminContentForm;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
+  width: 100%;
+  padding-top: 18%;
+  box-sizing: border-box;
+  position: relative;
+  background-color: white;
+  padding-bottom: 150px;
+  @media (max-width: 950px) {
+    padding-top: 25%;
+  }
+`;
+
+const InnerContainer = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: white;
+  width: 100%;
+  padding-bottom: 5%;
+  position: relative;
   padding: 0 20px;
+  box-sizing: border-box;
+`;
+
+const Wave = styled(motion.img)`
+  position: absolute;
+  top: -2px;
+  left: 0px;
+  width: 100%;
+  object-fit: cover;
+  @media (max-width: 950px) {
+    top: -10px;
+  }
 `;
 
 const InfoBox = styled.div`

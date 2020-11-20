@@ -139,6 +139,7 @@ const ImageLoader = ({
           data-testid="imageIcon"
           hover={hover}
           initial="hidden"
+          animate="show"
           onAnimationComplete={onComplete}
           transitionDuration={transitionDuration}
           transitionTiming={transitionTiming}

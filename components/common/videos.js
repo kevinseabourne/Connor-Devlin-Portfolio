@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
 import lodash from "lodash";
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useViewportScroll,
+  useTransform,
+} from "framer-motion";
 import DeleteContent from "../deleteContent";
+import { useInView } from "react-intersection-observer";
+import "intersection-observer";
 
 const Videos = ({
   page,
@@ -22,8 +29,31 @@ const Videos = ({
   handleDeleteContentPopUp,
 }) => {
   const [state, setState] = useState([]);
-  const [reverseDelay, setReverseDelay] = useState(false);
   const [mount, setMount] = useState(false);
+  const [positionY, setPositionY] = useState(0);
+  const [scrollingDown, setScrollingDown] = useState(false);
+  const [stateChange, setStateChange] = useState(false);
+  const timeout = useRef(null);
+
+  const { ref, inView, entry } = useInView({
+    triggerOnce: false,
+    rootMargin: "0px 0px",
+  });
+
+  useEffect(() => {
+    if (entry) {
+      setScrollingDown(positionY > entry.boundingClientRect.y);
+      setPositionY(entry.boundingClientRect.y);
+    }
+  }, [entry]);
+
+  useEffect(() => {
+    setStateChange(true);
+    timeout.current = setTimeout(() => {
+      setStateChange(false);
+    }, 1000);
+    return () => clearTimeout(timeout.current);
+  }, [state]);
 
   useEffect(() => {
     setState(data);
@@ -31,24 +61,21 @@ const Videos = ({
     return () => setMount(false);
   }, [data]);
 
-  const handleReverseDelay = () => {
-    setReverseDelay(!reverseDelay);
-  };
-
   // Framer Motion Animation
 
   const container = {
     hidden: {
       transition: {
+        delayChildren: stateChange ? 0.7 : 0,
         staggerChildren: 0.09,
-        delayChildren: 0.7,
         staggerDirection: -1,
       },
     },
     show: {
       transition: {
-        delayChildren: 0.7,
+        delayChildren: stateChange ? 0.7 : 0,
         staggerChildren: 0.1,
+        staggerDirection: scrollingDown ? -1 : 1,
       },
     },
   };
@@ -98,10 +125,10 @@ const Videos = ({
     <Container
       variants={container}
       initial="hidden"
-      animate="show"
+      animate={inView ? "show" : "hidden"}
       exit="hidden"
-      key={mount}
       data-testid="videoContainer"
+      ref={ref}
     >
       {state.map((item) => (
         <Item
@@ -128,7 +155,6 @@ const Videos = ({
               opacity="0"
               scale="0.99"
               transitionDuration={350}
-              handleReverseDelay={handleReverseDelay}
               transitionTiming="ease"
               boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
               borderRadius={"9px"}
