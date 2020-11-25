@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import AdminAbout from "../../../components/adminAbout";
 import AdminContentPage from "../../../components/common/adminContentPage";
-import AdminPricing from "../../../components/adminPricing";
+import AdminAddPricing from "../../../components/adminAddPricing";
+import AdminEditPricing from "../../../components/adminEditPricing";
 import AdminAddContent from "../../../components/adminAddContent";
 import AdminEditContent from "../../../components/adminEditContent";
 import AdminDeleteContent from "../../../components/adminDeleteContent";
 import { getAllWeddings } from "../../api/weddings";
 import { getAllCorporate } from "../../api/corporate";
+import { getAboutMe } from "../../api/about";
 import AdminSidebar from "../../../components/AdminSidebar";
 
 const AdminRoute = ({ params, data }) => {
@@ -15,7 +17,7 @@ const AdminRoute = ({ params, data }) => {
       return (
         <Container>
           <AdminSidebar />
-          <AdminAbout />
+          <AdminAbout data={data} />
         </Container>
       );
     case "weddings":
@@ -32,11 +34,18 @@ const AdminRoute = ({ params, data }) => {
           <AdminContentPage data={data} page="corporate" />
         </Container>
       );
-    case "pricing":
+    case "add-pricing":
       return (
         <Container>
           <AdminSidebar />
-          <AdminPricing />
+          <AdminAddPricing />
+        </Container>
+      );
+    case "edit-pricing":
+      return (
+        <Container>
+          <AdminSidebar />
+          <AdminEditPricing />
         </Container>
       );
     case "add-content":
@@ -71,16 +80,22 @@ export async function getStaticPaths() {
       { params: { id: "about" } },
       { params: { id: "weddings" } },
       { params: { id: "corporate" } },
-      { params: { id: "pricing" } },
+      { params: { id: "add-pricing" } },
+      { params: { id: "edit-pricing" } },
       { params: { id: "add-content" } },
       { params: { id: "edit-content" } },
-      { params: { id: "delete-content" } },
     ],
     fallback: false,
   };
 }
 
 export async function getStaticProps({ params }) {
+  if (params.id === "about") {
+    const data = await getAboutMe();
+    return {
+      props: data ? { data, params } : { data: null, params },
+    };
+  }
   if (params.id === "weddings" || params.id === "corporate") {
     const data =
       params.id === "weddings"
