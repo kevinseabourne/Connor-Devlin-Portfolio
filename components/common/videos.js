@@ -11,6 +11,7 @@ import {
   useTransform,
 } from "framer-motion";
 import DeleteContent from "../deleteContent";
+import cloneDeep from "lodash/cloneDeep";
 import { useInView } from "react-intersection-observer";
 import "intersection-observer";
 
@@ -33,6 +34,7 @@ const Videos = ({
   const [positionY, setPositionY] = useState(0);
   const [scrollingDown, setScrollingDown] = useState(false);
   const [stateChange, setStateChange] = useState(false);
+  const [hover, setHover] = useState(false);
   const timeout = useRef(null);
 
   const { ref, inView, entry } = useInView({
@@ -74,7 +76,7 @@ const Videos = ({
     show: {
       transition: {
         delayChildren: stateChange ? 0.7 : 0,
-        staggerChildren: 0.1,
+        staggerChildren: 0.2,
         staggerDirection: scrollingDown ? -1 : 1,
       },
     },
@@ -121,6 +123,46 @@ const Videos = ({
     },
   };
 
+  const parent = {
+    hidden: { scale: 1 },
+    show: { scale: 1 },
+  };
+
+  const child = {
+    hidden: {
+      opacity: 0,
+      y: 10,
+      scale: 0,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: [0, 1, 0.84, 1, 0.95, 1],
+      transition: {
+        type: "spring",
+        damping: 12,
+        mass: 0.2,
+        stiffness: 150,
+      },
+    },
+  };
+
+  const handleHover = (id) => {
+    if (!editDeleteContent) {
+      const stateClone = cloneDeep(state);
+      const updatedState = stateClone.map((item) => {
+        if (item.id === id && !item.hover) {
+          item.hover = true;
+          return item;
+        } else {
+          item.hover = false;
+          return item;
+        }
+      });
+      setState(updatedState);
+    }
+  };
+
   return (
     <Container
       variants={container}
@@ -145,6 +187,10 @@ const Videos = ({
               key && handleClick(item.id);
             }}
             data-testid="item"
+            variants={parent}
+            initial="hidden"
+            onPointerEnter={() => handleHover(item.id)}
+            onPointerLeave={() => handleHover(item.id)}
           >
             <ImageLoader
               maxWidth="100%"
@@ -159,13 +205,30 @@ const Videos = ({
               boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
               borderRadius={"9px"}
               handleOnLoadOutside={handleOnLoadOutside}
-              iconSrc={editDeleteContent ? null : playIcon}
+              iconSrc={editDeleteContent ? null : null}
               iconMaxWidth="45px"
               alt={page === "weddings" ? item.displayNames : item.company}
               editDeleteContent={editDeleteContent}
               iconMaxHeight="45px"
               dataTestId="weddingPhoto"
             />
+            {!editDeleteContent && (
+              <PlayIconContainer
+                variants={child}
+                initial="hidden"
+                animate={item.hover ? { scale: 1.1 } : { scale: 1 }}
+              >
+                <ImageLoader
+                  maxWidth="inherit"
+                  placeholderSize="100%"
+                  hover={true}
+                  alt="play Icon"
+                  src={playIcon}
+                  centerImage={true}
+                />
+              </PlayIconContainer>
+            )}
+
             {editDeleteContent && (
               <EditDeleteContainer>
                 <SelectedVideoButton>
@@ -292,7 +355,7 @@ const PlayIcon = styled.div`
   }
 `;
 
-const ImageContainer = styled.button`
+const ImageContainer = styled(motion.button)`
   margin-bottom: 9px;
   background-color: transparent !important;
   border: none;
@@ -328,6 +391,19 @@ const SelectedVideoButton = styled(motion.div)`
 
 const EditDeleteContainer = styled(motion.div)``;
 
+const PlayIconContainer = styled(motion.div)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  max-width: 45px;
+  max-height: 45px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+`;
+
 const Dot = styled(motion.div)`
   z-index: 14;
   width: 60%;
@@ -350,8 +426,6 @@ const DeleteIconContainer = styled(motion.div)`
   padding-top: 20px;
   padding-right: 20px;
 `;
-
-const Overlay = styled.div``;
 
 const Item = styled(motion.li)`
   display: flex;
