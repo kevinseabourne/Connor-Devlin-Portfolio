@@ -4,36 +4,8 @@ import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
 import Contact from "../pages/contact";
 
-const WeddingPricing = (props) => {
+const WeddingPricing = ({ data }) => {
   const contactRef = useRef(null);
-  const [packages, setPackages] = useState([
-    {
-      packageName: "Standard",
-      price: "$900",
-      description:
-        "Shorter way to capture your day. The best moments, with a cheaper price",
-      packageItems: [
-        "One Videographer",
-        "Up to 4 hours of coverage",
-        "Highlights Video (4mins)",
-        "Recieve a USB drive with all video footage of the day",
-        "Pre-wedding consultation with videographer",
-      ],
-    },
-    {
-      packageName: "Deluxe",
-      price: "$1300",
-      description: "The Complete Package. We capture everything on the day",
-      packageItems: [
-        "One Videographer",
-        "Full day of coverage",
-        "Highlights Video (10mins)",
-        "Sneak Peak Highlight Video (2mins) (recieved 5 - 7 days after wedding)",
-        "Recieve a USB drive with all video footage of the day",
-        "Pre-wedding consultation with videographer",
-      ],
-    },
-  ]);
 
   const [questions] = useState([
     {
@@ -74,6 +46,10 @@ const WeddingPricing = (props) => {
     },
   ]);
 
+  useEffect(() => {
+    console.log(data[0]);
+  }, []);
+
   const handleClick = () => {
     window.scrollTo({
       top: contactRef.current.offsetTop - 180,
@@ -81,18 +57,24 @@ const WeddingPricing = (props) => {
     });
   };
 
+  const packages = data[0];
+
+  const addOns = data[1].addOns;
+
   return (
     <Container>
       <Title>Wedding Pricing Packages</Title>
       <PackagesContainer>
         {packages.map((packageItem) => (
-          <Package key={packages.indexOf(packageItem)}>
+          <Package key={packageItem.id}>
             <InnerPackageContainer>
               <Name>{packageItem.packageName}</Name>
               <Price>{packageItem.price}</Price>
               <Description>{packageItem.description}</Description>
-              {packageItem.packageItems.map((item) => (
-                <Item key={packageItem.packageItems.indexOf(item)}>{item}</Item>
+              {packageItem.packageDetails.map((item) => (
+                <Item key={packageItem.packageDetails.indexOf(item)}>
+                  {item}
+                </Item>
               ))}
             </InnerPackageContainer>
             <Button onClick={handleClick}>Contact</Button>
@@ -102,29 +84,12 @@ const WeddingPricing = (props) => {
       <AddOnsContainer>
         <Name>Add Ons</Name>
         <Description>If you need a little extra</Description>
-        <ListItem>
-          <ListItemLabel>Additional hour of footage</ListItemLabel>
-          <AddOnPrice>$120</AddOnPrice>
-        </ListItem>
-        <ListItem>
-          <ListItemLabel>Vows</ListItemLabel> <AddOnPrice>$150</AddOnPrice>
-        </ListItem>
-        <ListItem>
-          <ListItemLabel>Full Speeches Video</ListItemLabel>
-          <AddOnPrice>$250</AddOnPrice>
-        </ListItem>
-        <ListItem>
-          <ListItemLabel>Full Ceremony Video</ListItemLabel>
-          <AddOnPrice>$350</AddOnPrice>
-        </ListItem>
-        <ListItem>
-          <ListItemLabel>Drone Footage</ListItemLabel>
-          <AddOnPrice>$200</AddOnPrice>
-        </ListItem>
-        <ListItem>
-          <ListItemLabel>Couple Engagement Session</ListItemLabel>
-          <AddOnPrice>$150</AddOnPrice>
-        </ListItem>
+        {addOns.map((addOn) => (
+          <ListItem key={addOns.indexOf(addOn)}>
+            <ListItemLabel>{addOn.title}</ListItemLabel>
+            <AddOnPrice>{`$${addOn.price}`}</AddOnPrice>
+          </ListItem>
+        ))}
       </AddOnsContainer>
       <BottomWave src={topWave} />
       <FAQContainer>
