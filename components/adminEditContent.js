@@ -173,25 +173,6 @@ const AdminEditContent = (props) => {
     setPopUpOpen(!popUpOpen);
   };
 
-  const variants = {
-    hidden: {
-      display: "flex",
-      justifyContent: "center",
-      transition: {
-        type: "spring",
-      },
-    },
-    show: {
-      display: "flex",
-      justifyContent: "flex-start",
-      transition: {
-        type: "spring",
-        delayChildren: 0.1,
-        staggerChildren: 0.7,
-      },
-    },
-  };
-
   const dataResolved =
     weddingsStatus !== "pending" && corporateStatus !== "pending"
       ? true
@@ -214,6 +195,27 @@ const AdminEditContent = (props) => {
           corporateTestimonial: selectedVideo.testimonial,
         }
     : {};
+
+  // Framer Motion Animation //
+
+  const variants = {
+    hidden: {
+      display: "flex",
+      justifyContent: "center",
+      transition: {
+        type: "spring",
+      },
+    },
+    show: {
+      display: "flex",
+      justifyContent: "flex-start",
+      transition: {
+        type: "spring",
+        delayChildren: 0.1,
+        staggerChildren: 0.7,
+      },
+    },
+  };
 
   return (
     <AnimateSharedLayout>

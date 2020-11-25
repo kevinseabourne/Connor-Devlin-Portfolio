@@ -33,8 +33,13 @@ const AdminSidebar = (props) => {
     },
     {
       icon: "https://chpistel.sirv.com/Connor-Portfolio/price-tag.png?w=30",
-      title: "Pricing",
-      route: "/admin/pricing",
+      title: "Add Pricing",
+      route: "/admin/add-pricing",
+    },
+    {
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/price-tag.png?w=30",
+      title: "Edit Pricing",
+      route: "/admin/edit-pricing",
     },
     {
       icon: "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=30",
@@ -45,11 +50,6 @@ const AdminSidebar = (props) => {
       icon: "https://chpistel.sirv.com/Connor-Portfolio/writing.png?w=30",
       title: "Edit Content",
       route: "/admin/edit-content",
-    },
-    {
-      icon: "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=30",
-      title: "Delete Content",
-      route: "/admin/delete-content",
     },
   ]);
 
