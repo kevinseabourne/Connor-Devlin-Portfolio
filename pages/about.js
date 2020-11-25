@@ -1,8 +1,11 @@
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ImageLoader from "../components/common/imageLoader";
 import topWave from "../public/images/wave4.svg";
+import { getAboutMe } from "./api/about";
 
-const About = () => {
+const About = ({ data }) => {
+  const { description } = data;
   return (
     <Container>
       <ImageWrapper>
@@ -26,30 +29,19 @@ const About = () => {
       </ImageWrapper>
       <Wrapper>
         <InfoContainer>
-          <Description>
-            Hi! I’m Connor.
-            <br /> <br />
-            Videographer, photographer, editor all round creative. My passion
-            for getting behind the camera took-off at a young age growing up in
-            Kalgoorlie WA. I would film my brother and his friends skateboarding
-            and eventually became the towns go-to kid for producing skate
-            videos. Since then I have followed my passion by moving to Perth,
-            obtaining a Film and Photography degree and running my own small
-            business.
-            <br /> <br />
-            I strive for simplicity in my work, focusing on strong
-            cinematography, honest performances and precisely tuned audio. As a
-            passionate and versatile shooter I employ a creative approach to
-            weddings, corporate material and everything in-between. No matter
-            the project or occasion, I’d love to work with you. Drop me a
-            message down below! Let’s Create.
-            <br /> <br />
-          </Description>
+          <Description>{description}</Description>
         </InfoContainer>
       </Wrapper>
     </Container>
   );
 };
+
+export async function getStaticProps() {
+  const data = await getAboutMe();
+  return {
+    props: data ? { data } : { data: null },
+  };
+}
 
 export default About;
 
@@ -197,6 +189,8 @@ const Description = styled.p`
   font-size: 1rem;
   letter-spacing: 1px;
   opacity: 0.7;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }
