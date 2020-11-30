@@ -42,7 +42,20 @@ export async function getAllPricingPackages() {
         .catch(function (error) {
           console.log("Error getting document:", error);
         });
+      return packages;
+    });
+  return response;
+}
 
+export async function getAddOns() {
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
       const addOns = await db
         .collection("pricing")
         .doc("addOns")
@@ -55,9 +68,33 @@ export async function getAllPricingPackages() {
         .catch(function (error) {
           console.log("Error getting document:", error);
         });
-      const response = [packages, addOns];
-      console.log(response);
-      return response;
+      return addOns;
+    });
+  return response;
+}
+
+export async function updateAddOns(addOnObj) {
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const addOns = await db
+        .collection("pricing")
+        .doc("addOns")
+        .update(addOnObj)
+        .then(function (doc) {
+          if (doc.exists) {
+            return doc.data();
+          }
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      return addOns;
     });
   return response;
 }
