@@ -3,33 +3,102 @@ import styled from "styled-components";
 import ImageLoader from "../components/common/imageLoader";
 import topWave from "../public/images/wave4.svg";
 import { getAboutMe } from "./api/about";
+import { motion } from "framer-motion";
 
 const About = ({ data }) => {
   const { description } = data;
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const childAnimationDown = {
+    hidden: {
+      opacity: 0,
+      y: -20,
+      scale: 0.99,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
+  const childAnimationUp = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+      scale: 0.99,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
+  const waveAnimation = {
+    hidden: {
+      y: 900,
+    },
+    show: {
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        mass: 0.7,
+        delay: 1.2,
+      },
+    },
+  };
+
+  const wrapperAnimation = {
+    hidden: {
+      y: 900,
+    },
+    show: {
+      x: 0,
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 12,
+        mass: 0.7,
+      },
+    },
+  };
+
   return (
-    <Container>
+    <Container variants={container} initial="hidden" animate="show">
       <ImageWrapper>
-        <ImageContainer>
+        <ImageContainer variants={childAnimationDown}>
           <ImageLoader
             maxWidth="inherit"
             placeholderSize="66.66%"
             borderRadius="19px"
-            opacity="0"
-            scale="0.99"
-            transitionTime="0.4s ease"
             src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
           />
         </ImageContainer>
-        <SmallTitle>Connor Devlin</SmallTitle>
-        <Name>
+        <SmallTitle variants={childAnimationDown}>Connor Devlin</SmallTitle>
+        <Name variants={childAnimationUp}>
           <FirstName>ABOUT</FirstName>
           <LastName>ME.</LastName>
         </Name>
-        <BottomWave src={topWave} />
+        <BottomWave src={topWave} variants={waveAnimation} />
       </ImageWrapper>
-      <Wrapper>
+      <Wrapper variants={wrapperAnimation}>
         <InfoContainer>
-          <Description>{description}</Description>
+          <Description variants={childAnimationUp}>{description}</Description>
         </InfoContainer>
       </Wrapper>
     </Container>
@@ -45,7 +114,7 @@ export async function getStaticProps() {
 
 export default About;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   min-height: 100vh;
   height: 100%;
   width: 100%;
@@ -55,7 +124,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(motion.div)`
   display: flex;
   flex: 1;
   align-items: center;
@@ -75,7 +144,7 @@ const ImageWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled(motion.div)`
   max-width: 650px;
   width: 100%;
   margin-top: 40px;
@@ -84,7 +153,7 @@ const ImageContainer = styled.div`
   position: relative;
 `;
 
-const BottomWave = styled.img`
+const BottomWave = styled(motion.img)`
   position: absolute;
   margin-top: auto;
   bottom: -5%;
@@ -108,7 +177,7 @@ const InfoContainer = styled.div`
   flex-direction: column;
 `;
 
-const SmallTitle = styled.span`
+const SmallTitle = styled(motion.span)`
   margin-top: 30px;
   font-size: 1rem;
   opacity: 0.7;
@@ -121,7 +190,7 @@ const SmallTitle = styled.span`
   }
 `;
 
-const Name = styled.div`
+const Name = styled(motion.div)`
   display: flex;
   position: relative;
   flex-direction: row;
@@ -136,7 +205,7 @@ const Name = styled.div`
   }
 `;
 
-const FirstName = styled.h1`
+const FirstName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
   letter-spacing: 0px;
@@ -165,7 +234,7 @@ const FirstName = styled.h1`
   }
 `;
 
-const LastName = styled.h1`
+const LastName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
   letter-spacing: 0px;
@@ -185,7 +254,7 @@ const LastName = styled.h1`
   }
 `;
 
-const Description = styled.p`
+const Description = styled(motion.p)`
   font-size: 1rem;
   letter-spacing: 1px;
   opacity: 0.7;

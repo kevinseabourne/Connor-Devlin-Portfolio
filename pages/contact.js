@@ -9,6 +9,7 @@ import { ReactSelect } from "../components/common/select";
 import { TextArea } from "../components/common/textArea";
 import { sendEmail } from "./api/email";
 import { LoadingSpinner } from "../components/loading-spinner";
+import { motion } from "framer-motion";
 
 const Contact = (props) => {
   const [status, setStatus] = useState("idle");
@@ -91,21 +92,58 @@ const Contact = (props) => {
     }
   };
 
+  const containerAnimation = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const titleAnimation = {
+    hidden: {
+      opacity: 0,
+      y: 12,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
+  const waveAnimation = {
+    hidden: {
+      opacity: 0,
+      x: 12,
+      y: 22,
+    },
+    show: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+    },
+  };
+
   return (
-    <Container>
-      <Title>Contact</Title>
+    <Container variants={containerAnimation} initial="hidden" animate="show">
+      <Title variants={titleAnimation}>Contact</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input
           name="name"
           label="Name"
           ref={register(schema.name)}
           error={errors.name}
+          opacity={0}
+          y={12}
         />
         <Input
           name="email"
           label="Email"
           ref={register(schema.email)}
           error={errors.email}
+          opacity={0}
+          y={12}
         />
         <InnerContainer>
           <DayPicker
@@ -116,6 +154,8 @@ const Contact = (props) => {
             validation={schema.date}
             error={errors.dayPicker}
             marginRight="5px"
+            opacity={0}
+            y={12}
           />
           <ReactSelect
             control={control}
@@ -126,6 +166,8 @@ const Contact = (props) => {
             validation={schema.topic}
             error={errors.topic}
             marginLeft="5px"
+            opacity={0}
+            y={12}
           />
         </InnerContainer>
 
@@ -134,19 +176,21 @@ const Contact = (props) => {
           label="Enquiry"
           ref={register(schema.enquiry)}
           error={errors.enquiry}
+          opacity={0}
+          y={12}
         />
-        <SubmitButton type="submit">
+        <SubmitButton type="submit" variants={titleAnimation}>
           {status !== "pending" ? "Send" : <LoadingSpinner size="30px" />}
         </SubmitButton>
       </Form>
-      <BottomWave src={bottomWave} />
+      <BottomWave src={bottomWave} variants={waveAnimation} />
     </Container>
   );
 };
 
 export default Contact;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   height: 100%;
   min-height: calc(100vh - 75px);
   width: 100%;
@@ -162,12 +206,12 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled(motion.h1)`
   margin-top: 50px;
   margin-bottom: 20px;
 `;
 
-const Form = styled.form`
+const Form = styled(motion.form)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,7 +233,7 @@ const InnerContainer = styled.div`
   }
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled(motion.button)`
   margin-top: 10px;
   font-size: 1rem;
   min-height: 54px;
@@ -216,7 +260,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const BottomWave = styled.img`
+const BottomWave = styled(motion.img)`
   position: absolute;
   bottom: 0px;
   left: -1px;
