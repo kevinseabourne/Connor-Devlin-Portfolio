@@ -56,6 +56,8 @@ export async function getAllWeddings() {
       const db = firebase.firestore();
       const weddings = await db
         .collection("weddings")
+        .orderBy("date", "desc")
+        .limit(20)
         .get()
         .then(function (querySnapshot) {
           let data = [];
@@ -74,37 +76,40 @@ export async function getAllWeddings() {
       return weddings;
     });
   return response;
+}
 
-  // const db = firebase.firestore();
-  // const weddings = await db
-  //   .collection("weddings")
-  //   .doc("64Fvb899DN4tT399fcAU")
-  //   .get()
-  //   .then((doc) => {
-  //     if (doc.exists) {
-  //       return doc.data();
-  //     }
-  //   });
-  // console.log(weddings);
-  // return weddings;
-
-  //   const db = firebase.firestore();
-  // const weddings = await db
-  //   .collection("weddings")
-  //   .get()
-  //   .then(function (querySnapshot) {
-  //     let data = [];
-  //     querySnapshot.forEach(function (doc) {
-  //       let item = doc.data();
-  //       item.weddingDate = item.weddingDate.toDate().toLocaleDateString();
-  //       data.push(item);
-  //     });
-  //     return data;
-  //   })
-  //   .catch(function (error) {
-  //     console.log("Error getting document:", error);
-  //   });
-  // return weddings;
+export async function getNextWeddings(lastIndex) {
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const weddings = await db
+        .collection("weddings")
+        .orderBy("date", "desc")
+        .startAfter(lastIndex.date)
+        .limit(20)
+        .get()
+        .then(function (querySnapshot) {
+          let data = [];
+          querySnapshot.forEach(function (doc) {
+            let item = doc.data();
+            const dateString = item.date.toDate();
+            item.date = moment(dateString).format("DD/MM/YYYY");
+            item.id = doc.id;
+            data.push(item);
+          });
+          return data;
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      return weddings;
+    });
+  return response;
 }
 
 export async function addWedding(data) {

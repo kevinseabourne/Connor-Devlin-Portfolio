@@ -28,6 +28,42 @@ export async function getAllCorporate() {
       const db = firebase.firestore();
       const corporate = await db
         .collection("corporate")
+        .orderBy("date", "desc")
+        .limit(20)
+        .get()
+        .then(function (querySnapshot) {
+          let data = [];
+          querySnapshot.forEach(function (doc) {
+            let item = doc.data();
+            const dateString = item.date.toDate();
+            item.date = moment(dateString).format("DD/MM/YYYY");
+            item.id = doc.id;
+            data.push(item);
+          });
+          return data;
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      return corporate;
+    });
+  return response;
+}
+
+export async function getNextCorporate() {
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const corporate = await db
+        .collection("corporate")
+        .orderBy("date", "desc")
+        .startAfter(lastIndex.date)
+        .limit(20)
         .get()
         .then(function (querySnapshot) {
           let data = [];
