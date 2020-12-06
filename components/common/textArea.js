@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
+import { motion } from "framer-motion";
 
 export const TextArea = React.forwardRef(
   (
@@ -15,12 +16,27 @@ export const TextArea = React.forwardRef(
       doSubmit,
       value,
       defaultValue,
+      x,
+      y,
+      opacity,
       ...rest
     },
     ref
   ) => {
+    const animation = {
+      hidden: {
+        opacity: opacity,
+        y: y,
+        x: x,
+      },
+      show: {
+        opacity: 1,
+        y: 0,
+        x: 0,
+      },
+    };
     return (
-      <Container>
+      <Container variants={animation}>
         <Label>{label}</Label>
         <InputContainer>
           <TextAreaInput
@@ -61,7 +77,7 @@ export const TextArea = React.forwardRef(
   }
 );
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: 100%;
   margin-bottom: 22px;
 `;

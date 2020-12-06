@@ -2,6 +2,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
+import { motion } from "framer-motion";
 
 export const Input = React.forwardRef(
   (
@@ -18,15 +19,31 @@ export const Input = React.forwardRef(
       marginRight,
       tabIndex,
       defaultValue,
+      y,
+      x,
+      opacity,
       ...rest
     },
     ref
   ) => {
+    const animation = {
+      hidden: {
+        opacity: opacity,
+        y: y,
+        x: x,
+      },
+      show: {
+        opacity: 1,
+        y: 0,
+        x: 0,
+      },
+    };
     return (
       <Container
         marginLeft={marginLeft}
         marginRight={marginRight}
         tabIndex={tabIndex}
+        variants={animation}
       >
         <Label>{label}</Label>
         <InputContainer>
@@ -69,7 +86,7 @@ export const Input = React.forwardRef(
   }
 );
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: 100%;
   margin-bottom: 22px;
   margin-left: ${({ marginLeft }) => marginLeft};

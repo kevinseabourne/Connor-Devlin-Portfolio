@@ -6,6 +6,7 @@ import { Controller } from "react-hook-form";
 import { formatDate, parseDate } from "react-day-picker/moment";
 import "moment/locale/it";
 import ImageLoader from "./imageLoader";
+import { motion } from "framer-motion";
 
 export const DayPicker = React.forwardRef(
   (
@@ -22,10 +23,29 @@ export const DayPicker = React.forwardRef(
       marginLeft,
       defaultValue,
       marginRight,
+      x,
+      y,
+      opacity,
       ...rest
     },
     ref
   ) => {
+    const animation = {
+      hidden: {
+        opacity: opacity,
+        y: y,
+        x: x,
+      },
+      show: {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        transition: {
+          delayChildren: 0.9,
+          staggerChildren: 0.9,
+        },
+      },
+    };
     return (
       <Controller
         control={control}
@@ -33,7 +53,11 @@ export const DayPicker = React.forwardRef(
         name={name}
         defaultValue=""
         render={({ onChange, onBlur, value, rules }) => (
-          <Container marginLeft={marginLeft} marginRight={marginRight}>
+          <Container
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            variants={animation}
+          >
             <Label>{label}</Label>
             <InputContainer>
               <DayPickerInput
@@ -54,9 +78,10 @@ export const DayPicker = React.forwardRef(
                   lazyLoad={true}
                   maxWidth="inherit"
                   placeholderSize="100%"
-                  opacity="0"
-                  scale="0.99"
-                  transitionTime="0.250s ease"
+                  opacity={0}
+                  x={5}
+                  delay={0.3}
+                  scale={0.9}
                   src="https://chpistel.sirv.com/Connor-Portfolio/time-and-date.png?w=50&png.optimize=true"
                 />
               </Icon>
@@ -71,11 +96,10 @@ export const DayPicker = React.forwardRef(
                 >
                   <ErrorContainer>
                     <ImageLoader
-                      lazyLoad={true}
                       maxWidth="15px"
                       placeholderSize="100%"
-                      opacity="0"
-                      scale="0.99"
+                      opacity={0}
+                      scale={0}
                       transitionTime="0.250s ease"
                       src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                     />
@@ -90,7 +114,7 @@ export const DayPicker = React.forwardRef(
     );
   }
 );
-const Container = styled.div`
+const Container = styled(motion.div)`
   font-size: 1.1rem;
   margin-bottom: 3px;
   display: flex;

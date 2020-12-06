@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { Input } from "./common/input";
 import ImageLoader from "./common/imageLoader";
 import { TextArea } from "./common/textArea";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { LoadingSpinner } from "./loading-spinner";
+import downWave from ".././public/images/down-wave.svg";
 
 const AdminPricingForm = ({ page }) => {
   const [packagesStatus, setPackagesStatus] = useState("idle");
@@ -15,6 +16,13 @@ const AdminPricingForm = ({ page }) => {
   const [packageDetailsLength, setPackageDetailsLength] = useState([
     { title: "packageDetail", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
+  const [addOnsLength, setAddOnsLength] = useState([
+    { title: "addOn", id: Math.floor(1000 + Math.random() * 9000) },
+  ]);
+
+  useEffect(() => {
+    console.log("change");
+  }, [page]);
 
   const { register, handleSubmit, reset, errors, unregister } = useForm();
 
@@ -60,187 +68,268 @@ const AdminPricingForm = ({ page }) => {
 
   const deleteAddOn = (index) => {
     // playDown();
-    const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
-    if (index > -1 && packageDetailsLength.length > 1) {
-      unregister(`partnerFirstName_${packageDetailsLengthClone[index].id}`);
-      packageDetailsLengthClone.splice(index, 1);
-      setPackageDetailsLength(packageDetailsLengthClone);
+    const addOnsLengthClone = cloneDeep(addOnsLength);
+    if (index > -1 && addOnsLength.length > 1) {
+      unregister(`addOnTitle${addOnsLengthClone[index].id}`);
+      unregister(`addOnPrice${addOnsLengthClone[index].id}`);
+      addOnsLengthClone.splice(index, 1);
+      setAddOnsLength(addOnsLengthClone);
     }
   };
 
   const addAddOn = (index) => {
     // play();
-    const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
-    if (index > -1 && packageDetailsLengthClone.length <= 10) {
-      packageDetailsLengthClone.splice(index + 1, 0, {
+    const addOnsLengthClone = cloneDeep(addOnsLength);
+    if (index > -1 && addOnsLengthClone.length <= 10) {
+      addOnsLengthClone.splice(index + 1, 0, {
         title: "packageDetail",
         id: Math.floor(1000 + Math.random() * 9000),
       });
-      setPackageDetailsLength(packageDetailsLengthClone);
+      setAddOnsLength(addOnsLengthClone);
     }
   };
 
-  return (
-    <FormContainer layout>
-      {page === "packages" && (
-        <Form onSubmit={handleSubmit(handlePackagesSubmit)} layout>
-          <Title layout>Edit Pricing Packages</Title>
-          <Input
-            name="packageName"
-            label="Title"
-            ref={register}
-            error={errors.name}
-          />
-          <Input
-            name="price"
-            label="Price"
-            ref={register}
-            error={errors.price}
-          />
-          <TextArea
-            name="description"
-            label="Description"
-            ref={register}
-            error={errors.description}
-          />
+  const variants = {
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.01,
+      staggerDirection: -1,
+    },
+    show: {
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
-          {packageDetailsLength.map((packageDetail) => (
-            <PackageDetailsContainer key={packageDetail.id}>
-              <AddPackageDetail
-                tabIndex="0"
-                role="button"
-                onClick={() =>
-                  addPackageDetail(packageDetailsLength.indexOf(packageDetail))
-                }
-              >
-                <ImageLoader
-                  maxWidth="inherit"
-                  placeholderSize="100%"
-                  opacity="0"
-                  transitionTime="300ms ease"
-                  hover={true}
-                  src={
-                    "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
-                  }
-                />
-              </AddPackageDetail>
+  const formAnimation = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+      x: 0,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delayChildren: 0.7,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const buttonAnimation = {
+    hidden: {
+      opacity: 0,
+      y: 12,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
+  return (
+    <AnimateSharedLayout>
+      <FormContainer layout variants={variants}>
+        <Wave src={downWave} layout />
+        <AnimatePresence>
+          {page === "packages" && (
+            <Form
+              onSubmit={handleSubmit(handlePackagesSubmit)}
+              variants={formAnimation}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+            >
+              <Title>Edit Pricing Packages</Title>
               <Input
-                name={`packageDetail_${packageDetail.id}`}
-                label="Package Detail"
-                ref={register(schema.packageDetail)}
-                error={errors[`packageDetail_${packageDetail.id}`]}
-              />
-              <DeletePackageDetail
-                tabIndex="0"
-                role="button"
-                onClick={() =>
-                  deletePackageDetail(
-                    packageDetailsLength.indexOf(packageDetail)
-                  )
-                }
-              >
-                <ImageLoader
-                  maxWidth="inherit"
-                  placeholderSize="100%"
-                  opacity="0"
-                  transitionTime="300ms ease"
-                  hover={true}
-                  src={
-                    "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
-                  }
-                />
-              </DeletePackageDetail>
-            </PackageDetailsContainer>
-          ))}
-          <SubmitButton
-            layout
-            type="submit"
-            whileTap={{ scale: 0.9 }}
-            disabled={packagesStatus === "pending" ? true : false}
-          >
-            {packagesStatus === "pending" ? (
-              <LoadingSpinner size={"28px"} />
-            ) : packagesStatus === "resolved" ? (
-              "Success"
-            ) : (
-              "Update"
-            )}
-          </SubmitButton>
-        </Form>
-      )}
-      {page === "addOns" && (
-        <Form onSubmit={handleSubmit(handleAddOnsSubmit)}>
-          {addOns.map((addOn) => (
-            <PackageDetailsContainer>
-              <AddPackageDetail
-                tabIndex="0"
-                role="button"
-                onClick={() => addAddOn(addOns.indexOf(addOn))}
-              >
-                <ImageLoader
-                  maxWidth="inherit"
-                  placeholderSize="100%"
-                  opacity="0"
-                  transitionTime="300ms ease"
-                  hover={true}
-                  src={
-                    "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
-                  }
-                />
-              </AddPackageDetail>
-              <Input
-                name={`addOnPrice_${addOn.id}`}
-                label="Price"
-                ref={register(schema.addOn)}
-                error={errors[`addOnPrice_${addOn.id}`]}
-              />
-              <Input
-                name={`addOnTitle_${addOn.id}`}
+                name="packageName"
                 label="Title"
-                ref={register(schema.addOn)}
-                error={errors[`addOnTitle_${addOn.id}`]}
+                ref={register}
+                error={errors.name}
               />
-              <DeletePackageDetail
-                tabIndex="0"
-                role="button"
-                onClick={() => deleteAddOn(addOns.indexOf(addOn))}
+              <Input
+                name="price"
+                label="Price"
+                ref={register}
+                error={errors.price}
+              />
+              <TextArea
+                name="description"
+                label="Description"
+                ref={register}
+                error={errors.description}
+              />
+
+              {packageDetailsLength.map((packageDetail) => (
+                <PackageDetailsContainer key={packageDetail.id}>
+                  <AddPackageDetail
+                    variants={buttonAnimation}
+                    tabIndex="0"
+                    role="button"
+                    onClick={() =>
+                      addPackageDetail(
+                        packageDetailsLength.indexOf(packageDetail)
+                      )
+                    }
+                  >
+                    <ImageLoader
+                      maxWidth="inherit"
+                      placeholderSize="100%"
+                      opacity="0"
+                      transitionTime="300ms ease"
+                      hover={true}
+                      src={
+                        "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
+                      }
+                    />
+                  </AddPackageDetail>
+                  <Input
+                    name={`packageDetail_${packageDetail.id}`}
+                    label="Package Detail"
+                    ref={register(schema.packageDetail)}
+                    error={errors[`packageDetail_${packageDetail.id}`]}
+                  />
+                  <DeletePackageDetail
+                    variants={buttonAnimation}
+                    tabIndex="0"
+                    role="button"
+                    onClick={() =>
+                      deletePackageDetail(
+                        packageDetailsLength.indexOf(packageDetail)
+                      )
+                    }
+                  >
+                    <ImageLoader
+                      maxWidth="inherit"
+                      placeholderSize="100%"
+                      opacity="0"
+                      transitionTime="300ms ease"
+                      hover={true}
+                      src={
+                        "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
+                      }
+                    />
+                  </DeletePackageDetail>
+                </PackageDetailsContainer>
+              ))}
+              <SubmitButton
+                layout
+                type="submit"
+                whileTap={{ scale: 0.9 }}
+                variants={buttonAnimation}
+                disabled={packagesStatus === "pending" ? true : false}
               >
-                <ImageLoader
-                  maxWidth="inherit"
-                  placeholderSize="100%"
-                  opacity="0"
-                  transitionTime="300ms ease"
-                  hover={true}
-                  src={
-                    "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
-                  }
-                />
-              </DeletePackageDetail>
-            </PackageDetailsContainer>
-          ))}
-          <SubmitButton
-            layout
-            type="submit"
-            whileTap={{ scale: 0.9 }}
-            disabled={addOnsStatus === "pending" ? true : false}
-          >
-            {addOnsStatus === "pending" ? (
-              <LoadingSpinner size={"28px"} />
-            ) : addOnsStatus === "resolved" ? (
-              "Success"
-            ) : (
-              "Update"
-            )}
-          </SubmitButton>
-        </Form>
-      )}
-    </FormContainer>
+                {packagesStatus === "pending" ? (
+                  <LoadingSpinner size={"28px"} />
+                ) : packagesStatus === "resolved" ? (
+                  "Success"
+                ) : (
+                  "Update"
+                )}
+              </SubmitButton>
+            </Form>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {page === "addOns" && (
+            <Form
+              onSubmit={handleSubmit(handleAddOnsSubmit)}
+              variants={formAnimation}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+            >
+              <Title>Edit Add Ons</Title>
+              {addOnsLength.map((addOn) => (
+                <PackageDetailsContainer key={addOn.id}>
+                  <AddPackageDetail
+                    tabIndex="0"
+                    role="button"
+                    onClick={() => addAddOn(addOnsLength.indexOf(addOn))}
+                  >
+                    <ImageLoader
+                      maxWidth="inherit"
+                      placeholderSize="100%"
+                      opacity="0"
+                      transitionTime="300ms ease"
+                      hover={true}
+                      src={
+                        "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
+                      }
+                    />
+                  </AddPackageDetail>
+                  <Input
+                    name={`addOnTitle_${addOn.id}`}
+                    label="Title"
+                    ref={register(schema.addOn)}
+                    error={errors[`addOnTitle_${addOn.id}`]}
+                  />
+                  <Input
+                    name={`addOnPrice_${addOn.id}`}
+                    label="Price"
+                    ref={register(schema.addOn)}
+                    error={errors[`addOnPrice_${addOn.id}`]}
+                  />
+                  <DeletePackageDetail
+                    tabIndex="0"
+                    role="button"
+                    onClick={() => deleteAddOn(addOnsLength.indexOf(addOn))}
+                  >
+                    <ImageLoader
+                      maxWidth="inherit"
+                      placeholderSize="100%"
+                      opacity="0"
+                      transitionTime="300ms ease"
+                      hover={true}
+                      src={
+                        "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
+                      }
+                    />
+                  </DeletePackageDetail>
+                </PackageDetailsContainer>
+              ))}
+              <SubmitButton
+                layout
+                type="submit"
+                whileTap={{ scale: 0.9 }}
+                variants={buttonAnimation}
+                disabled={addOnsStatus === "pending" ? true : false}
+              >
+                {addOnsStatus === "pending" ? (
+                  <LoadingSpinner size={"28px"} />
+                ) : addOnsStatus === "resolved" ? (
+                  "Success"
+                ) : (
+                  "Update"
+                )}
+              </SubmitButton>
+            </Form>
+          )}
+        </AnimatePresence>
+      </FormContainer>
+    </AnimateSharedLayout>
   );
 };
 
 export default AdminPricingForm;
 
-const FormContainer = styled(motion.div)``;
+const FormContainer = styled(motion.div)`
+  width: 100%;
+  padding-top: 18%;
+  box-sizing: border-box;
+  position: relative;
+  background-color: white;
+  padding-bottom: 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  @media (max-width: 950px) {
+    padding-top: 25%;
+  }
+`;
 
 const Title = styled(motion.h1)`
   margin: 70px 0px;
@@ -248,6 +337,17 @@ const Title = styled(motion.h1)`
   @media (max-width: 750px) {
     margin: 10% 0px;
     font-size: 1.4rem;
+  }
+`;
+
+const Wave = styled(motion.img)`
+  position: absolute;
+  top: -2px;
+  left: 0px;
+  width: 100%;
+  object-fit: cover;
+  @media (max-width: 950px) {
+    top: -10px;
   }
 `;
 
@@ -338,7 +438,7 @@ const Item = styled.span`
   letter-spacing: 0.2px;
 `;
 
-const Button = styled.button`
+const Button = styled(motion.button)`
   width: 100%;
   padding: 25px 10px;
   color: white;
@@ -361,9 +461,11 @@ const Button = styled.button`
 const PackageDetailsContainer = styled(motion.div)`
   width: 100%;
   position: relative;
+  display: flex;
+  flex-direction: row;
 `;
 
-const AddPackageDetail = styled.div`
+const AddPackageDetail = styled(motion.div)`
   width: 20px;
   display: flex;
   margin-right: 10px;
@@ -389,7 +491,7 @@ const AddPackageDetail = styled.div`
   }
 `;
 
-const DeletePackageDetail = styled.div`
+const DeletePackageDetail = styled(motion.div)`
   width: 20px;
   margin-left: 10px;
   position: absolute;

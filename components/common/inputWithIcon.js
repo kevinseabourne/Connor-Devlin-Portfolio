@@ -4,6 +4,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
 import popSound from "../../public/sounds/pop_waterdrip_hi.mp3";
 import useSound from "use-sound";
+import { motion } from "framer-motion";
 
 export const InputWithIcon = React.forwardRef(
   (
@@ -28,14 +29,34 @@ export const InputWithIcon = React.forwardRef(
       toolTipMaxWidth,
       toolTipImagePlaceHolderSize,
       toolTipImageBorderRadius,
+      opacity,
+      y,
+      x,
       ...rest
     },
     ref
   ) => {
     const [toolTipOpen, setToolTipOpen] = useState(false);
     const [play] = useSound(popSound, { volume: 0.5 });
+
+    const animation = {
+      hidden: {
+        opacity: opacity,
+        y: y,
+        x: x,
+      },
+      show: {
+        opacity: 1,
+        y: 0,
+        x: 0,
+      },
+    };
     return (
-      <Container marginLeft={marginLeft} marginRight={marginRight}>
+      <Container
+        marginLeft={marginLeft}
+        marginRight={marginRight}
+        variants={animation}
+      >
         <Label>{label}</Label>
         <InputContainer>
           <TextInput
@@ -73,6 +94,8 @@ export const InputWithIcon = React.forwardRef(
                 placeholderSize={iconPlaceHolderSize}
                 borderRadius={iconBorderRadius}
                 src={icon}
+                opacity={0}
+                scale={0.9}
                 hover={true}
               />
             </IconBox>
@@ -122,7 +145,7 @@ export const InputWithIcon = React.forwardRef(
   }
 );
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   width: 100%;
   margin-bottom: 22px;
   margin-left: ${({ marginLeft }) => marginLeft};

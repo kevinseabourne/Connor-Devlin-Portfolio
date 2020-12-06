@@ -4,6 +4,7 @@ import React, { useEffect, useState, useContext } from "react";
 import AppContext from "../context/appContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const AdminSidebar = (props) => {
   const context = useContext(AppContext);
@@ -58,8 +59,31 @@ const AdminSidebar = (props) => {
     router.push("/login");
   };
 
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const linkAnimation = {
+    hidden: {
+      opacity: 0,
+      y: -5,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
   return (
-    <Sidebar>
+    <Sidebar variants={container} initial="hidden" animate="show">
       <LinksContainer>
         {links.map((link) => (
           <Link
@@ -68,11 +92,10 @@ const AdminSidebar = (props) => {
             key={links.indexOf(link)}
             passHref
           >
-            <LinkContainer>
+            <LinkContainer variants={linkAnimation}>
               <ImageLoader
                 maxWidth="30px"
                 placeholderSize="100%"
-                opacity="0"
                 transitionDuration={300}
                 transitionTiming="ease"
                 hover={true}
@@ -85,13 +108,10 @@ const AdminSidebar = (props) => {
         ))}
       </LinksContainer>
 
-      <SignOutContainer onClick={signOut}>
+      <SignOutContainer onClick={signOut} variants={linkAnimation}>
         <ImageLoader
           width="30px"
           placeholderSize="100%"
-          opacity="0"
-          scale="0.99"
-          transitionTime="0.250s"
           hover={true}
           src="https://chpistel.sirv.com/Connor-Portfolio/logout%20(1).png?w=30"
         />
@@ -103,7 +123,7 @@ const AdminSidebar = (props) => {
 
 export default AdminSidebar;
 
-const Sidebar = styled.div`
+const Sidebar = styled(motion.div)`
   top: 0;
   left: 0;
   position: fixed;
@@ -129,12 +149,12 @@ const Sidebar = styled.div`
   }
 `;
 
-const LinksContainer = styled.div`
+const LinksContainer = styled(motion.div)`
   margin-top: 70px;
   margin-bottom: 30px;
 `;
 
-const LinkContainer = styled.a`
+const LinkContainer = styled(motion.a)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -162,7 +182,7 @@ const LinkTitle = styled.h3`
   }
 `;
 
-const SignOutContainer = styled.button`
+const SignOutContainer = styled(motion.button)`
   margin-bottom: 60px;
   display: flex;
   border: none;

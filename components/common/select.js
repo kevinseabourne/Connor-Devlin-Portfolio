@@ -4,6 +4,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Controller } from "react-hook-form";
 import Select from "react-select";
 import ImageLoader from "./imageLoader";
+import { motion } from "framer-motion";
 
 export const ReactSelect = React.forwardRef(
   (
@@ -21,10 +22,25 @@ export const ReactSelect = React.forwardRef(
       marginLeft,
       marginRight,
       defaultValue,
+      x,
+      y,
+      opacity,
       ...rest
     },
     ref
   ) => {
+    const animation = {
+      hidden: {
+        opacity: opacity,
+        y: y,
+        x: x,
+      },
+      show: {
+        opacity: 1,
+        y: 0,
+        x: 0,
+      },
+    };
     return (
       <Controller
         control={control}
@@ -32,7 +48,11 @@ export const ReactSelect = React.forwardRef(
         name={name}
         defaultValue=""
         render={({ onChange, value, rules }) => (
-          <Container marginLeft={marginLeft} marginRight={marginRight}>
+          <Container
+            marginLeft={marginLeft}
+            marginRight={marginRight}
+            variants={animation}
+          >
             <Label>{label}</Label>
             <InputContainer>
               <Select
@@ -70,7 +90,7 @@ export const ReactSelect = React.forwardRef(
     );
   }
 );
-const Container = styled.div`
+const Container = styled(motion.div)`
   font-size: 1.1rem;
   margin-bottom: 3px;
   display: flex;
