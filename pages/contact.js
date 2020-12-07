@@ -8,11 +8,18 @@ import { InputWithIcon } from "../components/common/inputWithIcon";
 import { ReactSelect } from "../components/common/select";
 import { TextArea } from "../components/common/textArea";
 import { sendEmail } from "./api/email";
+import { getAllPricingPackages } from "./api/pricing";
 import { LoadingSpinner } from "../components/loading-spinner";
 import { motion } from "framer-motion";
 
-const Contact = (props) => {
+const Contact = ({ data }) => {
   const [status, setStatus] = useState("idle");
+  const [packages, setPackages] = useState([]);
+
+  useEffect(() => {
+    handleFormPackages();
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -59,10 +66,7 @@ const Contact = (props) => {
   const topicOptions = [
     {
       label: "Wedding",
-      options: [
-        { value: "Wedding Standard Package", label: "Standard Package" },
-        { value: "Wedding Deluxe Package", label: "Deluxe Package" },
-      ],
+      options: packages,
     },
     {
       label: "Corporate",
@@ -90,6 +94,18 @@ const Contact = (props) => {
         reset();
       }
     }
+  };
+
+  const handleFormPackages = () => {
+    const selectPackageOptions = [];
+    data.map((pack) =>
+      selectPackageOptions.push({
+        value: `${pack.packageName} Package`,
+        label: `${pack.packageName} Package`,
+      })
+    );
+
+    setPackages(selectPackageOptions);
   };
 
   const containerAnimation = {
@@ -188,6 +204,13 @@ const Contact = (props) => {
   );
 };
 
+export async function getStaticProps() {
+  const data = await getAllPricingPackages();
+  return {
+    props: data ? { data } : { data: null },
+  };
+}
+
 export default Contact;
 
 const Container = styled(motion.div)`
@@ -201,6 +224,7 @@ const Container = styled(motion.div)`
   flex-direction: column;
   position: relative;
   padding: 0px 20px;
+  padding-bottom: 200px;
   @media (min-width: 1023px) and (max-height: 810px) {
     height: 100%;
   }
