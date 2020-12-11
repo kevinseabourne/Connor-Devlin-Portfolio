@@ -4,7 +4,7 @@ import lodash from "lodash";
 import { addWedding } from "../pages/api/weddings";
 import { addCorporate } from "../pages/api/corporate";
 import AdminContentForm from "./common/adminContentForm";
-import { bundlePartnersIntoObj } from "./common/utils/bundlePartnersIntoObj";
+import { bundleDualInputValuesIntoObj } from "./common/utils/bundleDualInputValuesIntoObj";
 import AdminButtonsSection from "./common/adminButtonSections";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 
@@ -15,7 +15,12 @@ const AdminAddContent = (props) => {
 
   const handleAddWeddingSubmit = async (data) => {
     setWeddingsStatus("pending");
-    const updatedData = bundlePartnersIntoObj(data);
+    const updatedData = bundleDualInputValuesIntoObj(
+      data,
+      "FirstName",
+      "lastName",
+      "partners"
+    );
     const response = await addWedding(updatedData);
     setWeddingsStatus("resolved");
     return response;
