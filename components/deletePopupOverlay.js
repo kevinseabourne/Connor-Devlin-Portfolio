@@ -6,6 +6,7 @@ import useSound from "use-sound";
 import popSound from ".././public/sounds/pop.mp3";
 import { LoadingSpinner } from "./loading-spinner";
 import { deleteWedding } from ".././pages/api/weddings";
+import { deletePricingPackage } from ".././pages/api/pricing";
 
 export const DeletePopupOverlay = React.forwardRef(
   (
@@ -16,6 +17,8 @@ export const DeletePopupOverlay = React.forwardRef(
       page,
       handleDeleteWeddingSubmit,
       handleDeleteCorporateSubmit,
+      handleDeletePricingPackage,
+      deletePackage,
     },
     ref
   ) => {
@@ -23,8 +26,9 @@ export const DeletePopupOverlay = React.forwardRef(
     const timeout = useRef(null);
 
     useEffect(() => {
+      popUpOpen && ref.current.focus();
       return () => clearTimeout(timeout.current);
-    }, []);
+    }, [popUpOpen]);
 
     const { register, handleSubmit, reset } = useForm({});
     const [play] = useSound(popSound, { volume: 0.2 });
@@ -39,8 +43,10 @@ export const DeletePopupOverlay = React.forwardRef(
       setStatus("pending");
       if (page === "weddings") {
         handleDeleteWeddingSubmit();
-      } else {
+      } else if (page === "corporate") {
         handleDeleteCorporateSubmit();
+      } else if (page === "packages") {
+        handleDeletePricingPackage();
       }
 
       // fix weird error with the value of deleteCheckbox
@@ -67,15 +73,26 @@ export const DeletePopupOverlay = React.forwardRef(
     };
 
     const popUpAnimation = {
-      hidden: { scale: 0, opacity: 0 },
+      hidden: {
+        scale: 0,
+        opacity: 0,
+        transition: {
+          type: "spring",
+          duration: 0.5,
+        },
+      },
       show: {
         scale: 1,
         opacity: 1,
+        transition: {
+          type: "spring",
+          duration: 0.5,
+        },
       },
     };
 
     return (
-      <AnimatePresence>
+      <React.Fragment>
         <GlobalStyle popUpOpen={popUpOpen} />
         {popUpOpen && (
           <Overlay
@@ -84,8 +101,22 @@ export const DeletePopupOverlay = React.forwardRef(
             animate="show"
             exit="hidden"
             key={popUpOpen}
+            tabindex="-1"
           >
-            <DeleteContentPopUp ref={ref} variants={popUpAnimation}>
+            <DeleteContentPopUp
+              ref={ref}
+              variants={popUpAnimation}
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => {
+                const escKey = e.key === 27 || e.keyCode === 27;
+                if (escKey) {
+                  // console.log(document.activeElement);
+                  // e.target.blur();
+                  closePopup();
+                }
+              }}
+            >
               <SmallerTitle>
                 Are you sure you want to delete this content ?
               </SmallerTitle>
@@ -95,8 +126,28 @@ export const DeletePopupOverlay = React.forwardRef(
                   ref={register(schema.deleteCheckbox)}
                   name="deleteCheckbox"
                   onClick={play}
+                  onKeyDown={(e) => {
+                    const escKey = e.key === 27 || e.keyCode === 27;
+                    if (escKey) {
+                      closePopup();
+                      e.target.blur();
+                    }
+                    const enterKey = e.key === 13 || e.keyCode === 13;
+                    if (enterKey) {
+                      e.target.checked = !e.target.checked;
+                    }
+                  }}
                 />
-                <DeleteButton type="submit">
+                <DeleteButton
+                  type="submit"
+                  onKeyDown={(e) => {
+                    const escKey = e.key === 27 || e.keyCode === 27;
+                    if (escKey) {
+                      closePopup();
+                      e.target.blur();
+                    }
+                  }}
+                >
                   {status === "pending" ? (
                     <LoadingSpinner size="28px" />
                   ) : status === "resolved" ? (
@@ -109,7 +160,7 @@ export const DeletePopupOverlay = React.forwardRef(
             </DeleteContentPopUp>
           </Overlay>
         )}
-      </AnimatePresence>
+      </React.Fragment>
     );
   }
 );
@@ -157,6 +208,9 @@ const DeleteContentPopUp = styled(motion.div)`
   box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
     rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
     rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
   @media (max-width: 1250px) {
     margin-left: 200px;
   }

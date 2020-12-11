@@ -24,7 +24,6 @@ const Videos = ({
   page,
   data,
   handleClick,
-  handleOnLoadOutside,
   imageLoaded,
   selectedVideo,
   isOpen,
@@ -44,7 +43,7 @@ const Videos = ({
   const timeout = useRef(null);
 
   const { ref, inView, entry } = useInView({
-    triggerOnce: false,
+    triggerOnce: true,
     rootMargin: "0px 0px",
   });
 
@@ -109,17 +108,23 @@ const Videos = ({
     }
   };
 
+  const handleOnLoadOutside = () => {
+    console.log("hey");
+  };
+
   // Framer Motion Animation
 
   const container = {
     hidden: {
       transition: {
+        delayChildren: 0.2,
         staggerChildren: 0.09,
         staggerDirection: -1,
       },
     },
     show: {
       transition: {
+        delayChildren: 0.2,
         staggerChildren: 0.2,
         staggerDirection: scrollingDown ? -1 : 1,
       },
@@ -201,8 +206,7 @@ const Videos = ({
       <Container
         variants={container}
         initial="hidden"
-        animate="show"
-        key={inView}
+        animate={inView ? "show" : "hidden"}
         exit="hidden"
         layout
       >
@@ -246,6 +250,7 @@ const Videos = ({
                   editDeleteContent={editDeleteContent}
                   iconMaxHeight="45px"
                   dataTestId="weddingPhoto"
+                  handleOnLoadOutside={handleOnLoadOutside}
                 />
                 {!editDeleteContent && (
                   <PlayIconContainer
@@ -470,7 +475,7 @@ const PlayIconContainer = styled(motion.div)`
 `;
 
 const Dot = styled(motion.div)`
-  z-index: 14;
+  ${"" /* z-index: 14; */}
   width: 60%;
   height: 60%;
   border-radius: 50%;

@@ -199,6 +199,8 @@ const Pricing = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding 0 20px;
+  box-sizing: border-box;
 `;
 
 const ContactButton = styled.button`
@@ -222,5 +224,8 @@ const ContactButton = styled.button`
     opacity: 1;
     color: ${({ theme }) => theme.colors.secondary};
     background-color: ${({ theme }) => theme.colors.fontColor};
+  }
+  @media (max-width: 750px) {
+    width: 100%;
   }
 `;

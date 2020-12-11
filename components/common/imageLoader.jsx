@@ -82,7 +82,7 @@ const ImageLoader = ({
         <Image
           variants={animation}
           initial="hidden"
-          animate={inView ? "show" : "hidden"}
+          animate={isLoaded ? "show" : "hidden"}
           onLoad={onLoad}
           src={src}
           alt={alt}

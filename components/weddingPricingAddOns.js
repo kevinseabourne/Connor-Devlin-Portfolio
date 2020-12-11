@@ -3,8 +3,32 @@ import styled from "styled-components";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 
 const WeddingPricingAddOns = ({ addOns }) => {
+  const variants = {
+    hidden: {
+      opacity: 0,
+      x: 15,
+      y: 0,
+      transition: {
+        damping: 12,
+      },
+    },
+    show: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        delay: 0.8,
+        damping: 12,
+      },
+    },
+  };
   return (
-    <AddOnsContainer layout>
+    <AddOnsContainer
+      layout
+      variants={variants}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+    >
       <Name>Add Ons</Name>
       <Description>If you need a little extra</Description>
       {addOns.map((addOn) => (
@@ -24,6 +48,7 @@ const AddOnsContainer = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  background-color: white;
   border: 1px solid #efefef;
   padding: 0px 20px;
   box-sizing: border-box;
@@ -77,3 +102,7 @@ const ListItem = styled.div`
   width: 100%;
   letter-spacing: 0.2px;
 `;
+
+const ListItemLabel = styled.label``;
+
+const AddOnPrice = styled.span``;
