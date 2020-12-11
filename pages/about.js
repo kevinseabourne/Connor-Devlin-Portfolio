@@ -57,7 +57,7 @@ const About = ({ data }) => {
       transition: {
         type: "spring",
         damping: 12,
-        mass: 0.7,
+        mass: 0.4,
         delay: 1.2,
       },
     },
@@ -73,7 +73,7 @@ const About = ({ data }) => {
       transition: {
         type: "spring",
         damping: 12,
-        mass: 0.7,
+        mass: 0.4,
       },
     },
   };

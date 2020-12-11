@@ -2,59 +2,123 @@ import styled from "styled-components";
 import Link from "next/link";
 import ImageLoader from "../../components/common/imageLoader";
 import bottomWave from "../../public/images/wave4.svg";
+import { motion } from "framer-motion";
 
-const Pricing = (props) => {
+const Pricing = () => {
+  const staggerAnimation = {
+    hidden: {
+      transition: {
+        delayChildren: 0.7,
+        staggerChildren: 0.2,
+        staggerDirection: -1,
+      },
+    },
+    show: {
+      transition: {
+        delayChildren: 0.7,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const childAnimation = {
+    hidden: {
+      opacity: 0,
+      y: 12,
+      scale: 0.99,
+    },
+    show: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        delayChildren: 0.7,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const titleAnimation = {
+    hidden: {
+      opacity: 0,
+      y: 12,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
+  const labelAnimation = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+    },
+  };
+
+  const waveAnimation = {
+    hidden: {
+      opacity: 0,
+      x: 12,
+      y: 22,
+    },
+    show: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+    },
+  };
   return (
-    <Container>
-      <Title>Pricing</Title>
+    <Container variants={staggerAnimation} initial="hidden" animate="show">
+      <Title variants={titleAnimation}>Pricing</Title>
       <InnerContainer>
         <Link href="/pricing/[id]" as="/pricing/weddings">
-          <PricingContainer>
+          <PricingContainer
+            variants={childAnimation}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+          >
             <ImageLoader
               maxWidth="inherit"
               width="inherit"
               placeholderSize="66.66%"
               borderRadius="19px"
-              blur="5px"
-              opacity="0"
-              scale="0.99"
-              transitionTime="0.4s ease"
-              delay={120}
               hover={true}
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
               src="https://chpistel.sirv.com/Connor-Portfolio/wedding-pricing.jpeg?w=900"
             />
-            <Label>Weddings</Label>
+            <Label variants={labelAnimation}>Weddings</Label>
           </PricingContainer>
         </Link>
         <Link href="/pricing/[id]" as="pricing/corporate">
-          <PricingContainer>
+          <PricingContainer
+            variants={childAnimation}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+          >
             <ImageLoader
               maxWidth="inherit"
               width="inherit"
               placeholderSize="66.66%"
               borderRadius="19px"
-              blur="5px"
-              opacity="0"
-              scale="0.99"
-              transitionTime="0.4s ease"
               hover={true}
-              delay={240}
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
               src="https://chpistel.sirv.com/Connor-Portfolio/corporate-pricing.jpeg?w=900"
             />
-            <Label>Corporate</Label>
+            <Label variants={labelAnimation}>Corporate</Label>
           </PricingContainer>
         </Link>
       </InnerContainer>
-      <BottomWave src={bottomWave} />
+      <BottomWave src={bottomWave} variants={waveAnimation} />
     </Container>
   );
 };
 
 export default Pricing;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   height: calc(100vh - 75px);
   margin: auto;
   width: 100%;
@@ -64,7 +128,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Title = styled.h1`
+const Title = styled(motion.h1)`
   margin: 50px 0px;
   @media (max-width: 425px) {
     margin: 10% 0px;
@@ -72,7 +136,7 @@ const Title = styled.h1`
   }
 `;
 
-const InnerContainer = styled.div`
+const InnerContainer = styled(motion.div)`
   display: flex;
   width: 100%;
   align-items: center;
@@ -92,7 +156,7 @@ const InnerContainer = styled.div`
   }
 `;
 
-const PricingContainer = styled.div`
+const PricingContainer = styled(motion.div)`
   max-width: 850px;
   width: 100%;
   text-align: center;
@@ -133,7 +197,7 @@ const PricingContainer = styled.div`
   }
 `;
 
-const Label = styled.div`
+const Label = styled(motion.span)`
   color: white;
   font-size: 2rem;
   position: absolute;
@@ -145,7 +209,7 @@ const Label = styled.div`
   }
 `;
 
-const BottomWave = styled.img`
+const BottomWave = styled(motion.img)`
   object-position: center;
   object-fit: cover;
   margin-top: auto;

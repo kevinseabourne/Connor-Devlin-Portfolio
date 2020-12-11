@@ -85,7 +85,7 @@ export async function updateAddOns(addOnObj) {
       const addOns = await db
         .collection("pricing")
         .doc("addOns")
-        .update(addOnObj)
+        .update({ addOns: addOnObj })
         .then(function (doc) {
           if (doc.exists) {
             return doc.data();
@@ -99,7 +99,7 @@ export async function updateAddOns(addOnObj) {
   return response;
 }
 
-export async function updatePricingPackage(pricingPackage) {
+export async function addPricingPackage(pack) {
   const response = await firebase
     .auth()
     .signInWithEmailAndPassword(
@@ -108,19 +108,50 @@ export async function updatePricingPackage(pricingPackage) {
     )
     .then(async function () {
       const db = firebase.firestore();
-      const aboutMe = await db
+      const pricingPackage = await db
         .collection("pricing")
-        .doc(pricingPackage.id)
-        .update(pricingPackage)
+        .doc("packages")
+        .collection("packages")
+        .add(pack)
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         });
-      return aboutMe;
+      return pricingPackage;
     });
   return response;
 }
 
-export async function deletePricingPackage(pricingPackage) {
+export async function updatePricingPackage(pricingPackage, id) {
+  const response = await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL,
+      process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PASSWORD
+    )
+    .then(async function () {
+      const db = firebase.firestore();
+      const updatedPackage = await db
+        .collection("pricing")
+        .doc("packages")
+        .collection("packages")
+        .doc(id)
+        .update(pricingPackage)
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      return updatedPackage;
+    });
+  return response;
+}
+
+export async function deletePricingPackage(id) {
   const response = await firebase
     .auth()
     .signInWithEmailAndPassword(
@@ -131,7 +162,9 @@ export async function deletePricingPackage(pricingPackage) {
       const db = firebase.firestore();
       const aboutMe = await db
         .collection("pricing")
-        .doc(pricingPackage.id)
+        .doc("packages")
+        .collection("packages")
+        .doc(id)
         .delete()
         .catch(function (error) {
           console.log("Error getting document:", error);
