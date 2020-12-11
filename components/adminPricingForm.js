@@ -1,17 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import cloneDeep from "lodash/cloneDeep";
+import isEmpty from "lodash/isEmpty";
 import { useForm } from "react-hook-form";
 import { Input } from "./common/input";
 import ImageLoader from "./common/imageLoader";
 import { TextArea } from "./common/textArea";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { LoadingSpinner } from "./loading-spinner";
+import popSound from ".././public/sounds/pop_char.mp3";
+import popDownSound from ".././public/sounds/pop_down.mp3";
+import successSound from ".././public/sounds/music_marimba_on_hi.mp3";
+import errorSound from ".././public/sounds/pad_soft_off.mp3";
 import downWave from ".././public/images/down-wave.svg";
+import useSound from "use-sound";
 
-const AdminPricingForm = ({ page }) => {
-  const [packagesStatus, setPackagesStatus] = useState("idle");
-  const [addOnsStatus, setAddOnsStatus] = useState("idle");
+const AdminPricingForm = ({
+  page,
+  defaultValues,
+  dataResolved,
+  selectedPackage,
+  operation,
+  packagesStatus,
+  addOnsStatus,
+  handleEditPackageSubmit,
+  handleAddPackageSubmit,
+  handleEditAddOnsSubmit,
+  handleAddAddOnsSubmit,
+}) => {
   const timeout = useRef(null);
   const [packageDetailsLength, setPackageDetailsLength] = useState([
     { title: "packageDetail", id: Math.floor(1000 + Math.random() * 9000) },
@@ -21,10 +37,17 @@ const AdminPricingForm = ({ page }) => {
   ]);
 
   useEffect(() => {
-    console.log("change");
-  }, [page]);
+    if (!isEmpty(defaultValues) && dataResolved) {
+      handleDefaultValues();
+    }
+  }, [dataResolved, selectedPackage]);
 
   const { register, handleSubmit, reset, errors, unregister } = useForm();
+
+  const [play] = useSound(popSound);
+  const [playDown] = useSound(popDownSound);
+  const [playSuccessSound] = useSound(successSound, { volume: 0.2 });
+  const [playErrorSound] = useSound(errorSound, { volume: 0.2 });
 
   const schema = {
     packageDetail: {
@@ -40,14 +63,95 @@ const AdminPricingForm = ({ page }) => {
     },
   };
 
-  const handlePackagesSubmit = () => {};
+  const handleDefaultValues = () => {
+    if (operation === "Edit") {
+      if (page === "packages") {
+        handlePackageDetails();
+      } else {
+        handleAddOns();
+      }
+    }
+  };
 
-  const handleAddOnsSubmit = () => {};
+  const handlePackageDetails = () => {
+    const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
+
+    while (
+      defaultValues.packageDetails.length > packageDetailsLengthClone.length
+    ) {
+      packageDetailsLengthClone.push({
+        title: "packageDetail",
+        id: Math.floor(1000 + Math.random() * 9000),
+      });
+    }
+
+    if (
+      defaultValues.packageDetails.length < packageDetailsLengthClone.length
+    ) {
+      const amount =
+        packageDetailsLengthClone.length - defaultValues.packageDetails.length;
+      const index = packageDetailsLengthClone.length - 1;
+      packageDetailsLengthClone.splice(index, amount);
+    }
+    setPackageDetailsLength(packageDetailsLengthClone);
+
+    let defaultValuesWithPackageDetails = {};
+
+    for (let packageDetail of packageDetailsLengthClone) {
+      let index = packageDetailsLengthClone.indexOf(packageDetail);
+      defaultValuesWithPackageDetails[`packageDetail_${packageDetail.id}`] =
+        defaultValues.packageDetails[index];
+    }
+
+    defaultValuesWithPackageDetails.packageName = defaultValues.packageName;
+    defaultValuesWithPackageDetails.price = defaultValues.price;
+    defaultValuesWithPackageDetails.description = defaultValues.description;
+
+    reset(defaultValuesWithPackageDetails);
+  };
+
+  const handleAddOns = () => {
+    const addOnsLengthClone = _.cloneDeep(addOnsLength);
+
+    if (defaultValues.length > 1) {
+      while (defaultValues.length > addOnsLengthClone.length) {
+        addOnsLengthClone.push({
+          title: "addOn",
+          id: Math.floor(1000 + Math.random() * 9000),
+        });
+        setAddOnsLength(addOnsLengthClone);
+      }
+
+      let addOns = {};
+
+      for (let i of addOnsLengthClone) {
+        let index = addOnsLengthClone.indexOf(i);
+        addOns["addOnTitle_" + i.id] = defaultValues[index].title;
+
+        addOns["addOnPrice_" + i.id] = defaultValues[index].price;
+      }
+      reset(addOns);
+    }
+  };
+
+  const handlePackagesSubmit = (data) => {
+    if (operation === "Edit") {
+      handleEditPackageSubmit(data);
+    } else {
+      handleAddPackageSubmit(data);
+    }
+  };
+
+  const handleAddOnsSubmit = (data) => {
+    if (operation === "Edit") {
+      handleEditAddOnsSubmit(data);
+    }
+  };
 
   const deletePackageDetail = (index) => {
-    // playDown();
     const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
     if (index > -1 && packageDetailsLength.length > 1) {
+      playDown();
       unregister(`partnerFirstName_${packageDetailsLengthClone[index].id}`);
       packageDetailsLengthClone.splice(index, 1);
       setPackageDetailsLength(packageDetailsLengthClone);
@@ -55,9 +159,9 @@ const AdminPricingForm = ({ page }) => {
   };
 
   const addPackageDetail = (index) => {
-    // play();
     const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
     if (index > -1 && packageDetailsLengthClone.length <= 10) {
+      play();
       packageDetailsLengthClone.splice(index + 1, 0, {
         title: "packageDetail",
         id: Math.floor(1000 + Math.random() * 9000),
@@ -67,9 +171,9 @@ const AdminPricingForm = ({ page }) => {
   };
 
   const deleteAddOn = (index) => {
-    // playDown();
     const addOnsLengthClone = cloneDeep(addOnsLength);
     if (index > -1 && addOnsLength.length > 1) {
+      playDown();
       unregister(`addOnTitle${addOnsLengthClone[index].id}`);
       unregister(`addOnPrice${addOnsLengthClone[index].id}`);
       addOnsLengthClone.splice(index, 1);
@@ -78,9 +182,9 @@ const AdminPricingForm = ({ page }) => {
   };
 
   const addAddOn = (index) => {
-    // play();
     const addOnsLengthClone = cloneDeep(addOnsLength);
     if (index > -1 && addOnsLengthClone.length <= 10) {
+      play();
       addOnsLengthClone.splice(index + 1, 0, {
         title: "packageDetail",
         id: Math.floor(1000 + Math.random() * 9000),
@@ -143,7 +247,11 @@ const AdminPricingForm = ({ page }) => {
               animate="show"
               exit="hidden"
             >
-              <Title>Edit Pricing Packages</Title>
+              <Title>
+                {operation === "Add"
+                  ? `${operation} Pricing Package`
+                  : `${operation} Pricing Packages`}
+              </Title>
               <Input
                 name="packageName"
                 label="Title"
@@ -169,11 +277,20 @@ const AdminPricingForm = ({ page }) => {
                     variants={buttonAnimation}
                     tabIndex="0"
                     role="button"
+                    aria-label="add package detail button"
+                    title="add package detail"
                     onClick={() =>
                       addPackageDetail(
                         packageDetailsLength.indexOf(packageDetail)
                       )
                     }
+                    onKeyDown={(e) => {
+                      const key = e.key === 13 || e.keyCode === 13;
+                      key &&
+                        addPackageDetail(
+                          packageDetailsLength.indexOf(packageDetail)
+                        );
+                    }}
                   >
                     <ImageLoader
                       maxWidth="inherit"
@@ -196,11 +313,20 @@ const AdminPricingForm = ({ page }) => {
                     variants={buttonAnimation}
                     tabIndex="0"
                     role="button"
+                    aria-label="delete package detail button"
+                    title="delete package detail"
                     onClick={() =>
                       deletePackageDetail(
                         packageDetailsLength.indexOf(packageDetail)
                       )
                     }
+                    onKeyDown={(e) => {
+                      const key = e.key === 13 || e.keyCode === 13;
+                      key &&
+                        deletePackageDetail(
+                          packageDetailsLength.indexOf(packageDetail)
+                        );
+                    }}
                   >
                     <ImageLoader
                       maxWidth="inherit"
@@ -226,8 +352,10 @@ const AdminPricingForm = ({ page }) => {
                   <LoadingSpinner size={"28px"} />
                 ) : packagesStatus === "resolved" ? (
                   "Success"
-                ) : (
+                ) : operation === "Edit" ? (
                   "Update"
+                ) : (
+                  "Add"
                 )}
               </SubmitButton>
             </Form>

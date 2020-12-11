@@ -4,10 +4,12 @@ import { motion } from "framer-motion";
 import { LoadingSpinner } from "../loading-spinner";
 
 const AdminButtonsSection = ({
-  handleWeddingPageChange,
-  weddingsStatus,
-  handleCorporatePageChange,
-  corporateStatus,
+  handleContentOnePageChange,
+  handleContentTwoPageChange,
+  contentOneStatus,
+  contentTwoStatus,
+  buttonOneTitle,
+  buttonTwoTitle,
   page,
   operation,
 }) => {
@@ -38,26 +40,30 @@ const AdminButtonsSection = ({
       <ButtonsInnerContainer>
         <WeddingsFormButton
           variants={buttonAnimation}
-          animate={page === "weddings" ? "show" : "hidden"}
-          onClick={handleWeddingPageChange}
-          disabled={page === "weddings" ? true : false}
+          animate={
+            page === "weddings" || page === "packages" ? "show" : "hidden"
+          }
+          onClick={handleContentOnePageChange}
+          disabled={page === "weddings" || page === "packages" ? true : false}
         >
-          {weddingsStatus === "pending" ? (
+          {contentOneStatus === "pending" ? (
             <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
           ) : (
-            "Weddings"
+            buttonOneTitle
           )}
         </WeddingsFormButton>
         <CorporateFormButton
           variants={buttonAnimation}
-          animate={page === "corporate" ? "show" : "hidden"}
-          onClick={handleCorporatePageChange}
-          disabled={page === "corporate" ? true : false}
+          animate={
+            page === "corporate" || page === "addOns" ? "show" : "hidden"
+          }
+          onClick={handleContentTwoPageChange}
+          disabled={page === "corporate" || page === "addOns" ? true : false}
         >
-          {corporateStatus === "pending" ? (
+          {contentTwoStatus === "pending" ? (
             <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
           ) : (
-            "Corporate"
+            buttonTwoTitle
           )}
         </CorporateFormButton>
       </ButtonsInnerContainer>

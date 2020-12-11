@@ -2,18 +2,55 @@ import styled from "styled-components";
 import Link from "next/link";
 import ImageLoader from "./common/imageLoader";
 import topWave from "../public/images/top-wave.svg";
+import { motion } from "framer-motion";
 
-const Banner = (props) => {
+const Banner = () => {
+  const container = {
+    hidden: {
+      staggerChildren: 0.9,
+    },
+    show: {
+      staggerChildren: 0.9,
+    },
+  };
+
+  const textAnimation = {
+    hidden: {
+      x: -40,
+      opacity: 0,
+    },
+    show: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
+  const imageAnimation = {
+    hidden: {
+      y: 40,
+      opacity: 0,
+    },
+    show: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
   return (
     <Container>
       <InnerContainer>
-        <InfoContainer>
-          <SmallTitle>Videographer</SmallTitle>
+        <InfoContainer variants={container} initial="hidden" animate="show">
+          <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
           <Name>
             <FirstName>CONNOR</FirstName>
             <LastName>DEVLIN.</LastName>
           </Name>
-          <Description>
+          <Description variants={textAnimation}>
             Digital media producer and filmmaker based out of Perth WA. Creating
             videos for weddings, businesses and everything in between.
           </Description>
@@ -21,14 +58,11 @@ const Banner = (props) => {
             <ReadMoreLink>Read More</ReadMoreLink>
           </Link>
         </InfoContainer>
-        <ImageContainer>
+        <ImageContainer variants={imageAnimation}>
           <ImageLoader
             maxWidth="inherit"
             placeholderSize="66.66%"
             borderRadius="19px"
-            opacity="0"
-            scale="0.99"
-            transitionTime="0.4s ease"
             boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
             src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=566"
           />
@@ -41,7 +75,7 @@ const Banner = (props) => {
 
 export default Banner;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   height: calc(100vh - 75px);
   width: 100%;
   display: flex;
@@ -61,7 +95,7 @@ const Container = styled.div`
   }
 `;
 
-const InnerContainer = styled.div`
+const InnerContainer = styled(motion.div)`
   padding: 0px 50px;
   width: 100%;
   box-sizing: border-box;
@@ -83,7 +117,7 @@ const InnerContainer = styled.div`
   }
 `;
 
-const InfoContainer = styled.div`
+const InfoContainer = styled(motion.div)`
   display: flex;
   max-width: 450px;
   width: 100%;
@@ -104,7 +138,7 @@ const InfoContainer = styled.div`
   }
 `;
 
-const SmallTitle = styled.span`
+const SmallTitle = styled(motion.span)`
   font-size: 1rem;
   opacity: 0.7;
   @media (max-width: 424px) {
@@ -115,14 +149,14 @@ const SmallTitle = styled.span`
   }
 `;
 
-const Name = styled.div`
+const Name = styled(motion.div)`
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
 `;
 
-const FirstName = styled.h1`
+const FirstName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
   letter-spacing: 0px;
@@ -150,7 +184,7 @@ const FirstName = styled.h1`
   }
 `;
 
-const LastName = styled.h1`
+const LastName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
   letter-spacing: 0px;
@@ -170,7 +204,7 @@ const LastName = styled.h1`
   }
 `;
 
-const Description = styled.p`
+const Description = styled(motion.p)`
   font-size: 1rem;
   letter-spacing: 1px;
   width: 95%;
@@ -187,7 +221,7 @@ const Description = styled.p`
   }
 `;
 
-const ReadMoreLink = styled.span`
+const ReadMoreLink = styled(motion.span)`
   font-size: 1rem;
   font-weight: 800;
   z-index: 0;
@@ -219,7 +253,7 @@ const ReadMoreLink = styled.span`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled(motion.div)`
   max-width: 700px;
   width: 100%;
   margin-bottom: 75px;
