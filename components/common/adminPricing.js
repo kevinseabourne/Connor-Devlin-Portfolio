@@ -228,16 +228,14 @@ const AdminPricing = ({ operation }) => {
         />
         <AnimatePresence>
           {packageDataResolved && (
-            <AnimateSharedLayout>
-              <WeddingPricingPackages
-                page={page}
-                packages={packages}
-                showAdminContent={operation === "Edit"}
-                selectedItem={selectedPackage}
-                handleClick={handleClick}
-                handleDeletePricingPackage={handleDeletePricingPackage}
-              />
-            </AnimateSharedLayout>
+            <WeddingPricingPackages
+              page={page}
+              packages={packages}
+              showAdminContent={operation === "Edit"}
+              selectedItem={selectedPackage}
+              handleClick={handleClick}
+              handleDeletePricingPackage={handleDeletePricingPackage}
+            />
           )}
         </AnimatePresence>
         <AnimatePresence>

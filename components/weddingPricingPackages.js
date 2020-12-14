@@ -77,15 +77,15 @@ const WeddingPricingPackages = ({
   const parent = {
     hidden: {
       transition: {
-        delayChildren: stateChange ? 0.7 : 0,
-        staggerChildren: 0.09,
+        delayChildren: 0,
+        staggerChildren: 0,
         staggerDirection: -1,
       },
     },
     show: {
       transition: {
         delayChildren: stateChange ? 0.7 : 0,
-        staggerChildren: 0.2,
+        staggerChildren: 0.12,
         staggerDirection: scrollingDown ? -1 : 1,
       },
     },
@@ -95,11 +95,10 @@ const WeddingPricingPackages = ({
     hidden: {
       opacity: 0,
       x: 15,
-      y: 0,
     },
     show: {
-      opacity: 1,
       x: 0,
+      opacity: 1,
       transition: {
         damping: 12,
       },
@@ -154,7 +153,7 @@ const WeddingPricingPackages = ({
         exit="hidden"
         layout
       >
-        {packages.map((packageItem, index) => (
+        {packages.map((packageItem) => (
           <Package
             key={packageItem.id}
             variants={child}
@@ -264,27 +263,31 @@ const Overlay = styled(motion.div)`
 `;
 
 const PackagesContainer = styled(motion.div)`
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 362px));
   justify-content: center;
   align-items: flex-start;
-  margin-bottom: 0px;
+  grid-auto-flow: row;
+  grid-column-end: auto;
+  grid-gap: calc(100vw * 0.03) 2%;
+  width: 100%;
+  margin-bottom: 14px;
   padding: 0 20px;
   box-sizing: border-box;
-  @media (max-width: 852px) {
-    flex-direction: column;
-    flex-wrap: nowrap;
+  @media (max-width: 1493px) {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 362px));
+  }
+  @media (max-width: 786px) {
+    grid-gap: 30px 3%;
   }
 `;
 
 const Package = styled(motion.div)`
   display: flex;
-  min-width: 360px;
+  width: 100%;
   max-width: 360px;
   align-items: center;
   justify-content: center;
-  margin: 30px;
   flex-direction: column;
   background-color: white;
   border: 1px solid #efefef;
@@ -300,11 +303,7 @@ const Package = styled(motion.div)`
     margin: 0px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 30px;
     max-width: 500px;
-    &:first-child {
-      margin: 30px auto;
-    }
   }
 `;
 

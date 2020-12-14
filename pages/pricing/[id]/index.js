@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useEffect } from "react";
 import WeddingPricing from "../../../components/weddingPricing";
 import CorporatePricing from "../../../components/corporatePricing";
-import { getAllPricingPackages } from "../../api/pricing";
+import { getAllPricingPackages, getAddOns } from "../../api/pricing";
 
 const Pricing = ({ params, data }) => {
   return params.id === "weddings" ? (
@@ -21,7 +21,9 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   if (params.id === "weddings") {
-    const data = await getAllPricingPackages();
+    const packages = await getAllPricingPackages();
+    const { addOns } = await getAddOns();
+    const data = [packages, addOns];
     return {
       props: data ? { data, params } : { data: null, params },
     };

@@ -41,9 +41,9 @@ export const InputWithIcon = React.forwardRef(
 
     const animation = {
       hidden: {
-        opacity: opacity,
-        y: y,
-        x: x,
+        opacity: opacity ? opacity : 1,
+        y: y ? y : 0,
+        x: x ? x : 0,
       },
       show: {
         opacity: 1,

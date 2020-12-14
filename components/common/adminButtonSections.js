@@ -81,6 +81,9 @@ const ButtonsContainer = styled(motion.div)`
   align-items: center;
   padding: 70px 20px;
   box-sizing: border-box;
+  @media (max-width: 609px) {
+    padding: 30px 20px;
+  }
 `;
 
 const Title = styled(motion.h1)`
@@ -89,6 +92,9 @@ const Title = styled(motion.h1)`
   text-align: center;
   @media (max-width: 750px) {
     font-size: 1.4rem;
+  }
+  @media (max-width: 609px) {
+    font-size: 1rem;
   }
 `;
 

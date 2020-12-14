@@ -2,7 +2,9 @@ import styled from "styled-components";
 import React, { useState, useEffect, useRef } from "react";
 import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
-import Contact from "../pages/contact";
+import ContactForm from "./common/contactForm";
+import WeddingPricingPackages from "./weddingPricingPackages";
+import WeddingPricingAddOns from "./weddingPricingAddOns";
 
 const WeddingPricing = ({ data }) => {
   const contactRef = useRef(null);
@@ -46,10 +48,6 @@ const WeddingPricing = ({ data }) => {
     },
   ]);
 
-  useEffect(() => {
-    console.log(data[0]);
-  }, []);
-
   const handleClick = () => {
     window.scrollTo({
       top: contactRef.current.offsetTop - 180,
@@ -58,39 +56,15 @@ const WeddingPricing = ({ data }) => {
   };
 
   const packages = data[0];
-
-  const addOns = data[1].addOns;
+  const addOns = data[1];
 
   return (
     <Container>
       <Title>Wedding Pricing Packages</Title>
       <PackagesContainer>
-        {packages.map((packageItem) => (
-          <Package key={packageItem.id}>
-            <InnerPackageContainer>
-              <Name>{packageItem.packageName}</Name>
-              <Price>{packageItem.price}</Price>
-              <Description>{packageItem.description}</Description>
-              {packageItem.packageDetails.map((item) => (
-                <Item key={packageItem.packageDetails.indexOf(item)}>
-                  {item}
-                </Item>
-              ))}
-            </InnerPackageContainer>
-            <Button onClick={handleClick}>Contact</Button>
-          </Package>
-        ))}
+        <WeddingPricingPackages handleClick={handleClick} packages={packages} />
       </PackagesContainer>
-      <AddOnsContainer>
-        <Name>Add Ons</Name>
-        <Description>If you need a little extra</Description>
-        {addOns.map((addOn) => (
-          <ListItem key={addOns.indexOf(addOn)}>
-            <ListItemLabel>{addOn.title}</ListItemLabel>
-            <AddOnPrice>{`$${addOn.price}`}</AddOnPrice>
-          </ListItem>
-        ))}
-      </AddOnsContainer>
+      <WeddingPricingAddOns addOns={addOns} />
       <BottomWave src={topWave} />
       <FAQContainer>
         <FAQTitle>FAQ</FAQTitle>
@@ -105,7 +79,7 @@ const WeddingPricing = ({ data }) => {
       </FAQContainer>
       <Wave src={downWave} />
       <ContactContainer ref={contactRef}>
-        <Contact />
+        <ContactForm data={packages} />
       </ContactContainer>
     </Container>
   );

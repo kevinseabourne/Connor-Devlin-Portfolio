@@ -450,6 +450,8 @@ const FormContainer = styled(motion.div)`
   box-sizing: border-box;
   position: relative;
   background-color: white;
+  padding-left: 20px;
+  padding-right: 20px;
   padding-bottom: 150px;
   display: flex;
   align-items: center;
@@ -479,118 +481,14 @@ const Wave = styled(motion.img)`
   }
 `;
 
-const PackagesContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  margin-bottom: 0px;
-  padding: 0 20px;
-  box-sizing: border-box;
-  @media (max-width: 852px) {
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-`;
-
-const Package = styled.div`
-  display: flex;
-  max-width: 360px;
-  align-items: center;
-  justify-content: center;
-  margin: 30px;
-  flex-direction: column;
-  border: 1px solid #efefef;
-  border-radius: 9px;
-  &:first-child {
-    margin-left: 0px;
-  }
-  @media (max-width: 852px) {
-    margin: 0px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
-    max-width: 500px;
-    &:first-child {
-      margin: 30px auto;
-    }
-  }
-`;
-
-const InnerPackageContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: 0px 20px;
-  &:hover {
-    cursor: default;
-  }
-`;
-
-const Name = styled.h3`
-  margin-top: 20px;
-  font-size: 2rem;
-  font-weight: 500;
-  color: #e78b1b;
-`;
-
-const Price = styled.span`
-  font-size: 1.2rem;
-  margin-bottom: 0px;
-  color: #e78b1b;
-`;
-
-const Description = styled.p`
-  font-size: 0.9rem;
-  text-align: center;
-  display: flex;
-  margin-top: 7px;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 20px;
-  margin-bottom: 0px;
-  width: 100%;
-  letter-spacing: 0.2px;
-  border-bottom: 1px solid #efefef;
-`;
-
-const Item = styled.span`
-  font-size: 1rem;
-  text-align: center;
-  padding: 25px 0px;
-  border-bottom: 1px solid #efefef;
-  width: 100%;
-  letter-spacing: 0.2px;
-`;
-
-const Button = styled(motion.button)`
-  width: 100%;
-  padding: 25px 10px;
-  color: white;
-  font-family: inherit;
-  letter-spacing: 1.5px;
-  background-color: #ea8f1f;
-  font-size: 1.2rem;
-  border: none;
-  letter-spacing: 0.2px;
-  border-bottom-left-radius: 9px;
-  border-bottom-right-radius: 9px;
-  &:hover {
-    cursor: pointer;
-  }
-  &:focus {
-    outline: none;
-  }
-`;
-
 const PackageDetailsContainer = styled(motion.div)`
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: row;
+  @media (max-width: 772px) {
+    height: 130px;
+  }
 `;
 
 const AddPackageDetail = styled(motion.div)`
@@ -607,7 +505,7 @@ const AddPackageDetail = styled(motion.div)`
   &:focus:not(:focus-visible) {
     outline: none;
   }
-  @media (max-width: 609px) {
+  @media (max-width: 772px) {
     order: 4;
     bottom: 22px;
     top: unset;
@@ -632,7 +530,7 @@ const DeletePackageDetail = styled(motion.div)`
   &:focus:not(:focus-visible) {
     outline: none;
   }
-  @media (max-width: 609px) {
+  @media (max-width: 772px) {
     position: absolute;
     bottom: 22px;
     top: unset;

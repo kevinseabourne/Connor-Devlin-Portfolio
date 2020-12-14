@@ -1,6 +1,6 @@
 import AdminContent from "./adminContent";
 
-const AdminEditContent = (props) => {
+const AdminEditContent = () => {
   return <AdminContent operation="Edit" />;
 };
 
