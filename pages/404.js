@@ -13,3 +13,5 @@ const Container = styled.main`
   align-items: center;
   justify-content: center;
 `;
+
+const Message = styled.h1``;

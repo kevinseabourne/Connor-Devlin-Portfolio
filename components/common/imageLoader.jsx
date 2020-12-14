@@ -6,6 +6,7 @@ import "intersection-observer";
 
 const ImageLoader = ({
   src,
+  srcSet,
   width,
   maxWidth,
   placeholderSize,
@@ -85,6 +86,7 @@ const ImageLoader = ({
           animate={isLoaded ? "show" : "hidden"}
           onLoad={onLoad}
           src={src}
+          srcSet={srcSet}
           alt={alt}
           key={keyValue}
           data-testid={dataTestId}

@@ -244,24 +244,6 @@ const WeddingPricingPackages = ({
 
 export default WeddingPricingPackages;
 
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  background-color: rgba(15, 15, 15, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-`;
-
 const PackagesContainer = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(3, minmax(100px, 362px));
@@ -272,8 +254,6 @@ const PackagesContainer = styled(motion.div)`
   grid-gap: calc(100vw * 0.03) 2%;
   width: 100%;
   margin-bottom: 14px;
-  padding: 0 20px;
-  box-sizing: border-box;
   @media (max-width: 1493px) {
     grid-template-columns: repeat(auto-fit, minmax(100px, 362px));
   }
@@ -293,11 +273,11 @@ const Package = styled(motion.div)`
   border: 1px solid #efefef;
   border-radius: 9px;
   position: relative;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
   &:first-child {
     margin-left: 0px;
   }
   &:hover {
-    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
   }
   @media (max-width: 852px) {
     margin: 0px;

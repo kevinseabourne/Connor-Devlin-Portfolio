@@ -25,7 +25,6 @@ const Admin = () => {
   return !user ? null : (
     <Container>
       <AdminSidebar />
-      <input type="file" />
     </Container>
   );
 };

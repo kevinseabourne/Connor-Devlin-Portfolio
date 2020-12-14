@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { motion } from "framer-motion";
 
 const WeddingPricingAddOns = ({ addOns }) => {
   const variants = {
@@ -66,8 +65,7 @@ const AddOnsContainer = styled(motion.div)`
     margin-top: 30px;
   }
   @media (max-width: 852px) {
-    max-width: 349px;
-    padding: 0 20px;
+    max-width: 362px;
   }
 `;
 
@@ -105,4 +103,6 @@ const ListItem = styled.div`
 
 const ListItemLabel = styled.label``;
 
-const AddOnPrice = styled.span``;
+const AddOnPrice = styled.span`
+  padding-left: 20px;
+`;

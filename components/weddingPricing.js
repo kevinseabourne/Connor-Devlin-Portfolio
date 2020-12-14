@@ -63,8 +63,8 @@ const WeddingPricing = ({ data }) => {
       <Title>Wedding Pricing Packages</Title>
       <PackagesContainer>
         <WeddingPricingPackages handleClick={handleClick} packages={packages} />
+        <WeddingPricingAddOns addOns={addOns} />
       </PackagesContainer>
-      <WeddingPricingAddOns addOns={addOns} />
       <BottomWave src={topWave} />
       <FAQContainer>
         <FAQTitle>FAQ</FAQTitle>
@@ -98,6 +98,7 @@ const Container = styled.div`
 
 const Title = styled.h1`
   margin: 60px 0px;
+  text-align: center;
 `;
 
 const PackagesContainer = styled.div`
@@ -115,149 +116,12 @@ const PackagesContainer = styled.div`
   }
 `;
 
-const Package = styled.div`
-  display: flex;
-  max-width: 360px;
-  align-items: center;
-  justify-content: center;
-  margin: 30px;
-  flex-direction: column;
-  border: 1px solid #efefef;
-  border-radius: 9px;
-  &:first-child {
-    margin-left: 0px;
-  }
-  @media (max-width: 852px) {
-    margin: 0px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
-    max-width: 500px;
-    &:first-child {
-      margin: 30px auto;
-    }
-  }
-`;
-
-const InnerPackageContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: 0px 20px;
-  &:hover {
-    cursor: default;
-  }
-`;
-
-const Name = styled.h3`
-  margin-top: 20px;
-  font-size: 2rem;
-  font-weight: 500;
-  color: #e78b1b;
-`;
-
-const Price = styled.span`
-  font-size: 1.2rem;
-  margin-bottom: 0px;
-  color: #e78b1b;
-`;
-
-const Description = styled.p`
-  font-size: 0.9rem;
-  text-align: center;
-  display: flex;
-  margin-top: 7px;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 20px;
-  margin-bottom: 0px;
-  width: 100%;
-  letter-spacing: 0.2px;
-  border-bottom: 1px solid #efefef;
-`;
-
-const Item = styled.span`
-  font-size: 1rem;
-  text-align: center;
-  padding: 25px 0px;
-  border-bottom: 1px solid #efefef;
-  width: 100%;
-  letter-spacing: 0.2px;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 25px 10px;
-  color: white;
-  font-family: inherit;
-  letter-spacing: 1.5px;
-  background-color: #ea8f1f;
-  font-size: 1.2rem;
-  border: none;
-  letter-spacing: 0.2px;
-  border-bottom-left-radius: 9px;
-  border-bottom-right-radius: 9px;
-  &:hover {
-    cursor: pointer;
-  }
-  &:focus {
-    outline: none;
-  }
-`;
-
-const AddOnsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  border: 1px solid #efefef;
-  padding: 0px 20px;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 540px;
-  margin: 30px;
-  margin-right: 0px;
-  border-radius: 9px;
-  &:hover {
-    cursor: default;
-  }
-  @media (max-width: 1241px) {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 30px;
-  }
-  @media (max-width: 852px) {
-    max-width: 349px;
-    padding: 0 20px;
-  }
-`;
-
-const ListItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-  font-size: 1rem;
-  padding: 25px 0px;
-  width: 100%;
-  letter-spacing: 0.2px;
-`;
-
-const ListItemLabel = styled.label``;
-
-const AddOnPrice = styled.span``;
-
 const BottomWave = styled.img`
   bottom: -25px;
-  left: -1px;
-  margin-bottom: -24px;
+  left: 0px;
+  margin-bottom: -14px;
   width: 100%;
   z-index: -100;
-  @media (max-width: 1024px) {
-    bottom: -1px;
-  }
 `;
 
 const FAQContainer = styled.div`
@@ -272,8 +136,13 @@ const FAQContainer = styled.div`
 `;
 
 const FAQTitle = styled.h1`
-  font-size: 2.3rem;
-  margin-bottom: 120px;
+  font-size: 2.7rem;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  @media (max-width: 784px) {
+    font-size: 2.2rem;
+    margin-top: 45px;
+  }
 `;
 
 const FAQInnerContainer = styled.div`
@@ -283,9 +152,14 @@ const FAQInnerContainer = styled.div`
   align-items: center;
   grid-auto-flow: row;
   grid-column-end: auto;
+  padding: 0 20px;
   grid-gap: 120px;
-  @media (max-width: 852px) {
+  @media (max-width: 1370px) {
+    grid-template-columns: repeat(2, minmax(30px, 360px));
+  }
+  @media (max-width: 784px) {
     grid-template-columns: repeat(1, minmax(30px, 360px));
+    grid-gap: 60px 120px;
   }
 `;
 

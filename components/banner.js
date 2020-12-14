@@ -42,15 +42,15 @@ const Banner = () => {
     },
   };
   return (
-    <Container>
+    <Container variants={container} initial="hidden" animate="show">
       <InnerContainer>
-        <InfoContainer variants={container} initial="hidden" animate="show">
-          <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
+        <InfoContainer variants={textAnimation}>
+          <SmallTitle>Videographer</SmallTitle>
           <Name>
             <FirstName>CONNOR</FirstName>
             <LastName>DEVLIN.</LastName>
           </Name>
-          <Description variants={textAnimation}>
+          <Description>
             Digital media producer and filmmaker based out of Perth WA. Creating
             videos for weddings, businesses and everything in between.
           </Description>
@@ -63,8 +63,16 @@ const Banner = () => {
             maxWidth="inherit"
             placeholderSize="66.66%"
             borderRadius="19px"
+            alt="Connor Devlin"
             boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
-            src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=566"
+            srcSet="
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=766 1300w,
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=622 1200w,
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=522 1100w,
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=501 1024w,
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=386 425w,
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=338 375w,
+          "
           />
         </ImageContainer>
       </InnerContainer>

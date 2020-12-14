@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { getAllWeddings } from "./api/weddings";
 import ContentPage from "../components/common/contentPage";
 import ErrorMessage from "../components/common/errorMessage";
@@ -20,3 +21,9 @@ export async function getStaticProps() {
 }
 
 export default Weddings;
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
