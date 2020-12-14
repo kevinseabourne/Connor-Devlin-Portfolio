@@ -7,10 +7,14 @@ import { motion } from "framer-motion";
 const Banner = () => {
   const container = {
     hidden: {
-      staggerChildren: 0.9,
+      transition: {
+        staggerChildren: 0.2,
+      },
     },
     show: {
-      staggerChildren: 0.9,
+      transition: {
+        staggerChildren: 0.2,
+      },
     },
   };
 
@@ -30,11 +34,11 @@ const Banner = () => {
 
   const imageAnimation = {
     hidden: {
-      y: 40,
+      x: 40,
       opacity: 0,
     },
     show: {
-      y: 0,
+      x: 0,
       opacity: 1,
       transition: {
         type: "spring",
@@ -44,18 +48,18 @@ const Banner = () => {
   return (
     <Container variants={container} initial="hidden" animate="show">
       <InnerContainer>
-        <InfoContainer variants={textAnimation}>
-          <SmallTitle>Videographer</SmallTitle>
-          <Name>
+        <InfoContainer>
+          <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
+          <Name variants={textAnimation}>
             <FirstName>CONNOR</FirstName>
             <LastName>DEVLIN.</LastName>
           </Name>
-          <Description>
+          <Description variants={textAnimation}>
             Digital media producer and filmmaker based out of Perth WA. Creating
             videos for weddings, businesses and everything in between.
           </Description>
           <Link href="/about">
-            <ReadMoreLink>Read More</ReadMoreLink>
+            <ReadMoreLink variants={textAnimation}>Read More</ReadMoreLink>
           </Link>
         </InfoContainer>
         <ImageContainer variants={imageAnimation}>
@@ -64,6 +68,7 @@ const Banner = () => {
             placeholderSize="66.66%"
             borderRadius="19px"
             alt="Connor Devlin"
+            opacity={0}
             boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
             srcSet="
             https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=766 1300w,
@@ -71,7 +76,7 @@ const Banner = () => {
             https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=522 1100w,
             https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=501 1024w,
             https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=386 425w,
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=338 375w,
+            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=336 375w,
           "
           />
         </ImageContainer>
@@ -278,7 +283,7 @@ const ImageContainer = styled(motion.div)`
 const BottomWave = styled.img`
   position: absolute;
   bottom: -55px;
-  left: -1px;
+  left: 0px;
   width: 100%;
   z-index: -100;
   @media (max-width: 1024px) {

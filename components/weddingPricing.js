@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
 import ContactForm from "./common/contactForm";

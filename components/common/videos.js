@@ -24,7 +24,6 @@ const Videos = ({
   page,
   data,
   handleClick,
-  imageLoaded,
   selectedVideo,
   isOpen,
   closeOverlay,
@@ -39,11 +38,11 @@ const Videos = ({
   const [positionY, setPositionY] = useState(0);
   const [scrollingDown, setScrollingDown] = useState(false);
   const [stateChange, setStateChange] = useState(false);
-  const [hover, setHover] = useState(false);
+  // const [hover, setHover] = useState(false);
   const timeout = useRef(null);
 
   const { ref, inView, entry } = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     rootMargin: "0px 0px",
   });
 
@@ -108,17 +107,13 @@ const Videos = ({
     }
   };
 
-  const handleOnLoadOutside = () => {
-    console.log("hey");
-  };
+  const handleOnLoadOutside = () => {};
 
   // Framer Motion Animation
 
   const container = {
     hidden: {
       transition: {
-        delayChildren: 0.2,
-        staggerChildren: 0.09,
         staggerDirection: -1,
       },
     },
@@ -475,7 +470,6 @@ const PlayIconContainer = styled(motion.div)`
 `;
 
 const Dot = styled(motion.div)`
-  ${"" /* z-index: 14; */}
   width: 60%;
   height: 60%;
   border-radius: 50%;
@@ -501,11 +495,6 @@ const Item = styled(motion.li)`
   display: flex;
   justify-content: center;
   flex-direction: column;
-`;
-
-const Img = styled(motion.img)`
-  width: 100%;
-  max-width: 500px;
 `;
 
 const Names = styled(motion.label)`

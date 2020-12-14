@@ -2,13 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import AppContext from "../../context/appContext";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import AdminSidebar from "../../components/AdminSidebar";
 import { getCurrentUser } from "../api/auth";
 
 const Admin = () => {
   const context = useContext(AppContext);
-  const { handleSignOut } = context;
   const [user, setUser] = useState(null);
   const router = useRouter();
 

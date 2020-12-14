@@ -27,9 +27,8 @@ const VideoLoader = ({
   const timeout = useRef(null);
 
   const { ref, inView } = useInView({
-    rootMargin: "-500px",
+    rootMargin: "500px 0px",
     triggerOnce: false,
-    threshold: 0, // a number between 0 - 1. 1 being the whole element must be in view for it to load if the root margin is 0px
   });
 
   useEffect(() => {

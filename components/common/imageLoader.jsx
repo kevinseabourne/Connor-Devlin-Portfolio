@@ -16,6 +16,7 @@ const ImageLoader = ({
   onClick,
   borderRadius,
   hover,
+  duration,
   transitionTiming,
   transitionDuration,
   boxShadow,
@@ -46,10 +47,10 @@ const ImageLoader = ({
 
   const animation = {
     hidden: {
-      opacity: opacity ? opacity : 1,
+      opacity: opacity === undefined ? 1 : opacity,
       y: y ? y : 0,
       x: x ? x : 0,
-      scale: scale ? scale : 1,
+      scale: scale === undefined ? 1 : scale,
       filter: blur ? `blur(${blur}px)` : `blur(0px)`,
     },
     show: {
@@ -60,6 +61,7 @@ const ImageLoader = ({
       filter: `blur(0px)`,
       transition: {
         type: "spring",
+        duration: duration ? duration : undefined,
         delay: delay ? delay : 0,
       },
     },

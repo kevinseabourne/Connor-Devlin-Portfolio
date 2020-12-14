@@ -4,7 +4,7 @@ import ImageLoader from "./common/imageLoader";
 import Link from "next/link";
 import BurgerBar from "./common/burgerBar";
 
-const Header = (props) => {
+const Header = () => {
   const ref = useRef(null);
   const [links] = useState([
     { title: "About", link: "/about" },
@@ -83,8 +83,11 @@ const Header = (props) => {
               width="100%"
               placeholderSize="13.2%"
               hover={true}
+              opacity={0}
+              scale={0}
+              duration={0.1}
               lazyLoad={true}
-              src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=350&png.optimize=true"
+              src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
             />
           </Logo>
         </NameContainer>
@@ -151,18 +154,6 @@ const NameContainer = styled.a`
   }
 `;
 
-const LogoNameContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
-const LogoSecondLabel = styled.label`
-  margin-left: 21.2px;
-  font-size: 1rem:
-`;
-
 const Logo = styled.div`
   z-index: -1;
   width: 240px;
@@ -172,14 +163,6 @@ const Logo = styled.div`
   @media (max-width: 335px) {
     width: 180px;
   }
-`;
-
-const Name = styled.label`
-  font-size: 24px;
-  white-space: nowrap;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 20px;
 `;
 
 const LinksContainer = styled.div`
