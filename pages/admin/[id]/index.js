@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ErrorMessage from "../../../components/common/errorMessage";
 import AdminAbout from "../../../components/adminAbout";
 import AdminContentPage from "../../../components/common/adminContentPage";
 import AdminAddPricing from "../../../components/adminAddPricing";
@@ -14,25 +15,31 @@ import AdminSidebar from "../../../components/AdminSidebar";
 const AdminRoute = ({ params, data }) => {
   switch (params.id) {
     case "about":
-      return (
+      return data ? (
         <Container>
           <AdminSidebar />
           <AdminAbout data={data} />
         </Container>
+      ) : (
+        <ErrorMessage />
       );
     case "weddings":
-      return (
+      return data ? (
         <Container>
           <AdminSidebar />
           <AdminContentPage data={data} page="weddings" />
         </Container>
+      ) : (
+        <ErrorMessage />
       );
     case "corporate":
-      return (
+      return data ? (
         <Container>
           <AdminSidebar />
           <AdminContentPage data={data} page="corporate" />
         </Container>
+      ) : (
+        <ErrorMessage />
       );
     case "add-pricing":
       return (

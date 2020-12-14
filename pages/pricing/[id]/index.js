@@ -3,10 +3,15 @@ import React, { useEffect } from "react";
 import WeddingPricing from "../../../components/weddingPricing";
 import CorporatePricing from "../../../components/corporatePricing";
 import { getAllPricingPackages, getAddOns } from "../../api/pricing";
+import ErrorMessage from "../../../components/common/errorMessage";
 
 const Pricing = ({ params, data }) => {
   return params.id === "weddings" ? (
-    <WeddingPricing data={data} />
+    data ? (
+      <WeddingPricing data={data} />
+    ) : (
+      <ErrorMessage />
+    )
   ) : (
     <CorporatePricing />
   );

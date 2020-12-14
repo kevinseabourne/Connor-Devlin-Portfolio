@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ImageLoader from "../components/common/imageLoader";
+import ErrorMessage from "../components/common/errorMessage";
 import topWave from "../public/images/wave4.svg";
 import { getAboutMe } from "./api/about";
 import { motion } from "framer-motion";
@@ -78,7 +79,7 @@ const About = ({ data }) => {
     },
   };
 
-  return (
+  return data ? (
     <Container variants={container} initial="hidden" animate="show">
       <ImageWrapper>
         <ImageContainer variants={childAnimationDown}>
@@ -102,6 +103,8 @@ const About = ({ data }) => {
         </InfoContainer>
       </Wrapper>
     </Container>
+  ) : (
+    <ErrorMessage />
   );
 };
 
