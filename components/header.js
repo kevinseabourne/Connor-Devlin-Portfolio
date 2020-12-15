@@ -116,7 +116,7 @@ export default Header;
 const Container = styled.div`
   width: 100%;
   height: 75px;
-  position: sticky;
+  position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
