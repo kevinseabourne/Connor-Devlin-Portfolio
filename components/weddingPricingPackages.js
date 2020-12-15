@@ -15,8 +15,6 @@ const WeddingPricingPackages = ({
   selectedItem,
   handleDeletePricingPackage,
 }) => {
-  const [positionY, setPositionY] = useState(0);
-  const [scrollingDown, setScrollingDown] = useState(false);
   const [stateChange, setStateChange] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const prevDeletePopup = usePrevious(deletePopup);
@@ -24,24 +22,12 @@ const WeddingPricingPackages = ({
   const deletePopupRef = useRef(null);
   const timeout = useRef(null);
 
-  const { ref, inView, entry } = useInView({
-    triggerOnce: false,
-    rootMargin: "0px 0px",
-  });
-
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    if (entry) {
-      setScrollingDown(positionY > entry.boundingClientRect.y);
-      setPositionY(entry.boundingClientRect.y);
-    }
-  }, [entry]);
 
   useEffect(() => {
     setStateChange(true);
@@ -86,7 +72,7 @@ const WeddingPricingPackages = ({
       transition: {
         delayChildren: stateChange ? 0.7 : 0,
         staggerChildren: 0.12,
-        staggerDirection: scrollingDown ? -1 : 1,
+        staggerDirection: 1,
       },
     },
   };
@@ -146,10 +132,9 @@ const WeddingPricingPackages = ({
   return (
     <AnimateSharedLayout>
       <PackagesContainer
-        ref={ref}
         variants={parent}
         initial="hidden"
-        animate={inView ? "show" : "hidden"}
+        animate="show"
         exit="hidden"
         layout
       >

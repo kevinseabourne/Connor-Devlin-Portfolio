@@ -61,7 +61,7 @@ const PlaceHolderContainer = styled(motion.div)`
   margin-left: ${({ marginLeft }) => (marginLeft ? marginLeft : "0px")};
   margin-right: ${({ marginRight }) => (marginRight ? marginRight : "0px")};
   position: relative;
-  z-index: 20;
+  z-index: 3;
   background-color: white;
   overflow: hidden;
   box-shadow: 0px 10px 40px -10px rgba(0, 64, 128, 0.2);

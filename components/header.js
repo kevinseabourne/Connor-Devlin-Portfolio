@@ -76,55 +76,65 @@ const Header = () => {
   };
   return (
     <Container>
-      <Link href="/" passHref>
-        <NameContainer>
-          <Logo>
-            <ImageLoader
-              width="100%"
-              placeholderSize="13.2%"
-              hover={true}
-              opacity={0}
-              scale={0}
-              duration={0.1}
-              lazyLoad={true}
-              src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
-            />
-          </Logo>
-        </NameContainer>
-      </Link>
+      <InnerContainer>
+        <Link href="/" passHref>
+          <NameContainer>
+            <Logo>
+              <ImageLoader
+                width="100%"
+                placeholderSize="13.2%"
+                hover={true}
+                opacity={0}
+                scale={0}
+                duration={0.1}
+                lazyLoad={true}
+                src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
+              />
+            </Logo>
+          </NameContainer>
+        </Link>
 
-      <LinksContainer>
-        {links.map((link) => (
-          <Link key={links.indexOf(link)} href={link.link} passHref>
-            <LinkTitle>{link.title}</LinkTitle>
-          </Link>
-        ))}
-      </LinksContainer>
-      <BurgerBar
-        ref={ref}
-        adminLinks={adminLinks}
-        handleBurgerClick={handleBurgerClick}
-        burgerOpen={burgerOpen}
-        links={links}
-      />
+        <LinksContainer>
+          {links.map((link) => (
+            <Link key={links.indexOf(link)} href={link.link} passHref>
+              <LinkTitle>{link.title}</LinkTitle>
+            </Link>
+          ))}
+        </LinksContainer>
+        <BurgerBar
+          ref={ref}
+          adminLinks={adminLinks}
+          handleBurgerClick={handleBurgerClick}
+          burgerOpen={burgerOpen}
+          links={links}
+        />
+      </InnerContainer>
     </Container>
   );
 };
 
 export default Header;
 
-const Container = styled.div`
+const Container = styled.header`
   width: 100%;
   height: 75px;
-  position: absolute;
-  z-index: 1;
+  position: sticky;
+  position: -webkit-sticky;
+  z-index: 5;
   top: 0;
   left: 0;
-  display: flex;
-  align-items: center;
+  display: block;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   box-shadow: 0px 0px 6px 1px rgba(50, 172, 109, 0.7);
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: auto;
 `;
 
 const NameContainer = styled.a`

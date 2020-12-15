@@ -63,7 +63,7 @@ const AdminSidebar = (props) => {
     hidden: {},
     show: {
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0,
       },
     },
   };

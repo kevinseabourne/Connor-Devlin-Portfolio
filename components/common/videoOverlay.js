@@ -16,7 +16,6 @@ const VideoOverlay = ({
 }) => {
   const spinnerRef = useRef(null);
   const videoRef = useRef(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
@@ -86,7 +85,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 10;
   background-color: rgba(15, 15, 15, 0.8);
   display: flex;
   justify-content: center;
@@ -119,15 +118,6 @@ const Overlay = styled.div`
   &.overlayAnimation-exit-active {
     opacity: 0;
   }
-`;
-
-const Spinner = styled.div``;
-
-const Trailer = styled.iframe`
-  height: 59%;
-  width: 65%;
-  padding-top: 77px;
-  box-shadow: 0px 17px 10px -10px rgba(0, 0, 0, 0.4);
 `;
 
 const VideoContainer = styled.div`

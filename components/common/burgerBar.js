@@ -168,6 +168,7 @@ const Overlay = styled.div`
   position: fixed;
   right: 0;
   top: 0;
+  z-index: 10;
   width: 100%;
   height: 100%;
   transition: all 0.3s;
@@ -197,7 +198,7 @@ const Content = styled.div`
   padding-top: 108px;
   height: 100vh;
   display: flex;
-  z-index: 1;
+  z-index: 10;
   padding-right: 20px;
   padding-left: 20px;
   box-sizing: border-box;
