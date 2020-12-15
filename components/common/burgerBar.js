@@ -198,7 +198,7 @@ const Content = styled.div`
   padding-top: 108px;
   height: 100vh;
   display: flex;
-  z-index: 10;
+  z-index: 12;
   padding-right: 20px;
   padding-left: 20px;
   box-sizing: border-box;

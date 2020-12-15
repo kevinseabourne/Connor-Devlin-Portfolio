@@ -39,15 +39,15 @@ const Videos = ({
     rootMargin: "0px 0px",
   });
 
-  useEffect(() => {
-    browserCheck();
-    window.addEventListener("load", handleContentLoaded);
-    window.addEventListener("pageshow", handleContentLoaded);
-    return () => {
-      window.removeEventListener("load", handleContentLoaded);
-      window.removeEventListener("pageshow", handleContentLoaded);
-    };
-  }, []);
+  // useEffect(() => {
+  //   browserCheck();
+  //   window.addEventListener("load", handleContentLoaded);
+  //   window.addEventListener("pageshow", handleContentLoaded);
+  //   return () => {
+  //     window.removeEventListener("load", handleContentLoaded);
+  //     window.removeEventListener("pageshow", handleContentLoaded);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (entry) {
@@ -131,12 +131,9 @@ const Videos = ({
   };
 
   const handleOnLoadOutside = (id) => {
-    const stateClone = cloneDeep(state);
-    const updatedState = stateClone.map((item) => {
-      id === item.id && (item.imageLoaded = true);
-      return item;
-    });
-    setState(updatedState);
+    if (id === state[state.length - 1].id) {
+      handleContentLoaded();
+    }
   };
 
   // Framer Motion Animation
