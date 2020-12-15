@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import styled, { keyframes, css } from "styled-components";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { LoadingSpinner } from "../loading-spinner";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
 import "intersection-observer";
@@ -10,7 +11,9 @@ const ImageLoader = ({
   width,
   maxWidth,
   placeholderSize,
+  placeholderColor,
   alt,
+  itemId,
   keyValue,
   dataTestId,
   onClick,
@@ -20,20 +23,23 @@ const ImageLoader = ({
   transitionTiming,
   transitionDuration,
   boxShadow,
+  loadingSpinner, // true or false to show a loading spinner when the image is still loading
+  loaderPlaceholder, // true or false to show a loader placeholder when the image is still loading
+  loaderPlaceholderDuration,
   centerImage,
+  contentLoaded,
   handleOnLoadOutside,
-  editDeleteContent,
   y,
   x,
+  zIndex,
   blur,
   scale,
   opacity,
   delay,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [mountAnimationComplete, setMountAnimationComplete] = useState(false);
 
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: false,
     rootMargin: "500px 0px",
   });
@@ -41,7 +47,7 @@ const ImageLoader = ({
   const onLoad = () => {
     setIsLoaded(true);
     if (handleOnLoadOutside) {
-      handleOnLoadOutside();
+      handleOnLoadOutside(itemId);
     }
   };
 
@@ -78,10 +84,12 @@ const ImageLoader = ({
       <Placeholder
         borderRadius={borderRadius}
         onClick={onClick}
+        contentLoaded={contentLoaded}
+        zIndex={zIndex}
         placeholderSize={placeholderSize}
+        placeholderColor={placeholderColor}
       />
-
-      {inView && (
+      {src && inView && (
         <Image
           variants={animation}
           initial="hidden"
@@ -89,6 +97,7 @@ const ImageLoader = ({
           onLoad={onLoad}
           src={src}
           srcSet={srcSet}
+          contentLoaded={contentLoaded}
           alt={alt}
           key={keyValue}
           data-testid={dataTestId}
@@ -97,7 +106,23 @@ const ImageLoader = ({
           hover={hover}
           borderRadius={borderRadius}
           boxShadow={boxShadow}
-          editDeleteContent={editDeleteContent}
+        />
+      )}
+
+      {loadingSpinner && !isLoaded && <LoadingSpinner size="39px" />}
+
+      {loaderPlaceholder && (
+        <LoaderPlaceholder
+          zIndex={zIndex}
+          initial={{ x: "-100%" }}
+          animate={{ x: "100%" }}
+          transition={{
+            type: "spring",
+            repeat: Infinity,
+            duration: loaderPlaceholderDuration
+              ? loaderPlaceholderDuration
+              : 1.5,
+          }}
         />
       )}
     </ImageContainer>
@@ -116,13 +141,17 @@ const ImageContainer = styled(motion.div)`
   background: transparent;
   margin: ${({ centerImage }) => (centerImage ? "auto" : "none")};
   z-index: ${({ hoverColor }) => (hoverColor ? "auto" : "0")};
+  border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
+  overflow: ${({ src }) => (src ? "default" : "hidden")};
 `;
 
 const Placeholder = styled(motion.div)`
   width: 100%;
+  z-index: ${({ zIndex }) => (zIndex ? zIndex : "default")};
   padding-bottom: ${({ placeholderSize }) =>
     placeholderSize ? placeholderSize : "100%"};
-  background: transparent;
+  background: ${({ placeholderColor }) =>
+    placeholderColor ? placeholderColor : "transparent"};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
 `;
 
@@ -144,17 +173,19 @@ const Image = styled(motion.img)`
   }
   `;
 
-const Icon = styled(motion.img)`
-  position: absolute;
-  object-fit: contain;
-  display: ${({ iconSrc }) => (iconSrc ? "flex" : "none")};
-  object-position: center;
-  max-width: ${({ iconMaxWidth }) => iconMaxWidth};
-  max-height: ${({ iconMaxHeight }) => iconMaxHeight};
+const LoaderPlaceholder = styled(motion.div)`
   width: 100%;
   height: 100%;
-  margin: auto;
-  &:hover {
-    cursor: ${({ hover }) => (hover ? "pointer" : "default")};
-  }
+  z-index: ${({ zIndex }) => (zIndex ? zIndex : "default")};
+  background-image: linear-gradient(
+    0.25turn,
+    transparent 0%,
+    #d1d5db 25%,
+    transparent 50%
+  );
+  position: absolute;
+  vertical-align: middle;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
 `;

@@ -4,18 +4,12 @@ import playIcon from "../../public/images/playIcon.svg";
 import ImageLoader from "./imageLoader";
 import VideoOverlay from "./videoOverlay";
 import moment from "moment";
-import lodash from "lodash";
 import { handleWeddingNames } from "./utils/handleWeddingName";
 import { LoadingSpinner } from "../loading-spinner";
-import {
-  motion,
-  AnimatePresence,
-  AnimateSharedLayout,
-  useViewportScroll,
-  useTransform,
-} from "framer-motion";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { getNextWeddings } from "../../pages/api/weddings";
 import DeleteContent from "../deleteContent";
+import LoadingPlaceholder from "../common/loadingPlaceholder";
 import cloneDeep from "lodash/cloneDeep";
 import { useInView } from "react-intersection-observer";
 import "intersection-observer";
@@ -33,18 +27,27 @@ const Videos = ({
   handleDeleteContentPopUp,
 }) => {
   const [state, setState] = useState([]);
-  const [mount, setMount] = useState(false);
   const [status, setStatus] = useState("idle");
   const [positionY, setPositionY] = useState(0);
   const [scrollingDown, setScrollingDown] = useState(false);
-  const [stateChange, setStateChange] = useState(false);
-  // const [hover, setHover] = useState(false);
+  const [contentLoaded, setContentLoaded] = useState("");
   const timeout = useRef(null);
+  const timeoutTwo = useRef(null);
 
   const { ref, inView, entry } = useInView({
     triggerOnce: false,
     rootMargin: "0px 0px",
   });
+
+  useEffect(() => {
+    browserCheck();
+    window.addEventListener("load", handleContentLoaded);
+    window.addEventListener("pageshow", handleContentLoaded);
+    return () => {
+      window.removeEventListener("load", handleContentLoaded);
+      window.removeEventListener("pageshow", handleContentLoaded);
+    };
+  }, []);
 
   useEffect(() => {
     if (entry) {
@@ -54,17 +57,14 @@ const Videos = ({
   }, [entry]);
 
   useEffect(() => {
-    setStateChange(true);
-    timeout.current = setTimeout(() => {
-      setStateChange(false);
-    }, 1000);
-    return () => clearTimeout(timeout.current);
+    return () => {
+      clearTimeout(timeout.current);
+      clearTimeout(timeoutTwo.current);
+    };
   }, [state]);
 
   useEffect(() => {
     setState(data);
-    setMount(true);
-    return () => setMount(false);
   }, [data]);
 
   const handleShowMore = async () => {
@@ -91,6 +91,12 @@ const Videos = ({
     setStatus("resolved");
   };
 
+  const handleContentLoaded = () => {
+    timeoutTwo.current = setTimeout(() => {
+      setContentLoaded(true);
+    }, 400);
+  };
+
   const handleHover = (id) => {
     if (!editDeleteContent) {
       const stateClone = cloneDeep(state);
@@ -107,7 +113,31 @@ const Videos = ({
     }
   };
 
-  const handleOnLoadOutside = () => {};
+  const browserCheck = () => {
+    // the window.load event was not working with safari, block view of the content
+    // if the browser is safari it will show the content even if the page has not fully load
+    // not ideal but it better than showing nothing.
+    const isSafari =
+      /constructor/i.test(window.HTMLElement) ||
+      (function (p) {
+        return p.toString() === "[object SafariRemoteNotification]";
+      })(
+        !window["safari"] ||
+          (typeof safari !== "undefined" && window["safari"].pushNotification)
+      );
+    if (isSafari) {
+      setContentLoaded(true);
+    }
+  };
+
+  const handleOnLoadOutside = (id) => {
+    const stateClone = cloneDeep(state);
+    const updatedState = stateClone.map((item) => {
+      id === item.id && (item.imageLoaded = true);
+      return item;
+    });
+    setState(updatedState);
+  };
 
   // Framer Motion Animation
 
@@ -119,8 +149,7 @@ const Videos = ({
     },
     show: {
       transition: {
-        delayChildren: 0.2,
-        staggerChildren: 0.2,
+        staggerChildren: 0.3,
         staggerDirection: scrollingDown ? -1 : 1,
       },
     },
@@ -140,12 +169,12 @@ const Videos = ({
     hidden: {
       backgroundColor: "rgba(255, 255, 255, 1)",
       opacity: 0,
-      transform: "scale(0)",
+      scale: 0,
     },
     show: {
       backgroundColor: "rgba(50,172,109,1)",
       opacity: 1,
-      transform: "scale(1)",
+      scale: 1,
       transition: {
         type: "spring",
         stiffness: 800,
@@ -168,14 +197,17 @@ const Videos = ({
   };
 
   const parent = {
-    hidden: { scale: 1 },
-    show: { scale: 1 },
+    hidden: { opacity: 0, y: -12 },
+    show: {
+      opacity: 1,
+      y: 0,
+    },
   };
 
   const child = {
     hidden: {
       opacity: 0,
-      y: 10,
+      y: 0,
       scale: 0,
     },
     show: {
@@ -214,6 +246,28 @@ const Videos = ({
               exit="hidden"
               className="item"
             >
+              {!contentLoaded && (
+                <LoadingContainer variants={parent} exit="hidden">
+                  <LoadingPlaceholder
+                    marginLeft="auto"
+                    marginRight="auto"
+                    maxWidth="690px"
+                    height="100%"
+                    borderRadius="9px"
+                    duration={2.3}
+                  />
+                  <LoadingPlaceholder
+                    marginTop="9px"
+                    marginLeft="auto"
+                    marginRight="auto"
+                    maxWidth="60%"
+                    height="28px"
+                    borderRadius="9px"
+                    duration={2.3}
+                  />
+                </LoadingContainer>
+              )}
+
               <ImageContainer
                 onClick={() => handleClick(item.id)}
                 onKeyDown={(e) => {
@@ -223,36 +277,27 @@ const Videos = ({
                 data-testid="item"
                 variants={parent}
                 initial="hidden"
+                animate={contentLoaded ? "show" : "hidden"}
                 onPointerEnter={() => handleHover(item.id)}
                 onPointerLeave={() => handleHover(item.id)}
               >
                 <ImageLoader
+                  itemId={item.id}
                   maxWidth="100%"
-                  placeholderSize="56.2%"
+                  placeholderSize="56.3%"
                   src={item.coverPhoto}
                   hover={true}
                   borderRadius="19px"
-                  opacity="0"
-                  scale="0.99"
-                  transitionDuration={350}
+                  opacity={0}
                   transitionTiming="ease"
                   boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
                   borderRadius={"9px"}
                   handleOnLoadOutside={handleOnLoadOutside}
-                  iconSrc={editDeleteContent ? null : null}
-                  iconMaxWidth="45px"
                   alt={page === "weddings" ? item.displayNames : item.company}
-                  editDeleteContent={editDeleteContent}
-                  iconMaxHeight="45px"
                   dataTestId="weddingPhoto"
-                  handleOnLoadOutside={handleOnLoadOutside}
                 />
-                {!editDeleteContent && (
-                  <PlayIconContainer
-                    variants={child}
-                    initial="hidden"
-                    animate={item.hover ? { scale: 1.1 } : { scale: 1 }}
-                  >
+                {contentLoaded && !editDeleteContent && (
+                  <PlayIconContainer variants={child}>
                     <ImageLoader
                       maxWidth="inherit"
                       placeholderSize="100%"
@@ -264,7 +309,7 @@ const Videos = ({
                   </PlayIconContainer>
                 )}
 
-                {editDeleteContent && (
+                {contentLoaded && editDeleteContent && (
                   <EditDeleteContainer>
                     <SelectedVideoButton>
                       <Dot
@@ -288,8 +333,7 @@ const Videos = ({
                         <ImageLoader
                           maxWidth="20px"
                           placeholderSize="100%"
-                          opacity="0"
-                          transitionTime="300ms ease"
+                          opacity={0}
                           hover={true}
                           alt="delete"
                           src={
@@ -302,6 +346,7 @@ const Videos = ({
                   </EditDeleteContainer>
                 )}
               </ImageContainer>
+
               {!showAdminContentData && (
                 <Names
                   title="contentName"
@@ -313,7 +358,7 @@ const Videos = ({
                 </Names>
               )}
 
-              {showAdminContentData && (
+              {contentLoaded && showAdminContentData && (
                 <WrappedNames onClick={() => handleClick(item.id)}>
                   {item.displayNames
                     ? item.displayNames.replace("&", "\n")
@@ -345,6 +390,7 @@ const Videos = ({
             centerVideo={true}
           />
         </VideoContainer>
+
         {state.length >= 20 && (
           <ShowMoreButton
             layout
@@ -398,6 +444,13 @@ const VideoContainer = styled(motion.ul)`
     grid-template-columns: repeat(1, minmax(100px, 1fr));
     grid-gap: calc(100vw * 0.1) 20px;
   }
+`;
+
+const LoadingContainer = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 20;
 `;
 
 const PlayIcon = styled.div`
@@ -495,6 +548,7 @@ const Item = styled(motion.li)`
   display: flex;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 `;
 
 const Names = styled(motion.label)`
@@ -503,6 +557,7 @@ const Names = styled(motion.label)`
   margin-left: auto;
   margin-right: auto;
   white-space: normal;
+  position: relative;
   transition: all 0.15s ease-in-out;
   &:hover {
     cursor: pointer;
