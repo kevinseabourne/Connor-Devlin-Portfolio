@@ -8,8 +8,8 @@ import { handleWeddingNames } from "./utils/handleWeddingName";
 import { LoadingSpinner } from "../loading-spinner";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { getNextWeddings } from "../../pages/api/weddings";
-import DeleteContent from "../deleteContent";
 import LoadingPlaceholder from "../common/loadingPlaceholder";
+import ImageVideoLoadingPlaceholder from "../common/imageVideoLoadingPlaceholder";
 import cloneDeep from "lodash/cloneDeep";
 import { useInView } from "react-intersection-observer";
 import "intersection-observer";
@@ -30,7 +30,7 @@ const Videos = ({
   const [status, setStatus] = useState("idle");
   const [positionY, setPositionY] = useState(0);
   const [scrollingDown, setScrollingDown] = useState(false);
-  const [contentLoaded, setContentLoaded] = useState("");
+  const [contentLoaded, setContentLoaded] = useState(false);
   const timeout = useRef(null);
   const timeoutTwo = useRef(null);
 
@@ -38,16 +38,6 @@ const Videos = ({
     triggerOnce: false,
     rootMargin: "0px 0px",
   });
-
-  // useEffect(() => {
-  //   browserCheck();
-  //   window.addEventListener("load", handleContentLoaded);
-  //   window.addEventListener("pageshow", handleContentLoaded);
-  //   return () => {
-  //     window.removeEventListener("load", handleContentLoaded);
-  //     window.removeEventListener("pageshow", handleContentLoaded);
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (entry) {
@@ -91,12 +81,6 @@ const Videos = ({
     setStatus("resolved");
   };
 
-  const handleContentLoaded = () => {
-    timeoutTwo.current = setTimeout(() => {
-      setContentLoaded(true);
-    }, 400);
-  };
-
   const handleHover = (id) => {
     if (!editDeleteContent) {
       const stateClone = cloneDeep(state);
@@ -113,26 +97,11 @@ const Videos = ({
     }
   };
 
-  const browserCheck = () => {
-    // the window.load event was not working with safari, block view of the content
-    // if the browser is safari it will show the content even if the page has not fully load
-    // not ideal but it better than showing nothing.
-    const isSafari =
-      /constructor/i.test(window.HTMLElement) ||
-      (function (p) {
-        return p.toString() === "[object SafariRemoteNotification]";
-      })(
-        !window["safari"] ||
-          (typeof safari !== "undefined" && window["safari"].pushNotification)
-      );
-    if (isSafari) {
-      setContentLoaded(true);
-    }
-  };
-
   const handleOnLoadOutside = (id) => {
     if (id === state[state.length - 1].id) {
-      handleContentLoaded();
+      timeoutTwo.current = setTimeout(() => {
+        setContentLoaded(true);
+      }, 1000);
     }
   };
 
@@ -146,7 +115,7 @@ const Videos = ({
     },
     show: {
       transition: {
-        staggerChildren: 0.3,
+        staggerChildren: 0.2,
         staggerDirection: scrollingDown ? -1 : 1,
       },
     },
@@ -159,7 +128,13 @@ const Videos = ({
 
   const itemB = {
     hidden: { opacity: 0 },
-    show: { opacity: 1 },
+    show: {
+      opacity: 1,
+      transition: {
+        type: "spring",
+        duration: 0.1,
+      },
+    },
   };
 
   const dotAnimation = {
@@ -193,11 +168,27 @@ const Videos = ({
     },
   };
 
-  const parent = {
-    hidden: { opacity: 0, y: -12 },
+  const loaderAnimation = {
+    hidden: { opacity: 0, scale: 0.8, y: 120 },
     show: {
       opacity: 1,
+      scale: 1,
       y: 0,
+      transition: {
+        type: "spring",
+        duration: 0.1,
+      },
+    },
+  };
+
+  const itemAnimation = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        type: "spring",
+        duration: 0.1,
+      },
     },
   };
 
@@ -210,7 +201,7 @@ const Videos = ({
     show: {
       opacity: 1,
       y: 0,
-      scale: [0, 1, 0.84, 1, 0.95, 1],
+      scale: 1,
       transition: {
         type: "spring",
         damping: 12,
@@ -225,185 +216,188 @@ const Videos = ({
     show: { scale: 1, opacity: 1, transition: { type: "spring" } },
   };
 
+  //  scale: [0, 1, 0.84, 1, 0.95, 1];
+
   return (
     <AnimateSharedLayout>
-      <Container
-        variants={container}
-        initial="hidden"
-        animate={inView ? "show" : "hidden"}
-        exit="hidden"
-        layout
-      >
-        <VideoContainer data-testid="videoContainer" ref={ref} layout>
-          {state.map((item) => (
-            <Item
-              key={item.id}
-              variants={itemA}
-              layoutId={item.id}
-              exit="hidden"
-              className="item"
-            >
-              {!contentLoaded && (
-                <LoadingContainer variants={parent} exit="hidden">
-                  <LoadingPlaceholder
-                    marginLeft="auto"
-                    marginRight="auto"
-                    maxWidth="690px"
-                    height="100%"
-                    borderRadius="9px"
-                    duration={2.3}
-                  />
-                  <LoadingPlaceholder
-                    marginTop="9px"
-                    marginLeft="auto"
-                    marginRight="auto"
-                    maxWidth="60%"
-                    height="28px"
-                    borderRadius="9px"
-                    duration={2.3}
-                  />
-                </LoadingContainer>
-              )}
-
-              <ImageContainer
-                onClick={() => handleClick(item.id)}
-                onKeyDown={(e) => {
-                  const key = e.key === 27 || e.keyCode === 27;
-                  key && handleClick(item.id);
-                }}
-                data-testid="item"
-                variants={parent}
-                initial="hidden"
-                animate={contentLoaded ? "show" : "hidden"}
-                onPointerEnter={() => handleHover(item.id)}
-                onPointerLeave={() => handleHover(item.id)}
+      <AnimatePresence>
+        <Container
+          variants={container}
+          initial="hidden"
+          animate={inView ? "show" : "hidden"}
+          exit="hidden"
+          layout
+        >
+          <VideoContainer data-testid="videoContainer" ref={ref}>
+            {state.map((item) => (
+              <Item
+                key={item.id}
+                variants={itemA}
+                layoutId={item.id}
+                exit="hidden"
+                className="item"
               >
-                <ImageLoader
-                  itemId={item.id}
-                  maxWidth="100%"
-                  placeholderSize="56.3%"
-                  src={item.coverPhoto}
-                  hover={true}
-                  borderRadius="19px"
-                  opacity={0}
-                  transitionTiming="ease"
-                  boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
-                  borderRadius={"9px"}
-                  handleOnLoadOutside={handleOnLoadOutside}
-                  alt={page === "weddings" ? item.displayNames : item.company}
-                  dataTestId="weddingPhoto"
-                />
-                {contentLoaded && !editDeleteContent && (
-                  <PlayIconContainer variants={child}>
-                    <ImageLoader
-                      maxWidth="inherit"
-                      placeholderSize="100%"
-                      hover={true}
-                      alt="play Icon"
-                      src={playIcon}
-                      centerImage={true}
+                {!contentLoaded && (
+                  <LoadingContainer variants={loaderAnimation} exit="hidden">
+                    <ImageVideoLoadingPlaceholder
+                      placeholderSize="56.3%"
+                      maxWidth="690px"
+                      borderRadius="9px"
+                      duration={1.3}
                     />
-                  </PlayIconContainer>
+                    <LoadingPlaceholder
+                      marginTop="9px"
+                      marginLeft="auto"
+                      marginRight="auto"
+                      maxWidth="60%"
+                      height="28px"
+                      borderRadius="9px"
+                      duration={1.3}
+                    />
+                  </LoadingContainer>
                 )}
 
-                {contentLoaded && editDeleteContent && (
-                  <EditDeleteContainer>
-                    <SelectedVideoButton>
-                      <Dot
-                        variants={dotAnimation}
-                        animate={
-                          selectedVideo.id === item.id ? "show" : "hidden"
-                        }
-                      />
-                    </SelectedVideoButton>
-                    <AnimatePresence>
-                      <DeleteIconContainer
-                        onClick={() => {
-                          handleDeleteContentPopUp();
-                          // play();
-                        }}
-                        variants={variants}
-                        animate={
-                          selectedVideo.id === item.id ? "show" : "hidden"
-                        }
-                      >
-                        <ImageLoader
-                          maxWidth="20px"
-                          placeholderSize="100%"
-                          opacity={0}
-                          hover={true}
-                          alt="delete"
-                          src={
-                            "https://chpistel.sirv.com/Connor-Portfolio/clear.png?colorlevel.white=0&w=40"
-                          }
-                          centerImage={true}
-                        />
-                      </DeleteIconContainer>
-                    </AnimatePresence>
-                  </EditDeleteContainer>
-                )}
-              </ImageContainer>
-
-              {!showAdminContentData && (
-                <Names
-                  title="contentName"
-                  variants={itemB}
-                  key={state.indexOf(item)}
+                <ImageContainer
                   onClick={() => handleClick(item.id)}
+                  onKeyDown={(e) => {
+                    const key = e.key === 27 || e.keyCode === 27;
+                    key && handleClick(item.id);
+                  }}
+                  data-testid="item"
+                  variants={itemAnimation}
+                  animate={contentLoaded ? "show" : "hidden"}
+                  onPointerEnter={() => handleHover(item.id)}
+                  onPointerLeave={() => handleHover(item.id)}
                 >
-                  {page === "weddings" ? item.displayNames : item.company}
-                </Names>
-              )}
-
-              {contentLoaded && showAdminContentData && (
-                <WrappedNames onClick={() => handleClick(item.id)}>
-                  {item.displayNames
-                    ? item.displayNames.replace("&", "\n")
-                    : item.company}
-                </WrappedNames>
-              )}
-
-              {showAdminContentData && (
-                <AdminVideoContent>
-                  <EventDate>{item.date}</EventDate>
-                  {page === "wedings" && (
-                    <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
+                  <ImageLoader
+                    itemId={item.id}
+                    maxWidth="100%"
+                    placeholderSize="56.3%"
+                    src={item.coverPhoto}
+                    hover={true}
+                    opacity={0}
+                    transitionTiming="ease"
+                    boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
+                    borderRadius={"9px"}
+                    handleOnLoadOutside={handleOnLoadOutside}
+                    alt={page === "weddings" ? item.displayNames : item.company}
+                    dataTestId="weddingPhoto"
+                  />
+                  {!editDeleteContent && (
+                    <PlayIconContainer
+                      variants={child}
+                      animate={item.hover ? { scale: 1.1 } : { scale: 1 }}
+                    >
+                      <ImageLoader
+                        maxWidth="inherit"
+                        placeholderSize="100%"
+                        hover={true}
+                        alt="play Icon"
+                        src={playIcon}
+                        centerImage={true}
+                      />
+                    </PlayIconContainer>
                   )}
-                  {page === "corporate" && (
-                    <Description>{item.description}</Description>
+
+                  {editDeleteContent && (
+                    <EditDeleteContainer>
+                      <SelectedVideoButton>
+                        <Dot
+                          variants={dotAnimation}
+                          animate={
+                            selectedVideo.id === item.id ? "show" : "hidden"
+                          }
+                        />
+                      </SelectedVideoButton>
+                      <AnimatePresence>
+                        <DeleteIconContainer
+                          onClick={() => {
+                            handleDeleteContentPopUp();
+                            // play();
+                          }}
+                          variants={variants}
+                          animate={
+                            selectedVideo.id === item.id ? "show" : "hidden"
+                          }
+                        >
+                          <ImageLoader
+                            maxWidth="20px"
+                            placeholderSize="100%"
+                            opacity={0}
+                            hover={true}
+                            alt="delete"
+                            src={
+                              "https://chpistel.sirv.com/Connor-Portfolio/clear.png?colorlevel.white=0&w=40"
+                            }
+                            centerImage={true}
+                          />
+                        </DeleteIconContainer>
+                      </AnimatePresence>
+                    </EditDeleteContainer>
                   )}
-                </AdminVideoContent>
+                </ImageContainer>
+
+                {!showAdminContentData && (
+                  <Names
+                    title="contentName"
+                    variants={itemB}
+                    animate={contentLoaded ? "show" : "hidden"}
+                    key={state.indexOf(item)}
+                    onClick={() => handleClick(item.id)}
+                  >
+                    {page === "weddings" ? item.displayNames : item.company}
+                  </Names>
+                )}
+
+                {showAdminContentData && (
+                  <WrappedNames onClick={() => handleClick(item.id)}>
+                    {item.displayNames
+                      ? item.displayNames.replace("&", "\n")
+                      : item.company}
+                  </WrappedNames>
+                )}
+
+                {showAdminContentData && (
+                  <AdminVideoContent>
+                    <EventDate>{item.date}</EventDate>
+                    {page === "wedings" && (
+                      <Location>{`${item.location.suburb}, ${item.location.state}`}</Location>
+                    )}
+                    {page === "corporate" && (
+                      <Description>{item.description}</Description>
+                    )}
+                  </AdminVideoContent>
+                )}
+              </Item>
+            ))}
+
+            <VideoOverlay
+              isOpen={isOpen}
+              closeOverlay={closeOverlay}
+              src={selectedVideo.video}
+              maxWidth={"900px"}
+              placeholderSize={"56.25%"}
+              alt={page === "weddings" ? weddingNames : selectedVideo.company}
+              centerVideo={true}
+            />
+          </VideoContainer>
+          {state.length >= 20 && (
+            <ShowMoreButton
+              layout
+              variants={buttonAnimation}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleShowMore}
+            >
+              {status === "pending" ? (
+                <LoadingSpinner size={"28px"} />
+              ) : (
+                "Show More"
               )}
-            </Item>
-          ))}
-
-          <VideoOverlay
-            isOpen={isOpen}
-            closeOverlay={closeOverlay}
-            src={selectedVideo.video}
-            maxWidth={"900px"}
-            placeholderSize={"56.25%"}
-            alt={page === "weddings" ? weddingNames : selectedVideo.company}
-            centerVideo={true}
-          />
-        </VideoContainer>
-
-        {state.length >= 20 && (
-          <ShowMoreButton
-            layout
-            variants={buttonAnimation}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleShowMore}
-          >
-            {status === "pending" ? (
-              <LoadingSpinner size={"28px"} />
-            ) : (
-              "Show More"
-            )}
-          </ShowMoreButton>
-        )}
-      </Container>
+            </ShowMoreButton>
+          )}
+        </Container>
+      </AnimatePresence>
     </AnimateSharedLayout>
   );
 };
@@ -447,7 +441,7 @@ const LoadingContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: 20;
+  z-index: 9;
 `;
 
 const PlayIcon = styled.div`
@@ -489,6 +483,10 @@ const ImageContainer = styled(motion.button)`
   &:focus:not(:focus-visible) {
     outline: none;
   }
+`;
+
+const ImageLoaderContainer = styled.div`
+  position: relative;
 `;
 
 const SelectedVideoButton = styled(motion.div)`
