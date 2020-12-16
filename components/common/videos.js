@@ -123,7 +123,7 @@ const Videos = ({
   };
 
   const itemA = {
-    hidden: { scale: 0.96, opacity: 0, y: 12 },
+    hidden: { scale: 0.8, opacity: 0, y: 20 },
     show: { scale: 1, opacity: 1, y: 0 },
   };
 
@@ -170,7 +170,7 @@ const Videos = ({
   };
 
   const loaderAnimation = {
-    hidden: { opacity: 0, scale: 0.8, y: 120 },
+    hidden: { opacity: 0, scale: 0.8, y: 20 },
     show: {
       opacity: 1,
       scale: 1,
