@@ -286,7 +286,8 @@ const Videos = ({
                   {!editDeleteContent && (
                     <PlayIconContainer
                       variants={child}
-                      animate={item.hover ? { scale: 1.1 } : { scale: 1 }}
+                      animate={contentLoaded ? "show" : "hidden"}
+                      whileHover={{ scale: 1.1 }}
                     >
                       <ImageLoader
                         maxWidth="inherit"
@@ -305,7 +306,11 @@ const Videos = ({
                         <Dot
                           variants={dotAnimation}
                           animate={
-                            selectedVideo.id === item.id ? "show" : "hidden"
+                            selectedVideo.id === item.id
+                              ? contentLoaded
+                                ? "show"
+                                : "hidden"
+                              : "hidden"
                           }
                         />
                       </SelectedVideoButton>
@@ -317,7 +322,11 @@ const Videos = ({
                           }}
                           variants={variants}
                           animate={
-                            selectedVideo.id === item.id ? "show" : "hidden"
+                            selectedVideo.id === item.id
+                              ? contentLoaded
+                                ? "show"
+                                : "hidden"
+                              : "hidden"
                           }
                         >
                           <ImageLoader
@@ -350,14 +359,18 @@ const Videos = ({
                 )}
 
                 {showAdminContentData && (
-                  <WrappedNames onClick={() => handleClick(item.id)}>
+                  <WrappedNames
+                    onClick={() => handleClick(item.id)}
+                    variants={itemB}
+                    animate={contentLoaded ? "show" : "hidden"}
+                  >
                     {item.displayNames
                       ? item.displayNames.replace("&", "\n")
                       : item.company}
                   </WrappedNames>
                 )}
 
-                {showAdminContentData && (
+                {contentLoaded && showAdminContentData && (
                   <AdminVideoContent>
                     <EventDate>{item.date}</EventDate>
                     {page === "wedings" && (
@@ -571,7 +584,7 @@ const Names = styled(motion.label)`
   }
 `;
 
-const WrappedNames = styled.div`
+const WrappedNames = styled(motion.div)`
   display: flex;
   flex-direction: column;
   white-space: pre-line;
