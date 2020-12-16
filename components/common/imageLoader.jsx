@@ -24,8 +24,6 @@ const ImageLoader = ({
   transitionDuration,
   boxShadow,
   loadingSpinner, // true or false to show a loading spinner when the image is still loading
-  loaderPlaceholder, // true or false to show a loader placeholder when the image is still loading
-  loaderPlaceholderDuration,
   centerImage,
   contentLoaded,
   handleOnLoadOutside,
@@ -108,23 +106,7 @@ const ImageLoader = ({
           boxShadow={boxShadow}
         />
       )}
-
       {loadingSpinner && !isLoaded && <LoadingSpinner size="39px" />}
-
-      {loaderPlaceholder && (
-        <LoaderPlaceholder
-          zIndex={zIndex}
-          initial={{ x: "-100%" }}
-          animate={{ x: "100%" }}
-          transition={{
-            type: "spring",
-            repeat: Infinity,
-            duration: loaderPlaceholderDuration
-              ? loaderPlaceholderDuration
-              : 1.5,
-          }}
-        />
-      )}
     </ImageContainer>
   );
 };
@@ -172,20 +154,3 @@ const Image = styled(motion.img)`
   }
   }
   `;
-
-const LoaderPlaceholder = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-  z-index: ${({ zIndex }) => (zIndex ? zIndex : "default")};
-  background-image: linear-gradient(
-    0.25turn,
-    transparent 0%,
-    #d1d5db 25%,
-    transparent 50%
-  );
-  position: absolute;
-  vertical-align: middle;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-`;
