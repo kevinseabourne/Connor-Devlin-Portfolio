@@ -116,6 +116,7 @@ export default Header;
 
 const Container = styled.header`
   width: 100%;
+  min-width: 100%;
   height: 75px;
   position: sticky;
   position: -webkit-sticky;
