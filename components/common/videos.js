@@ -192,7 +192,7 @@ const Videos = ({
     },
   };
 
-  const child = {
+  const playIconAnimation = {
     hidden: {
       opacity: 0,
       y: 0,
@@ -208,6 +208,9 @@ const Videos = ({
         mass: 0.2,
         stiffness: 150,
       },
+    },
+    hover: {
+      scale: 1.1,
     },
   };
 
@@ -265,6 +268,7 @@ const Videos = ({
                   }}
                   data-testid="item"
                   variants={itemAnimation}
+                  initial="hidden"
                   animate={contentLoaded ? "show" : "hidden"}
                   onPointerEnter={() => handleHover(item.id)}
                   onPointerLeave={() => handleHover(item.id)}
@@ -285,9 +289,14 @@ const Videos = ({
                   />
                   {!editDeleteContent && (
                     <PlayIconContainer
-                      variants={child}
-                      animate={contentLoaded ? "show" : "hidden"}
-                      whileHover={{ scale: 1.1 }}
+                      variants={playIconAnimation}
+                      animate={
+                        contentLoaded
+                          ? item.hover
+                            ? "hover"
+                            : "show"
+                          : "hidden"
+                      }
                     >
                       <ImageLoader
                         maxWidth="inherit"
