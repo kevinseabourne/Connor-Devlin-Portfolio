@@ -101,7 +101,7 @@ const Videos = ({
     if (id === state[state.length - 1].id) {
       timeoutTwo.current = setTimeout(() => {
         setContentLoaded(true);
-      }, 1000);
+      }, 400);
     }
   };
 
