@@ -98,7 +98,8 @@ const Videos = ({
   };
 
   const handleOnLoadOutside = (id) => {
-    if (id === state[state.length - 1].id) {
+    const index = state.length - 1;
+    if (id === state[index].id) {
       timeoutTwo.current = setTimeout(() => {
         setContentLoaded(true);
       }, 400);
@@ -463,7 +464,6 @@ const LoadingContainer = styled(motion.div)`
   width: 100%;
   height: 100%;
   position: absolute;
-  z-index: 9;
 `;
 
 const PlayIcon = styled.div`
