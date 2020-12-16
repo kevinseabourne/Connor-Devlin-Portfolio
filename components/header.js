@@ -85,7 +85,6 @@ const Header = () => {
                 placeholderSize="13.2%"
                 hover={true}
                 opacity={0}
-                scale={0}
                 duration={0.1}
                 lazyLoad={true}
                 src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
