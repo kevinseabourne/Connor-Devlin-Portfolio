@@ -3,12 +3,12 @@ import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import downWave from "../public/images/wave3.svg";
 import topWave from "../public/images/wave4.svg";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import "intersection-observer";
 
-const Clients = (props) => {
-  const [state, setState] = useState([
+const Clients = () => {
+  const [state] = useState([
     {
       title: "teach learn grow",
       url:
@@ -25,20 +25,10 @@ const Clients = (props) => {
     },
   ]);
 
-  const [positionY, setPositionY] = useState(0);
-  const [scrollingDown, setScrollingDown] = useState(false);
-
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: "-50px 0px",
+    rootMargin: "0px 0px",
   });
-
-  useEffect(() => {
-    if (entry) {
-      setScrollingDown(positionY > entry.boundingClientRect.y);
-      setPositionY(entry.boundingClientRect.y);
-    }
-  }, [entry]);
 
   const container = {
     hidden: {
@@ -50,9 +40,8 @@ const Clients = (props) => {
     },
     show: {
       transition: {
-        delayChildren: 0,
         staggerChildren: 0.2,
-        staggerDirection: scrollingDown ? -1 : 1,
+        staggerDirection: 1,
       },
     },
   };
@@ -152,7 +141,7 @@ const ImageContainer = styled(motion.div)``;
 const Wave = styled.img`
   position: absolute;
   top: -20px;
-  left: -1px;
+  left: 0px;
   width: 100%;
   object-fit: cover;
 `;
@@ -160,7 +149,7 @@ const Wave = styled.img`
 const BottomWave = styled.img`
   position: absolute;
   bottom: -20px;
-  left: -1px;
+  left: 0px;
   z-index: -100;
   width: 100%;
   object-fit: cover;
