@@ -1,26 +1,29 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-export const LoadingSpinner = React.forwardRef(({ size, stroke }, ref) => {
-  return (
-    <Spinner
-      ref={ref}
-      viewBox="0 0 66 66"
-      size={size}
-      data-testid="loadingSpinner"
-      stroke={stroke}
-    >
-      <circle
-        className="circle"
-        strokeWidth="3"
-        strokeLinecap="round"
-        cx="33"
-        cy="33"
-        r="30"
-      />
-    </Spinner>
-  );
-});
+export const LoadingSpinner = React.forwardRef(
+  ({ size, stroke, zIndex }, ref) => {
+    return (
+      <Spinner
+        ref={ref}
+        viewBox="0 0 66 66"
+        size={size}
+        zIndex={zIndex}
+        data-testid="loadingSpinner"
+        stroke={stroke}
+      >
+        <circle
+          className="circle"
+          strokeWidth="3"
+          strokeLinecap="round"
+          cx="33"
+          cy="33"
+          r="30"
+        />
+      </Spinner>
+    );
+  }
+);
 
 const rotation = keyframes`
 0% {
@@ -63,6 +66,7 @@ const Spinner = styled.svg`
   left: 0;
   right: 0;
   margin: auto;
+  z-index: ${({ zIndex }) => (zIndex ? zIndex : 0)};
   animation: ${rotation} 1.35s linear infinite;
   & .circle {
     stroke-dasharray: 180;
