@@ -1,10 +1,12 @@
+import React, { useEffect, useState, useRef, useContext } from "react";
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
-import React, { useEffect, useState, useContext } from "react";
+import TextLoadingPlaceholder from "../components/common/textLoadingPlaceholder";
+import ImageVideoLoadingPlaceholder from "../components/common/imageVideoLoadingPlaceholder";
 import AppContext from "../context/appContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const AdminSidebar = (props) => {
   const context = useContext(AppContext);
@@ -53,10 +55,24 @@ const AdminSidebar = (props) => {
       route: "/admin/edit-content",
     },
   ]);
+  const [contentLoaded, setContentLoaded] = useState(false);
+  const timeout = useRef(null);
+
+  useEffect(() => {
+    return () => clearTimeout(timeout.current);
+  }, []);
 
   const signOut = () => {
     handleSignOut();
     router.push("/login");
+  };
+
+  const handleOnLoadOutside = (route) => {
+    if (route === "signOutIcon") {
+      timeout.current = setTimeout(() => {
+        setContentLoaded(true);
+      }, 500);
+    }
   };
 
   const container = {
@@ -82,8 +98,31 @@ const AdminSidebar = (props) => {
     },
   };
 
+  const fade = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
+  const fadeLink = {
+    hidden: {
+      opacity: 0,
+      visibility: "hidden",
+    },
+    show: {
+      opacity: 1,
+      visibility: "visible",
+    },
+  };
+
   return (
-    <Sidebar variants={container} initial="hidden" animate="show">
+    <Sidebar>
       <LinksContainer>
         {links.map((link) => (
           <Link
@@ -93,29 +132,100 @@ const AdminSidebar = (props) => {
             passHref
           >
             <LinkContainer variants={linkAnimation}>
-              <ImageLoader
-                maxWidth="30px"
-                placeholderSize="100%"
-                transitionDuration={300}
-                transitionTiming="ease"
-                hover={true}
-                src={link.icon}
-                delay={links.indexOf(link) * 62}
-              />
-              <LinkTitle>{link.title}</LinkTitle>
+              <InnerLinkContainer
+                variants={fadeLink}
+                initial="hidden"
+                animate={contentLoaded ? "show" : "hidden"}
+                exit="hidden"
+              >
+                <ImageLoader
+                  itemId={link.route}
+                  maxWidth="30px"
+                  placeholderSize="100%"
+                  hover={true}
+                  contentLoaded={contentLoaded}
+                  src={link.icon}
+                  handleOnLoadOutside={handleOnLoadOutside}
+                />
+                <LinkTitle>{link.title}</LinkTitle>
+              </InnerLinkContainer>
+              <AnimatePresence>
+                {!contentLoaded && (
+                  <LoadingContainer
+                    variants={fade}
+                    initial="hidden"
+                    animate={!contentLoaded ? "show" : "hidden"}
+                    exit="hidden"
+                  >
+                    <ImageVideoLoadingPlaceholder
+                      placeholderSize="100%"
+                      maxWidth="47px"
+                      marginLeft="-10px"
+                      marginRight="10px"
+                      borderRadius="50%"
+                      duration={1.3}
+                    />
+                    <TextLoadingPlaceholder
+                      marginTop="0px"
+                      marginRight="0px"
+                      maxWidth="80%"
+                      height="28px"
+                      borderRadius="9px"
+                      duration={1.3}
+                    />
+                  </LoadingContainer>
+                )}
+              </AnimatePresence>
             </LinkContainer>
           </Link>
         ))}
       </LinksContainer>
 
       <SignOutContainer onClick={signOut} variants={linkAnimation}>
-        <ImageLoader
-          width="30px"
-          placeholderSize="100%"
-          hover={true}
-          src="https://chpistel.sirv.com/Connor-Portfolio/logout%20(1).png?w=30"
-        />
-        <Signout onClick={signOut}>Sign Out</Signout>
+        <InnerSignOutContainer
+          variants={fadeLink}
+          initial="hidden"
+          animate={contentLoaded ? "show" : "hidden"}
+          exit="hidden"
+        >
+          <ImageLoader
+            itemId={"signOutIcon"}
+            width="30px"
+            placeholderSize="100%"
+            hover={true}
+            handleOnLoadOutside={handleOnLoadOutside}
+            src="https://chpistel.sirv.com/Connor-Portfolio/logout%20(1).png?w=30"
+          />
+          <Signout onClick={signOut}>Sign Out</Signout>
+        </InnerSignOutContainer>
+        <AnimatePresence>
+          {!contentLoaded && (
+            <LoadingContainer
+              backgroundColor="#F9FAFB"
+              variants={fade}
+              initial="hidden"
+              animate={!contentLoaded ? "show" : "hidden"}
+              exit="hidden"
+            >
+              <ImageVideoLoadingPlaceholder
+                placeholderSize="100%"
+                maxWidth="40px"
+                marginLeft="0px"
+                marginRight="10px"
+                borderRadius="50%"
+                duration={1.3}
+              />
+              <TextLoadingPlaceholder
+                marginTop="0px"
+                marginRight="0px"
+                maxWidth="40%"
+                height="24px"
+                borderRadius="9px"
+                duration={1.3}
+              />
+            </LoadingContainer>
+          )}
+        </AnimatePresence>
       </SignOutContainer>
     </Sidebar>
   );
@@ -158,6 +268,7 @@ const LinkContainer = styled(motion.a)`
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
   justify-content: flex-start;
   margin-top: 20px;
   padding: 15px;
@@ -173,13 +284,36 @@ const LinkContainer = styled(motion.a)`
   }
 `;
 
-const LinkTitle = styled.h3`
+const InnerLinkContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: 15px;
+`;
+
+const LinkTitle = styled(motion.h3)`
   margin-left: 18px;
   font-size: 1.02rem;
   letter-spacing: 0px;
   @media (max-width: 750px) {
     display: none;
   }
+`;
+
+const LoadingContainer = styled(motion.div)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background-color: ${({ backgroundColor }) =>
+    backgroundColor ? backgroundColor : "transparent"};
 `;
 
 const SignOutContainer = styled(motion.button)`
@@ -190,6 +324,7 @@ const SignOutContainer = styled(motion.button)`
   margin-top: auto;
   justify-content: center;
   flex-direction: row;
+  position: relative;
   padding: 15px 15px;
   font-family: inherit;
   box-sizing: border-box;
@@ -219,4 +354,11 @@ const Signout = styled.span`
   @media (max-width: 750px) {
     display: none;
   }
+`;
+
+const InnerSignOutContainer = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
 `;
