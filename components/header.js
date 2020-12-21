@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import Link from "next/link";
+import Image from "next/image";
 import BurgerBar from "./common/burgerBar";
 
 const Header = () => {
@@ -80,14 +81,11 @@ const Header = () => {
         <Link href="/" passHref>
           <NameContainer>
             <Logo>
-              <ImageLoader
-                width="100%"
-                placeholderSize="13.2%"
-                hover={true}
-                opacity={0}
-                duration={0.1}
-                lazyLoad={true}
+              <Image
                 src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
+                width={225}
+                height={29}
+                alt="Connor Devlin Media"
               />
             </Logo>
           </NameContainer>

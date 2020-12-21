@@ -1,5 +1,8 @@
 module.exports = {
   // add more font or image formats if importing them to here.
+  images: {
+    domains: ["chpistel.sirv.com"],
+  },
   webpack: (config, options) => {
     config.module.rules.push(
       {
