@@ -83,7 +83,7 @@ const PlaceholderAnimation = styled(motion.div)`
   background-image: linear-gradient(
     0.25turn,
     transparent 0%,
-    #d1d5db 25%,
+    #f3f4f6 25%,
     transparent 50%
   );
   position: absolute;

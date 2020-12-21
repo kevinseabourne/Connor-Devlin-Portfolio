@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 
-const LoadingPlaceholder = ({
+const TextLoadingPlaceholder = ({
   duration,
   maxWidth,
   height,
@@ -49,7 +49,7 @@ const LoadingPlaceholder = ({
   );
 };
 
-export default LoadingPlaceholder;
+export default TextLoadingPlaceholder;
 
 const PlaceHolderContainer = styled(motion.div)`
   width: 100%;
@@ -73,7 +73,7 @@ const Placeholder = styled(motion.div)`
   background-image: linear-gradient(
     0.25turn,
     transparent 0%,
-    #d1d5db 25%,
+    #f3f4f6 25%,
     transparent 50%
   );
   position: absolute;
@@ -82,4 +82,5 @@ const Placeholder = styled(motion.div)`
   width: 100%;
   height: 100%;
   ${"" /* filter: blur(5px); */}
+  ${"" /* #d1d5db */}
 `;

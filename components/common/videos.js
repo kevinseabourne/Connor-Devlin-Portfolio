@@ -8,7 +8,7 @@ import { handleWeddingNames } from "./utils/handleWeddingName";
 import { LoadingSpinner } from "../loading-spinner";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { getNextWeddings } from "../../pages/api/weddings";
-import LoadingPlaceholder from "../common/loadingPlaceholder";
+import TextLoadingPlaceholder from "../common/textLoadingPlaceholder";
 import ImageVideoLoadingPlaceholder from "../common/imageVideoLoadingPlaceholder";
 import cloneDeep from "lodash/cloneDeep";
 import { useInView } from "react-intersection-observer";
@@ -51,7 +51,7 @@ const Videos = ({
       clearTimeout(timeout.current);
       clearTimeout(timeoutTwo.current);
     };
-  }, [state]);
+  }, []);
 
   useEffect(() => {
     setState(data);
@@ -102,7 +102,7 @@ const Videos = ({
     if (id === state[index].id) {
       timeoutTwo.current = setTimeout(() => {
         setContentLoaded(true);
-      }, 400);
+      }, 500);
     }
   };
 
@@ -249,7 +249,7 @@ const Videos = ({
                       borderRadius="9px"
                       duration={1.3}
                     />
-                    <LoadingPlaceholder
+                    <TextLoadingPlaceholder
                       marginTop="9px"
                       marginLeft="auto"
                       marginRight="auto"
@@ -281,7 +281,6 @@ const Videos = ({
                     src={item.coverPhoto}
                     hover={true}
                     opacity={0}
-                    transitionTiming="ease"
                     boxShadow="0px 9px 20px rgba(0,0,0,0.2)"
                     borderRadius={"9px"}
                     handleOnLoadOutside={handleOnLoadOutside}
