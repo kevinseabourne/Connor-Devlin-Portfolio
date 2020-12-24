@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import DynamicHeader from "../components/dynamicHead";
 import styled from "styled-components";
 import ImageLoader from "../components/common/imageLoader";
 import ErrorMessage from "../components/common/errorMessage";
@@ -81,6 +81,7 @@ const About = ({ data }) => {
 
   return data ? (
     <Container variants={container} initial="hidden" animate="show">
+      <DynamicHead title="About Me - Connor Devlin" />
       <ImageWrapper>
         <ImageContainer variants={childAnimationDown}>
           <ImageLoader
