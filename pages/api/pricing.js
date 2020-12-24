@@ -29,6 +29,7 @@ export async function getAllPricingPackages() {
         .collection("pricing")
         .doc("packages")
         .collection("packages")
+        .orderBy("price", "desc")
         .get()
         .then(function (querySnapshot) {
           let data = [];
@@ -92,7 +93,14 @@ export async function updateAddOns(addOnObj) {
           }
         })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         });
       return addOns;
     });
@@ -144,7 +152,14 @@ export async function updatePricingPackage(pricingPackage, id) {
         .doc(id)
         .update(pricingPackage)
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         });
       return updatedPackage;
     });
@@ -167,7 +182,14 @@ export async function deletePricingPackage(id) {
         .doc(id)
         .delete()
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         });
       return aboutMe;
     });
