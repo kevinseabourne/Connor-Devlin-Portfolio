@@ -70,13 +70,13 @@ const Banner = () => {
             alt="Connor Devlin"
             opacity={0}
             boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
+            src="https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=701"
             srcSet="
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=766 1300w,
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=622 1200w,
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=522 1100w,
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=501 1024w,
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=386 425w,
-            https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?w=336 375w,
+            https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=622 1200w,
+            https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=522 1100w,
+            https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=501 1024w,
+            https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=386 425w,
+            https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=336 375w,
           "
           />
         </ImageContainer>
@@ -138,8 +138,7 @@ const InfoContainer = styled(motion.div)`
   justify-content: flex-start;
   flex-direction: column;
   margin-bottom: 110px;
-  margin-right: 30px;
-  ${"" /* background-color: rgba(255, 255, 255, 0.8); */}
+  margin-right: 50px;
   @media (max-width: 1024px) {
     margin-top: 60px;
     margin-right: 0px;
@@ -153,7 +152,7 @@ const InfoContainer = styled(motion.div)`
 
 const SmallTitle = styled(motion.span)`
   font-size: 1rem;
-  opacity: 0.7;
+  font-family: "Karla-ExtraBold";
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }
@@ -167,13 +166,15 @@ const Name = styled(motion.div)`
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
+  font-family: "Att-reborn";
+  font-weight: 400;
+  font-size: 2rem;
+  letter-spacing: 6px;
 `;
 
 const FirstName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
-  letter-spacing: 0px;
-  font-size: 3rem;
   margin-right: 12px;
   &::after {
     content: "";
@@ -200,8 +201,6 @@ const FirstName = styled(motion.h1)`
 const LastName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
-  letter-spacing: 0px;
-  font-size: 3rem;
   padding-left: 3px;
   text-align: center;
   background-image: ${({ theme }) =>
@@ -218,25 +217,24 @@ const LastName = styled(motion.h1)`
 `;
 
 const Description = styled(motion.p)`
-  font-size: 1rem;
-  letter-spacing: 1px;
+  font-size: 1.05rem;
   width: 95%;
-  opacity: 0.7;
+  font-family: "Karla-Bold";
   margin-bottom: 90px;
   @media (max-width: 1024px) {
     margin-bottom: 40px;
   }
   @media (max-width: 424px) {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   @media (max-width: 300px) {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 `;
 
 const ReadMoreLink = styled(motion.span)`
   font-size: 1rem;
-  font-weight: 800;
+  font-family: "Karla-ExtraBold";
   z-index: 0;
   position: relative;
   transition: all 0.3s;
@@ -249,7 +247,7 @@ const ReadMoreLink = styled(motion.span)`
     width: 0%;
     background-image: ${({ theme }) =>
       `linear-gradient( to right,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100% )`};
-    bottom: -4px;
+    bottom: -4.5px;
     left: 0;
   }
   &:hover {

@@ -111,6 +111,8 @@ const VideoContainer = styled.div`
 `;
 
 const Title = styled.h1`
+  font-size: 2.1rem;
+  font-family: "Karla-Bold";
   margin: 70px 0px;
   @media (max-width: 750px) {
     margin: 10% 0px;
@@ -149,8 +151,9 @@ const Quote = styled.div`
 
 const WeddingPartners = styled.label`
   align-self: flex-start;
-  font-size: 1rem;
+  font-size: 1.1em;
   margin-left: 75px;
+  font-family: "Karla-ExtraBold";
   @media (max-width: 750px) {
     margin-left: 0px;
     align-self: center;
@@ -176,7 +179,7 @@ const QuotesContainer = styled.div`
 const Description = styled.div`
   margin-top: 9px;
   font-family: exmouth;
-  font-size: 3.5rem;
+  font-size: 4.3rem;
   text-align: center;
   margin-bottom: 21px;
   letter-spacing: 1px;
@@ -213,12 +216,12 @@ const ContactButton = styled.button`
   background-color: ${({ theme }) => theme.colors.secondary};
   padding: 15px 26px;
   margin-top: 100px;
-  margin-bottom: 100px;
+  margin-bottom: 300px;
   color: ${({ theme }) => theme.colors.fontColor};
   border-radius: 8px;
   border: none;
   justify-content: center;
-  opacity: 0.9;
+
   &:hover {
     cursor: pointer;
     opacity: 1;

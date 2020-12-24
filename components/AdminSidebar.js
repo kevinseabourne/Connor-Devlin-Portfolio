@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
-const AdminSidebar = (props) => {
+const AdminSidebar = () => {
   const context = useContext(AppContext);
   const { handleSignOut } = context;
   const router = useRouter();
@@ -35,12 +35,12 @@ const AdminSidebar = (props) => {
       route: "/admin/corporate",
     },
     {
-      icon: "https://chpistel.sirv.com/Connor-Portfolio/price-tag.png?w=30",
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=30",
       title: "Add Pricing",
       route: "/admin/add-pricing",
     },
     {
-      icon: "https://chpistel.sirv.com/Connor-Portfolio/price-tag.png?w=30",
+      icon: "https://chpistel.sirv.com/Connor-Portfolio/writing.png?w=30",
       title: "Edit Pricing",
       route: "/admin/edit-pricing",
     },

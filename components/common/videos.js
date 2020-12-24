@@ -506,10 +506,6 @@ const ImageContainer = styled(motion.button)`
   }
 `;
 
-const ImageLoaderContainer = styled.div`
-  position: relative;
-`;
-
 const SelectedVideoButton = styled(motion.div)`
   width: 20px;
   height: 20px;
@@ -568,8 +564,9 @@ const Item = styled(motion.li)`
 `;
 
 const Names = styled(motion.label)`
-  font-size: 1.2rem;
-  letter-spacing: 0.8px;
+  font-size: 1.18rem;
+  font-family: "Karla-Bold";
+  font-weight: 900;
   margin-left: auto;
   margin-right: auto;
   white-space: normal;
