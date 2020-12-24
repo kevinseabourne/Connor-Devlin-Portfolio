@@ -1,21 +1,38 @@
 import { createGlobalStyle } from "styled-components";
-import mainFont from "./fonts/FuturaStd-Heavy.otf";
 import fancyFont from "./fonts/exmouth_.ttf";
+import KarlaExtraBold from "./fonts/Karla-ExtraBold.ttf";
+import KarlaBold from "./fonts/Karla-Bold.ttf";
+import KarlaSemiBold from "./fonts/Karla-SemiBold.ttf";
+import KarlaRegular from "./fonts/Karla-Regular.ttf";
+import AttractTypeReborn from "./fonts/Attractype Reborn.ttf";
 
 export const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: "Inter Black";
-    src: url("./fonts/Inter-Black.otf");
-  }
-  @font-face {
-    font-family: "Inter Regular";
-    src: url("./fonts/Inter-Regular.otf");
-  }
 
-  @font-face {
-    font-family: "Futura Std Heavy";
-    src: url(${mainFont});
-  }
+@font-face {
+  font-family: "Att-reborn";
+  src: url(${AttractTypeReborn});
+}
+
+@font-face {
+  font-family: "Karla-ExtraBold";
+  src: url(${KarlaExtraBold});
+}
+
+@font-face {
+  font-family: "Karla-Bold";
+  src: url(${KarlaBold});
+}
+
+@font-face {
+  font-family: "Karla-SemiBold";
+  src: url(${KarlaSemiBold});
+}
+
+@font-face {
+  font-family: "Karla-Regular";
+  src: url(${KarlaRegular});
+}
+
 
   @font-face {
     font-family: "exmouth";
@@ -24,13 +41,13 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     margin: 0;
-    font-family: "Futura Std Heavy", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    font-family: "Karla-Bold", -apple-system, BlinkMacSystemFont, "Segoe UI",
       "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
       "Helvetica Neue", sans-serif;
-    color: #272932;
+    color: rgb(60, 60, 60);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: 1.3px;
+    letter-spacing: 0px;
     line-height: 1.47;
     height: 100vh;
     background-color: E7ECEF;
