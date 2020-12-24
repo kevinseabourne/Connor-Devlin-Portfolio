@@ -62,10 +62,7 @@ export default class MyDocument extends Document {
             property="og:description"
             content="Digital media producer and filmmaker"
           />
-          <meta
-            property="og:image"
-            content="https://chpistel.sirv.com/Connor-Portfolio/browser-Screenshot.png?w=700"
-          />
+          <meta property="og:image" content="/images/browser-Screenshot.png" />
           <meta
             property="og:url"
             content="https://connor-devlin-portfolio.vercel.app/"
@@ -78,7 +75,7 @@ export default class MyDocument extends Document {
           <meta property="twitter:title" content="Connor Devlin Media" />
           <meta
             property="twitter:image"
-            content="https://www.sitename.com/image-for-twitter.png"
+            content="/images/browser-Screenshot.png"
           />
         </Head>
         <body>
