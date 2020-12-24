@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
 
-const HomePageContact = (props) => {
+const HomePageContact = () => {
   return (
     <Container>
       <Link href="/contact">
@@ -33,8 +33,8 @@ const ContactButton = styled.button`
   transition: all 0.2s;
   background-color: ${({ theme }) => theme.colors.secondary};
   padding: 15px 26px;
-  margin-top: 100px;
-  margin-bottom: 100px;
+  margin-top: 80px;
+  margin-bottom: 300px;
   color: ${({ theme }) => theme.colors.fontColor};
   border-radius: 8px;
   border: none;
@@ -49,9 +49,9 @@ const ContactButton = styled.button`
 `;
 
 const CopyRight = styled.span`
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin: auto;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
   @media (max-width: 424px) {
     font-size: 0.9rem;
   }

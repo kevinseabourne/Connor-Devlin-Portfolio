@@ -279,6 +279,7 @@ const InnerPackageContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
+  overflow: hidden;
   padding: 0px 20px;
   &:hover {
     cursor: default;

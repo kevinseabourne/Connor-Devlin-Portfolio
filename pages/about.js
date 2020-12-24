@@ -87,7 +87,7 @@ const About = ({ data }) => {
             maxWidth="inherit"
             placeholderSize="66.66%"
             borderRadius="19px"
-            src="https://chpistel.sirv.com/Images/kal-visuals-lYn248p4rUg-unsplash.jpg?"
+            src="https://chpistel.sirv.com/Connor-Portfolio/Connor.jpg?w=611"
           />
         </ImageContainer>
         <SmallTitle variants={childAnimationDown}>Connor Devlin</SmallTitle>
@@ -160,6 +160,7 @@ const BottomWave = styled(motion.img)`
   position: absolute;
   margin-top: auto;
   bottom: -5%;
+  left: 0px;
   width: 100%;
   z-index: -100;
   @media (max-width: 1200px) {
@@ -183,7 +184,7 @@ const InfoContainer = styled.div`
 const SmallTitle = styled(motion.span)`
   margin-top: 30px;
   font-size: 1rem;
-  opacity: 0.7;
+  font-family: "Karla-ExtraBold";
   position: relative;
   @media (max-width: 424px) {
     font-size: 0.9rem;
@@ -200,6 +201,10 @@ const Name = styled(motion.div)`
   align-items: center;
   margin-top: 0px;
   margin-bottom: 12%;
+  font-family: "Att-reborn";
+  font-size: 2rem;
+  letter-spacing: 6px;
+  word-spacing: 21.4px;
   @media (max-width: 1600px) {
     margin-bottom: 14%;
   }
@@ -211,8 +216,6 @@ const Name = styled(motion.div)`
 const FirstName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
-  letter-spacing: 0px;
-  font-size: 3rem;
   margin-right: 12px;
   &::after {
     content: "";
@@ -240,9 +243,8 @@ const FirstName = styled(motion.h1)`
 const LastName = styled(motion.h1)`
   white-space: nowrap;
   position: relative;
-  letter-spacing: 0px;
-  font-size: 3rem;
   padding-left: 3px;
+  margin-left: 6px;
   text-align: center;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
@@ -258,15 +260,15 @@ const LastName = styled(motion.h1)`
 `;
 
 const Description = styled(motion.p)`
-  font-size: 1rem;
-  letter-spacing: 1px;
-  opacity: 0.7;
+  font-size: 1.05rem;
+  font-family: "Karla-Bold";
   white-space: pre-wrap;
   overflow-wrap: break-word;
+  padding-bottom: 10%;
   @media (max-width: 424px) {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   @media (max-width: 300px) {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 `;

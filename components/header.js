@@ -132,7 +132,6 @@ const InnerContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  margin: auto;
 `;
 
 const NameContainer = styled.a`
@@ -190,17 +189,21 @@ const LinkTitle = styled.a`
   white-space: nowrap;
   margin: 0 15px;
   transition: all 0.3s ease;
-  opacity: 0.9;
+  font-family: "Karla-Bold";
   background-color: transparent;
-  &::after {
-  }
+  font-size: 1.05rem;
   &:hover {
     cursor: pointer;
     opacity: 1;
     color: black;
-    ${"" /* background-color: ${({ theme }) => theme.colors.secondary}; */}
   }
   @media (max-width: 1024px) {
     display: none;
+  }
+  @media (max-width: 424px) {
+    font-size: 1rem;
+  }
+  @media (max-width: 300px) {
+    font-size: 0.9rem;
   }
 `;
