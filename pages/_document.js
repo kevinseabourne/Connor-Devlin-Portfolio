@@ -58,7 +58,6 @@ export default class MyDocument extends Document {
           />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
-          <meta property="og:title" content="Connor Devlin Media" />
           <meta
             property="og:description"
             content="Digital media producer and filmmaker"
@@ -67,16 +66,8 @@ export default class MyDocument extends Document {
             property="og:image"
             content="https://connor-devlin-portfolio.vercel.app/images/browser-Screenshot.png"
           />
-          <meta
-            property="og:url"
-            content="https://connor-devlin-portfolio.vercel.app/"
-          />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta
-            property="twitter:description"
-            content="Digital media producer and filmmaker"
-          />
-          <meta property="twitter:title" content="Connor Devlin Media" />
+
           <meta
             property="twitter:image"
             content="https://connor-devlin-portfolio.vercel.app/images/browser-Screenshot.png"
