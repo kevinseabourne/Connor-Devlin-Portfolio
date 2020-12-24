@@ -26,7 +26,6 @@ const AdminPricingForm = ({
   handleEditPackageSubmit,
   handleAddPackageSubmit,
   handleEditAddOnsSubmit,
-  handleAddAddOnsSubmit,
 }) => {
   const timeout = useRef(null);
   const [packageDetailsLength, setPackageDetailsLength] = useState([
@@ -50,16 +49,29 @@ const AdminPricingForm = ({
   const [playErrorSound] = useSound(errorSound, { volume: 0.2 });
 
   const schema = {
+    packageName: {
+      required: "A package name is required !",
+      minLength: { value: 3, message: "package name is too short !" },
+      maxLength: { value: 16, message: "package name is too long !" },
+    },
+    price: {
+      required: "A price is required !",
+      pattern: {
+        value: /\d*/,
+        message: "numbers only !",
+      },
+    },
+    description: {
+      required: "A description is required !",
+      minLength: { value: 3, message: "description is too short !" },
+      maxLength: { value: 130, message: "description is too long !" },
+    },
     packageDetail: {
       required: "A name is required !",
       minLength: {
         value: 1,
         message: "Package Detail should be greater than 1 character !",
       },
-      // pattern: {
-      //   value: /^[a-zA-Z '.-]*$/,
-      //   message: "Letters only !",
-      // },
     },
   };
 
@@ -152,7 +164,7 @@ const AdminPricingForm = ({
     const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
     if (index > -1 && packageDetailsLength.length > 1) {
       playDown();
-      unregister(`partnerFirstName_${packageDetailsLengthClone[index].id}`);
+      unregister(`packageDetail_${packageDetailsLengthClone[index].id}`);
       packageDetailsLengthClone.splice(index, 1);
       setPackageDetailsLength(packageDetailsLengthClone);
     }
@@ -255,19 +267,19 @@ const AdminPricingForm = ({
               <Input
                 name="packageName"
                 label="Title"
-                ref={register}
-                error={errors.name}
+                ref={register(schema.packageName)}
+                error={errors.packageName}
               />
               <Input
                 name="price"
                 label="Price"
-                ref={register}
+                ref={register(schema.price)}
                 error={errors.price}
               />
               <TextArea
                 name="description"
                 label="Description"
-                ref={register}
+                ref={register(schema.description)}
                 error={errors.description}
               />
 
