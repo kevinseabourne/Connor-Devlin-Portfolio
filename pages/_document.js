@@ -32,7 +32,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <title>Connor Devlin Media</title>
           <link
             rel="apple-touch-icon"
             sizes="180x180"
