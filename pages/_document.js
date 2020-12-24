@@ -70,6 +70,16 @@ export default class MyDocument extends Document {
             property="og:url"
             content="https://connor-devlin-portfolio.vercel.app/"
           />
+          <meta property="twitter:card" content="summary" />
+          <meta
+            property="twitter:description"
+            content="Digital media producer and filmmaker"
+          />
+          <meta property="twitter:title" content="Connor Devlin Media" />
+          <meta
+            property="twitter:image"
+            content="https://www.sitename.com/image-for-twitter.png"
+          />
         </Head>
         <body>
           <Main />
