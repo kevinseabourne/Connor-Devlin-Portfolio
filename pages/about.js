@@ -1,4 +1,4 @@
-import DynamicHeader from "../components/dynamicHead";
+import DynamicHead from "../components/dynamicHead";
 import styled from "styled-components";
 import ImageLoader from "../components/common/imageLoader";
 import ErrorMessage from "../components/common/errorMessage";
@@ -81,7 +81,7 @@ const About = ({ data }) => {
 
   return data ? (
     <Container variants={container} initial="hidden" animate="show">
-      <DynamicHead title="About Me - Connor Devlin" />
+      <DynamicHead title="About Me - Connor Devlin" urlQuery="/about" />
       <ImageWrapper>
         <ImageContainer variants={childAnimationDown}>
           <ImageLoader
