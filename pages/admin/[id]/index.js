@@ -9,6 +9,7 @@ import AdminEditContent from "../../../components/adminEditContent";
 import AdminDeleteContent from "../../../components/adminDeleteContent";
 import { getAllWeddings } from "../../api/weddings";
 import { getAllCorporate } from "../../api/corporate";
+import { getAllPricingPackages } from "../../api/pricing";
 import { getAboutMe } from "../../api/about";
 import AdminSidebar from "../../../components/AdminSidebar";
 
@@ -45,7 +46,7 @@ const AdminRoute = ({ params, data }) => {
       return (
         <Container>
           <AdminSidebar />
-          <AdminAddPricing />
+          <AdminAddPricing data={data} />
         </Container>
       );
     case "edit-pricing":
@@ -109,6 +110,12 @@ export async function getStaticProps({ params }) {
         ? await getAllWeddings()
         : await getAllCorporate();
 
+    return {
+      props: data ? { data, params } : { data: null, params },
+    };
+  }
+  if (params.id === "add-pricing") {
+    const data = await getAllPricingPackages();
     return {
       props: data ? { data, params } : { data: null, params },
     };

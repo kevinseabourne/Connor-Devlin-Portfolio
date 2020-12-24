@@ -32,41 +32,45 @@ const AdminButtonsSection = ({
     },
   };
 
+  const addPackages = page === "packages" && operation === "Add";
+
   return (
     <ButtonsContainer layout>
       <Title>
         Choose a section to {operation} {operation === "Add" ? "to" : ""} ?
       </Title>
-      <ButtonsInnerContainer>
-        <WeddingsFormButton
-          variants={buttonAnimation}
-          animate={
-            page === "weddings" || page === "packages" ? "show" : "hidden"
-          }
-          onClick={handleContentOnePageChange}
-          disabled={page === "weddings" || page === "packages" ? true : false}
-        >
-          {contentOneStatus === "pending" ? (
-            <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
-          ) : (
-            buttonOneTitle
-          )}
-        </WeddingsFormButton>
-        <CorporateFormButton
-          variants={buttonAnimation}
-          animate={
-            page === "corporate" || page === "addOns" ? "show" : "hidden"
-          }
-          onClick={handleContentTwoPageChange}
-          disabled={page === "corporate" || page === "addOns" ? true : false}
-        >
-          {contentTwoStatus === "pending" ? (
-            <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
-          ) : (
-            buttonTwoTitle
-          )}
-        </CorporateFormButton>
-      </ButtonsInnerContainer>
+      {!addPackages && (
+        <ButtonsInnerContainer>
+          <WeddingsFormButton
+            variants={buttonAnimation}
+            animate={
+              page === "weddings" || page === "packages" ? "show" : "hidden"
+            }
+            onClick={handleContentOnePageChange}
+            disabled={page === "weddings" || page === "packages" ? true : false}
+          >
+            {contentOneStatus === "pending" ? (
+              <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
+            ) : (
+              buttonOneTitle
+            )}
+          </WeddingsFormButton>
+          <CorporateFormButton
+            variants={buttonAnimation}
+            animate={
+              page === "corporate" || page === "addOns" ? "show" : "hidden"
+            }
+            onClick={handleContentTwoPageChange}
+            disabled={page === "corporate" || page === "addOns" ? true : false}
+          >
+            {contentTwoStatus === "pending" ? (
+              <LoadingSpinner size={"28px"} stroke="rgba(50,172,109,1)" />
+            ) : (
+              buttonTwoTitle
+            )}
+          </CorporateFormButton>
+        </ButtonsInnerContainer>
+      )}
     </ButtonsContainer>
   );
 };

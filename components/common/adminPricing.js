@@ -26,7 +26,7 @@ import AdminButtonsSection from "../common/adminButtonSections";
 import WeddingPricingPackages from "../weddingPricingPackages";
 import WeddingPricingAddOns from "../weddingPricingAddOns";
 
-const AdminPricing = ({ operation }) => {
+const AdminPricing = ({ operation, data }) => {
   const [packages, setPackages] = useState([]);
   const [addOns, setAddOns] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState({});
@@ -40,13 +40,17 @@ const AdminPricing = ({ operation }) => {
   const [play] = useSound(popSound, { volume: 0.2 });
 
   useEffect(() => {
+    if (operation === "Add" && data) {
+      // you cannot add more add Ons packages only just edit the current addOns. Which allows to to add and delete already
+      // so I will just load the packages
+      setPackages(data);
+      setPage("packages");
+    }
     return () => {
       clearTimeout(timeout.current);
       clearTimeout(timeoutThird.current);
     };
   }, []);
-
-  // console.log(deleteIconRef);
 
   const handleClick = (id) => {
     const packagesClone = _.cloneDeep(packages);
@@ -215,6 +219,7 @@ const AdminPricing = ({ operation }) => {
         variants={variants}
         initial="hidden"
         animate={page ? "show" : "hidden"}
+        operation={operation}
       >
         <AdminButtonsSection
           handleContentOnePageChange={handlePackagesPageChange}
@@ -226,12 +231,13 @@ const AdminPricing = ({ operation }) => {
           page={page}
           operation={operation}
         />
+
         <AnimatePresence>
           {packageDataResolved && (
             <WeddingPricingPackages
               page={page}
               packages={packages}
-              showAdminContent={operation === "Edit"}
+              showAdminContent={operation === "Edit" ? true : false}
               selectedItem={selectedPackage}
               handleClick={handleClick}
               handleDeletePricingPackage={handleDeletePricingPackage}
@@ -239,7 +245,9 @@ const AdminPricing = ({ operation }) => {
           )}
         </AnimatePresence>
         <AnimatePresence>
-          {addOnsDataResolved && <WeddingPricingAddOns addOns={addOns} />}
+          {operation === "Edit" && addOnsDataResolved && (
+            <WeddingPricingAddOns addOns={addOns} />
+          )}
         </AnimatePresence>
         {page !== null && (
           <AdminPricingForm
@@ -269,6 +277,7 @@ const Container = styled(motion.div)`
   transition: all 0.5s ease;
   display: flex;
   align-items: center;
+  padding-top: ${({ operation }) => (operation === "Add" ? "120px" : "0px")};
   justify-content: center;
   flex-direction: column;
   margin-left: auto;

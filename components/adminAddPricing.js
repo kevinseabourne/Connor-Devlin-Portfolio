@@ -1,7 +1,7 @@
 import AdminPricing from "./common/adminPricing";
 
-const AdminAddPricing = (props) => {
-  return <AdminPricing operation="Add" />;
+const AdminAddPricing = ({ data }) => {
+  return <AdminPricing operation="Add" data={data} />;
 };
 
 export default AdminAddPricing;
