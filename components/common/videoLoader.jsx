@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { LoadingSpinner } from "../loading-spinner";
 import { useInView } from "react-intersection-observer";
 import "intersection-observer";
@@ -21,14 +20,13 @@ const VideoLoader = ({
   hover,
   hoverColor,
   centerVideo,
-  lazyLoad, // turn lazyLoading off when using component inside react-transition-group as it messes with it's enter animation,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const timeout = useRef(null);
 
   const { ref, inView } = useInView({
     rootMargin: "500px 0px",
-    triggerOnce: false,
+    triggerOnce: true,
   });
 
   useEffect(() => {
