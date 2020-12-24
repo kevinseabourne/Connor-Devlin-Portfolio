@@ -32,6 +32,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <title>Connor Devlin Media</title>
           <link
             rel="apple-touch-icon"
             sizes="180x180"
@@ -62,12 +63,15 @@ export default class MyDocument extends Document {
             property="og:description"
             content="Digital media producer and filmmaker"
           />
-          <meta property="og:image" content="/images/browser-Screenshot.png" />
+          <meta
+            property="og:image"
+            content="https://connor-devlin-portfolio.vercel.app/images/browser-Screenshot.png"
+          />
           <meta
             property="og:url"
             content="https://connor-devlin-portfolio.vercel.app/"
           />
-          <meta property="twitter:card" content="summary" />
+          <meta property="twitter:card" content="summary_large_" />
           <meta
             property="twitter:description"
             content="Digital media producer and filmmaker"
@@ -75,7 +79,7 @@ export default class MyDocument extends Document {
           <meta property="twitter:title" content="Connor Devlin Media" />
           <meta
             property="twitter:image"
-            content="/images/browser-Screenshot.png"
+            content="https://connor-devlin-portfolio.vercel.app/images/browser-Screenshot.png"
           />
         </Head>
         <body>
