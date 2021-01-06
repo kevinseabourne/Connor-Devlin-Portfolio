@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
-import moment from "moment";
 import { toast } from "react-toastify";
+import logger from "./logger";
 
 const config_ = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -35,7 +35,15 @@ export async function getAboutMe() {
           }
         })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          logger.log(error);
         });
       return aboutMe;
     });
@@ -56,7 +64,15 @@ export async function updateAboutMe(updatedAboutMe) {
         .doc("aboutMe")
         .update({ description: updatedAboutMe })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          logger.log(error);
         });
       return aboutMe;
     });

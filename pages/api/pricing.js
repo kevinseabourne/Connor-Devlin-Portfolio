@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
-import moment from "moment";
 import { toast } from "react-toastify";
+import logger from "./logger";
 
 const config_ = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -41,7 +41,15 @@ export async function getAllPricingPackages() {
           return data;
         })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An unexpected error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          logger.log(error);
         });
       return packages;
     });
@@ -67,7 +75,15 @@ export async function getAddOns() {
           }
         })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An unexpected error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          logger.log(error);
         });
       return addOns;
     });
@@ -93,7 +109,7 @@ export async function updateAddOns(addOnObj) {
           }
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -101,6 +117,7 @@ export async function updateAddOns(addOnObj) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return addOns;
     });
@@ -122,7 +139,7 @@ export async function addPricingPackage(pack) {
         .collection("packages")
         .add(pack)
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -130,6 +147,7 @@ export async function addPricingPackage(pack) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return pricingPackage;
     });
@@ -152,7 +170,7 @@ export async function updatePricingPackage(pricingPackage, id) {
         .doc(id)
         .update(pricingPackage)
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -160,6 +178,7 @@ export async function updatePricingPackage(pricingPackage, id) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return updatedPackage;
     });
@@ -182,7 +201,7 @@ export async function deletePricingPackage(id) {
         .doc(id)
         .delete()
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -190,6 +209,7 @@ export async function deletePricingPackage(id) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return aboutMe;
     });

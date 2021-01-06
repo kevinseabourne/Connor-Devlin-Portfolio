@@ -3,34 +3,7 @@ import "firebase/firestore";
 import moment from "moment";
 import { getVimeoData } from "./vimeo";
 import { toast } from "react-toastify";
-
-// async function getToken() {
-//   const { data } = await http.post(
-//     process.env.NEXT_PUBLIC_FIREBASE_SIGNIN_ENDPOINT +
-//       process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-//     {
-//       email: "admin@admin.com",
-//       password: "xzsawq21",
-//       returnSecureToken: true,
-//     }
-//   );
-//   return data.refreshToken;
-// }
-
-// export async function getAllWeddings() {
-//   const token = await getToken();
-//   console.log(token);
-//   const response = await http.get(process.env.NEXT_PUBLIC_FIREBASE_ENDPOINT, {
-//     headers: {
-//       "Access-Control-Allow-Origin": "*",
-//       "Access-Control-Allow-Methods": "POST, GET, OPTIONS, DELETE, PUT",
-//       "Access-Control-Allow-Headers":
-//         "append,delete,entries,foreach,get,has,keys,set,values,Authorization",
-//     },
-//     Authorization: `Bearer ${token}`,
-//   });
-//   return response;
-// }
+import logger from "./logger";
 
 const config_ = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -71,7 +44,15 @@ export async function getAllWeddings() {
           return data;
         })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An unexpected error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          logger.log(error);
         });
       return weddings;
     });
@@ -105,7 +86,15 @@ export async function getNextWeddings(lastIndex) {
           return data;
         })
         .catch(function (error) {
-          console.log("Error getting document:", error);
+          toast.error("An unexpected error has occurred", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+          logger.log(error);
         });
       return weddings;
     });
@@ -139,7 +128,7 @@ export async function addWedding(data) {
           videoId: updatedData.weddingVideoId,
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -147,6 +136,7 @@ export async function addWedding(data) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return weddings;
     });
@@ -181,7 +171,7 @@ export async function editWedding(data) {
           videoId: updatedData.weddingVideoId,
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -189,6 +179,7 @@ export async function editWedding(data) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return weddings;
     });
@@ -209,7 +200,7 @@ export async function deleteWedding(data) {
         .doc(data.id)
         .delete()
         .catch(function (error) {
-          toast.error("An error has occurred", {
+          toast.error("An unexpected error has occurred", {
             position: "bottom-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -217,6 +208,7 @@ export async function deleteWedding(data) {
             pauseOnHover: true,
             draggable: true,
           });
+          logger.log(error);
         });
       return weddings;
     });

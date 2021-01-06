@@ -26,19 +26,56 @@ export async function signIn(formData) {
       returnSecureToken: true,
     }
   );
-  localStorage.setItem("tokenKey", data.idToken);
+  const user = {
+    token: data.idToken,
+    expiry: new Date(),
+  };
+  localStorage.setItem("user", user);
   return data;
 }
 
 export function getCurrentUser() {
   try {
-    const jwt = localStorage.getItem("tokenKey");
-    return jwtDecode(jwt);
+    const { token } = localStorage.getItem("user");
+    const expired = userSessionExpired();
+    if (!expired) {
+      return jwtDecode(token);
+    } else {
+      return null;
+    }
   } catch (ex) {
     return null;
   }
 }
 
 export function signOut() {
-  localStorage.removeItem("tokenKey");
+  localStorage.removeItem("user");
+}
+
+export function userSessionExpired() {
+  const { token, expiry } = localStorage.getItem("user");
+  const currentDate = new Date();
+  const timeDifference = Math.floor(
+    (Date.UTC(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    ) -
+      Date.UTC(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())) /
+      (1000 * 60 * 60 * 24)
+  );
+
+  // if the admin has not visited the site for 7 days then sign them out.
+  if (timeDifference >= 7) {
+    signOut();
+    return true;
+  } else {
+    // reset the expiry time instead of automatically signing them out after 7 days logged in.
+    const user = {
+      token: token,
+      exipiry: new Date(),
+    };
+    localStorage.setItem("user", user);
+  }
+  return false;
 }
