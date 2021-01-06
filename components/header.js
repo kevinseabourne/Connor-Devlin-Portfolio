@@ -7,6 +7,7 @@ import BurgerBar from "./common/burgerBar";
 
 const Header = () => {
   const ref = useRef(null);
+  const [showSkipLink, setShowSkipLink] = useState(false);
   const [links] = useState([
     { title: "About", link: "/about" },
     { title: "Weddings", link: "/weddings" },
@@ -78,6 +79,14 @@ const Header = () => {
   return (
     <Container>
       <InnerContainer>
+        <SkipHeaderLink
+          href="#main"
+          onFocus={() => setShowSkipLink(true)}
+          onBlur={() => setShowSkipLink(false)}
+          showSkipLink={showSkipLink}
+        >
+          Skip to Content
+        </SkipHeaderLink>
         <Link href="/" passHref>
           <NameContainer>
             <Logo>
@@ -90,7 +99,6 @@ const Header = () => {
             </Logo>
           </NameContainer>
         </Link>
-
         <LinksContainer>
           {links.map((link) => (
             <Link key={links.indexOf(link)} href={link.link} passHref>
@@ -132,6 +140,24 @@ const InnerContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+`;
+
+const SkipHeaderLink = styled.a`
+  opacity: ${({ showSkipLink }) => (showSkipLink ? 1 : 0)};
+  padding: 16px 24px;
+  position: absolute;
+  top: 92px;
+  left: 62px;
+  font-family: "Karla-Bold";
+  font-size: 1rem;
+  border-radius: 9px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
+    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
+    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
+  &:focus {
+    outline: initial solid initial;
+  }
 `;
 
 const NameContainer = styled.a`
