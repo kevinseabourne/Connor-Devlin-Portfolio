@@ -33,6 +33,22 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+             window.dataLayer = window.dataLayer || [];
+             function gtag(){dataLayer.push(arguments);}
+             gtag('js', new Date());
+             gtag('config', '${GA_TRACKING_ID}', {
+               page_path: window.location.pathname,
+             });
+           `,
+            }}
+          />
           <meta
             name="description"
             content="Connor Devlin Videography, Photography, weddings, film, Perth, Western Australia"
@@ -75,23 +91,6 @@ export default class MyDocument extends Document {
           <meta
             property="twitter:image"
             content="https://connor-devlin-portfolio.vercel.app/images/browser-Screenshot.png"
-          />
-
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-       window.dataLayer = window.dataLayer || [];
-       function gtag(){dataLayer.push(arguments);}
-       gtag('js', new Date());
-       gtag('config', '${GA_TRACKING_ID}', {
-         page_path: window.location.pathname,
-       });
-     `,
-            }}
           />
         </Head>
         <body>
