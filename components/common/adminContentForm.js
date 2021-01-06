@@ -30,6 +30,7 @@ const AdminContentForm = ({
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
   const [status, setStatus] = useState("idle");
+  const [partnerFirstNameFocus, setPartnerFirstNameFocus] = useState(false);
   const {
     register,
     handleSubmit,
@@ -191,9 +192,9 @@ const AdminContentForm = ({
   };
 
   const deletePartner = (index) => {
-    playDown();
     const partnersInputLengthClone = _.cloneDeep(partnersInputLength);
     if (index > -1 && partnersInputLength.length > 2) {
+      playDown();
       if (page === "weddings") {
         unregister(`partnerFirstName_${partnersInputLengthClone[index].id}`);
         unregister(`partnerLastName_${partnersInputLengthClone[index].id}`);
@@ -204,9 +205,10 @@ const AdminContentForm = ({
   };
 
   const addPartner = (index) => {
-    play();
     const partnersInputLengthClone = _.cloneDeep(partnersInputLength);
     if (index > -1 && partnersInputLengthClone.length <= 10) {
+      play();
+      setPartnerFirstNameFocus(true);
       partnersInputLengthClone.splice(index + 1, 0, {
         title: "partner",
         id: Math.floor(1000 + Math.random() * 9000),
@@ -339,8 +341,7 @@ const AdminContentForm = ({
                   <ImageLoader
                     maxWidth="inherit"
                     placeholderSize="100%"
-                    opacity="0"
-                    transitionTime="300ms ease"
+                    opacity={0}
                     hover={true}
                     src={
                       "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
@@ -354,6 +355,7 @@ const AdminContentForm = ({
                     ref={register(schema.name)}
                     error={errors[`partnerFirstName_${partner.id}`]}
                     marginRight="5px"
+                    autoFocus={partnerFirstNameFocus ? true : false}
                   />
                   <Input
                     name={`partnerLastName_${partner.id}`}
@@ -377,8 +379,7 @@ const AdminContentForm = ({
                   <ImageLoader
                     maxWidth="inherit"
                     placeholderSize="100%"
-                    opacity="0"
-                    transitionTime="300ms ease"
+                    opacity={0}
                     hover={true}
                     src={
                       "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"

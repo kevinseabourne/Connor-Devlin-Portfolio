@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { getCurrentUser } from "../pages/api/auth";
 
 const Login = () => {
-  const { handleSignIn, currentUser } = useContext(AppContext);
+  const { handleSignIn } = useContext(AppContext);
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [status, setStatus] = useState("idle");

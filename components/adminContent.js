@@ -18,7 +18,6 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { handleWeddingNames } from "./common/utils/handleWeddingName";
 import { bundleDualInputValuesIntoObj } from "./common/utils/bundleDualInputValuesIntoObj";
 import AdminContentForm from "./common/adminContentForm";
-import downWave from ".././public/images/wave3.svg";
 import popSound from ".././public/sounds/pop.mp3";
 import useSound from "use-sound";
 import { DeletePopupOverlay } from "./deletePopupOverlay";

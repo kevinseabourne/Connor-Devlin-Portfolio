@@ -1,5 +1,5 @@
 import App from "next/app";
-import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import { ThemeProvider } from "styled-components";
 import logger from "../pages/api/logger";
 import { ToastContainer } from "react-toastify";
@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { GlobalStyle } from "../globalStyle";
 import AppContext from "../context/appContext";
 import Header from "../components/header";
-import { signIn, getCurrentUser, signOut } from "./api/auth";
+import { signIn, signOut } from "./api/auth";
 import "react-day-picker/lib/style.css";
 
 logger.init();
@@ -23,8 +23,6 @@ const theme = {
 };
 
 const MyApp = ({ Component, pageProps }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-
   const handleSignIn = async (formData) => {
     const user = await signIn(formData);
     return user;
@@ -32,13 +30,11 @@ const MyApp = ({ Component, pageProps }) => {
 
   const handleSignOut = () => {
     signOut();
-    setCurrentUser(null);
   };
 
   return (
     <AppContext.Provider
       value={{
-        currentUser: currentUser,
         handleSignIn: handleSignIn,
         handleSignOut: handleSignOut,
       }}
@@ -47,10 +43,14 @@ const MyApp = ({ Component, pageProps }) => {
         <GlobalStyle />
         <Header />
         <ToastContainer />
-        <Component {...pageProps} />
+        <Main id="main">
+          <Component {...pageProps} />
+        </Main>
       </ThemeProvider>
     </AppContext.Provider>
   );
 };
 
 export default MyApp;
+
+const Main = styled.main``;

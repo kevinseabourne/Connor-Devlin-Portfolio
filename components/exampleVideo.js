@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import VideoLoader from "./common/videoLoader";
 
-const ExampleVideo = (props) => {
+const ExampleVideo = () => {
   return (
     <Container>
       <VideoLoader
@@ -10,7 +10,6 @@ const ExampleVideo = (props) => {
         placeholderSize="56.25%"
         alt="example-video"
         centerVideo={true}
-        lazyLoad={true}
       />
     </Container>
   );

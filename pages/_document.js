@@ -32,6 +32,10 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta
+            name="description"
+            content="Connor Devlin Videography, Photography, weddings, film, Perth, Western Australia"
+          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"

@@ -67,6 +67,7 @@ const VideoLoader = ({
           delay={delay}
           isFavourite={isFavourite}
           hover={hover}
+          dataTestId={dataTestId}
           hoverColor={hoverColor}
           borderRadius={borderRadius}
           title="movie-trailer"

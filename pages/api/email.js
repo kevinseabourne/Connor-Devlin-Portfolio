@@ -1,7 +1,6 @@
 import logger from "./logger";
 import { toast } from "react-toastify";
 import emailjs from "emailjs-com";
-import http from "./httpService";
 
 export async function sendEmail(data) {
   // Cypress Testing Coverage //

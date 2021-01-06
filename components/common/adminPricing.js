@@ -21,7 +21,6 @@ import downWave from "../../public/images/wave3.svg";
 import popSound from "../../public/sounds/pop.mp3";
 import useSound from "use-sound";
 import { updatePricingPackage } from "../../pages/api/pricing";
-import { DeletePopupOverlay } from "../deletePopupOverlay";
 import AdminButtonsSection from "../common/adminButtonSections";
 import WeddingPricingPackages from "../weddingPricingPackages";
 import WeddingPricingAddOns from "../weddingPricingAddOns";
@@ -240,6 +239,7 @@ const AdminPricing = ({ operation, data }) => {
               showAdminContent={operation === "Edit" ? true : false}
               selectedItem={selectedPackage}
               handleClick={handleClick}
+              operation={operation}
               handleDeletePricingPackage={handleDeletePricingPackage}
             />
           )}

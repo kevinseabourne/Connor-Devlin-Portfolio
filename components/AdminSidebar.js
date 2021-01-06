@@ -75,15 +75,6 @@ const AdminSidebar = () => {
     }
   };
 
-  const container = {
-    hidden: {},
-    show: {
-      transition: {
-        staggerChildren: 0,
-      },
-    },
-  };
-
   const linkAnimation = {
     hidden: {
       opacity: 0,
@@ -131,7 +122,10 @@ const AdminSidebar = () => {
             key={links.indexOf(link)}
             passHref
           >
-            <LinkContainer variants={linkAnimation}>
+            <LinkContainer
+              variants={linkAnimation}
+              contentLoaded={contentLoaded}
+            >
               <InnerLinkContainer
                 variants={fadeLink}
                 initial="hidden"
@@ -277,7 +271,8 @@ const LinkContainer = styled(motion.a)`
   transition: all 100ms;
   &:hover {
     cursor: pointer;
-    background-color: rgba(234, 235, 241, 1);
+    background-color: ${({ contentLoaded }) =>
+      contentLoaded ? "rgba(234, 235, 241, 1)" : "transparent"};
   }
   &:first-child {
     margin-top: 0px;

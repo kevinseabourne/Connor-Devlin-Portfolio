@@ -34,6 +34,7 @@ const AdminPricingForm = ({
   const [addOnsLength, setAddOnsLength] = useState([
     { title: "addOn", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
+  const [packDetailFocus, setPackDetailFocus] = useState(false);
 
   useEffect(() => {
     if (!isEmpty(defaultValues) && dataResolved) {
@@ -174,6 +175,7 @@ const AdminPricingForm = ({
     const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
     if (index > -1 && packageDetailsLengthClone.length <= 10) {
       play();
+      setPackDetailFocus(true);
       packageDetailsLengthClone.splice(index + 1, 0, {
         title: "packageDetail",
         id: Math.floor(1000 + Math.random() * 9000),
@@ -307,8 +309,7 @@ const AdminPricingForm = ({
                     <ImageLoader
                       maxWidth="inherit"
                       placeholderSize="100%"
-                      opacity="0"
-                      transitionTime="300ms ease"
+                      opacity={0}
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
@@ -320,6 +321,8 @@ const AdminPricingForm = ({
                     label="Package Detail"
                     ref={register(schema.packageDetail)}
                     error={errors[`packageDetail_${packageDetail.id}`]}
+                    autoFocus={packDetailFocus ? true : false}
+                    opacity={0}
                   />
                   <DeletePackageDetail
                     variants={buttonAnimation}
@@ -343,8 +346,7 @@ const AdminPricingForm = ({
                     <ImageLoader
                       maxWidth="inherit"
                       placeholderSize="100%"
-                      opacity="0"
-                      transitionTime="300ms ease"
+                      opacity={0}
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
@@ -393,8 +395,7 @@ const AdminPricingForm = ({
                     <ImageLoader
                       maxWidth="inherit"
                       placeholderSize="100%"
-                      opacity="0"
-                      transitionTime="300ms ease"
+                      opacity={0}
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
@@ -421,8 +422,7 @@ const AdminPricingForm = ({
                     <ImageLoader
                       maxWidth="inherit"
                       placeholderSize="100%"
-                      opacity="0"
-                      transitionTime="300ms ease"
+                      opacity={0}
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"

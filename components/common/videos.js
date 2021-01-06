@@ -11,8 +11,6 @@ import { getNextWeddings } from "../../pages/api/weddings";
 import TextLoadingPlaceholder from "../common/textLoadingPlaceholder";
 import ImageVideoLoadingPlaceholder from "../common/imageVideoLoadingPlaceholder";
 import cloneDeep from "lodash/cloneDeep";
-import { useInView } from "react-intersection-observer";
-import "intersection-observer";
 
 const Videos = ({
   page,
@@ -28,25 +26,13 @@ const Videos = ({
 }) => {
   const [state, setState] = useState([]);
   const [status, setStatus] = useState("idle");
-  const [positionY, setPositionY] = useState(0);
-  const [scrollingDown, setScrollingDown] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [contentLoaded, setContentLoaded] = useState(false);
   const timeout = useRef(null);
   const timeoutTwo = useRef(null);
 
-  const { ref, inView, entry } = useInView({
-    triggerOnce: false,
-    rootMargin: "0px 0px",
-  });
-
   useEffect(() => {
-    if (entry) {
-      setScrollingDown(positionY > entry.boundingClientRect.y);
-      setPositionY(entry.boundingClientRect.y);
-    }
-  }, [entry]);
-
-  useEffect(() => {
+    setIsMounted(true);
     return () => {
       clearTimeout(timeout.current);
       clearTimeout(timeoutTwo.current);
@@ -117,7 +103,6 @@ const Videos = ({
     show: {
       transition: {
         staggerChildren: 0.2,
-        staggerDirection: scrollingDown ? -1 : 1,
       },
     },
   };
@@ -228,11 +213,11 @@ const Videos = ({
         <Container
           variants={container}
           initial="hidden"
-          animate={inView ? "show" : "hidden"}
+          animate={isMounted ? "show" : "hidden"}
           exit="hidden"
           layout
         >
-          <VideoContainer data-testid="videoContainer" ref={ref}>
+          <VideoContainer data-testid="videoContainer">
             {state.map((item) => (
               <Item
                 key={item.id}
@@ -339,15 +324,12 @@ const Videos = ({
                           }
                         >
                           <ImageLoader
-                            maxWidth="20px"
+                            maxWidth="inherit"
                             placeholderSize="100%"
-                            opacity={0}
                             hover={true}
-                            alt="delete"
                             src={
-                              "https://chpistel.sirv.com/Connor-Portfolio/clear.png?colorlevel.white=0&w=40"
+                              "https://chpistel.sirv.com/Connor-Portfolio/error.png?w=60"
                             }
-                            centerImage={true}
                           />
                         </DeleteIconContainer>
                       </AnimatePresence>
@@ -548,12 +530,12 @@ const Dot = styled(motion.div)`
 
 const DeleteIconContainer = styled(motion.div)`
   position: absolute;
-  max-width: 30px;
+  max-width: 40px;
   width: 100%;
-  top: 0px;
-  right: 0px;
-  padding-top: 20px;
-  padding-right: 20px;
+  top: -15px;
+  right: -15px;
+  padding-left: 20px;
+  padding-bottom: 20px;
 `;
 
 const Item = styled(motion.li)`

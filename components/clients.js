@@ -64,7 +64,7 @@ const Clients = () => {
       animate={inView ? "show" : "hidden"}
       exit="hidden"
     >
-      <Wave src={downWave} />
+      <Wave src={downWave} alt="wave" />
       <Title variants={titleAnimation}>Clients</Title>
       <IconsContainer>
         {state.map((image) => (
@@ -80,7 +80,7 @@ const Clients = () => {
           </ImageContainer>
         ))}
       </IconsContainer>
-      <BottomWave src={topWave} />
+      <BottomWave src={topWave} alt="wave" />
     </Container>
   );
 };

@@ -4,11 +4,10 @@ import { DeletePopupOverlay } from "./deletePopupOverlay";
 import { usePrevious } from "./common/utils/hooks";
 import styled from "styled-components";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import "intersection-observer";
 
 const WeddingPricingPackages = ({
   packages,
+  operation,
   handleClick,
   page,
   showAdminContent,
@@ -71,7 +70,7 @@ const WeddingPricingPackages = ({
     show: {
       transition: {
         delayChildren: stateChange ? 0.7 : 0,
-        staggerChildren: 0.12,
+        staggerChildren: 0.2,
         staggerDirection: 1,
       },
     },
@@ -131,13 +130,7 @@ const WeddingPricingPackages = ({
 
   return (
     <AnimateSharedLayout>
-      <PackagesContainer
-        variants={parent}
-        initial="hidden"
-        animate="show"
-        exit="hidden"
-        layout
-      >
+      <PackagesContainer variants={parent} layout>
         {packages.map((packageItem) => (
           <Package
             key={packageItem.id}
@@ -145,15 +138,14 @@ const WeddingPricingPackages = ({
             layoutId={packageItem.id}
             initial="hidden"
             onClick={() => handleClick(packageItem.id)}
+            operation={operation}
           >
             <InnerPackageContainer>
               <Name>{packageItem.packageName}</Name>
               <Price>${packageItem.price}</Price>
               <Description>{packageItem.description}</Description>
-              {packageItem.packageDetails.map((item) => (
-                <Item key={packageItem.packageDetails.indexOf(item)}>
-                  {item}
-                </Item>
+              {packageItem.packageDetails.map((item, index) => (
+                <Item key={index}>{item}</Item>
               ))}
             </InnerPackageContainer>
             <Button disabled={showAdminContent ? true : false}>Contact</Button>
@@ -191,7 +183,6 @@ const WeddingPricingPackages = ({
                     const key = e.key === 13 || e.keyCode === 13;
                     key && handleDeleteContentPopUp();
                   }}
-                  // onClick={handleDeleteContentPopUp}
                   onClick={handleDeleteContentPopUp}
                   animate={
                     selectedItem.id === packageItem.id ? "show" : "hidden"
@@ -254,6 +245,7 @@ const Package = styled(motion.div)`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  pointer-events: ${({ operation }) => (operation === "Add" ? "none" : "auto")};
   background-color: white;
   border: 1px solid #efefef;
   border-radius: 9px;

@@ -13,6 +13,21 @@ const AdminButtonsSection = ({
   page,
   operation,
 }) => {
+  const titleAnimation = {
+    hidden: {
+      opacity: 0,
+      transition: {
+        type: "spring",
+      },
+    },
+    show: {
+      opacity: 1,
+      transition: {
+        type: "spring",
+      },
+    },
+  };
+
   const buttonAnimation = {
     hidden: {
       scale: 0.85,
@@ -24,7 +39,7 @@ const AdminButtonsSection = ({
     },
     show: {
       scale: 1,
-      color: "white",
+      color: "rgb(255, 255, 255)",
       backgroundImage: `radial-gradient( circle farthest-corner at 10% 20%, rgba(50,172,109,1) 0%, rgba(209,251,155,1) 100.2% )`,
       transition: {
         type: "spring",
@@ -36,7 +51,7 @@ const AdminButtonsSection = ({
 
   return (
     <ButtonsContainer layout>
-      <Title>
+      <Title variants={titleAnimation}>
         Choose a section to {operation} {operation === "Add" ? "to" : ""} ?
       </Title>
       {!addPackages && (
@@ -125,9 +140,6 @@ const WeddingsFormButton = styled(motion.button)`
   min-width: 136.16px;
   font-weight: 600;
   transition: all 0.3s ease-in-out;
-  ${"" /* box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
-    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
-    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px; */}
   &:hover {
     cursor: pointer;
   }
@@ -155,9 +167,6 @@ const CorporateFormButton = styled(motion.button)`
   font-weight: 600;
   border: none;
   min-width: 136.16px;
-  ${"" /* box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
-    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
-    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px; */}
   transition: all 0.3s ease-in-out;
   &:hover {
     cursor: pointer;

@@ -58,8 +58,10 @@ const Banner = () => {
             Digital media producer and filmmaker based out of Perth WA. Creating
             videos for weddings, businesses and everything in between.
           </Description>
-          <Link href="/about">
-            <ReadMoreLink variants={textAnimation}>Read More</ReadMoreLink>
+          <Link href="/about" passHref>
+            <ReadMoreLink tabIndex="0" role="button" variants={textAnimation}>
+              Read More
+            </ReadMoreLink>
           </Link>
         </InfoContainer>
         <ImageContainer variants={imageAnimation}>
@@ -81,7 +83,7 @@ const Banner = () => {
           />
         </ImageContainer>
       </InnerContainer>
-      <BottomWave src={topWave} />
+      <BottomWave src={topWave} alt="wave" />
     </Container>
   );
 };
@@ -232,7 +234,7 @@ const Description = styled(motion.p)`
   }
 `;
 
-const ReadMoreLink = styled(motion.span)`
+const ReadMoreLink = styled(motion.a)`
   font-size: 1rem;
   font-family: "Karla-ExtraBold";
   z-index: 0;
@@ -255,6 +257,9 @@ const ReadMoreLink = styled(motion.span)`
     &::after {
       width: 100%;
     }
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
   }
   @media (max-width: 424px) {
     font-size: 0.9rem;

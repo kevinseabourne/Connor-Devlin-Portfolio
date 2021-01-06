@@ -25,7 +25,7 @@ export const TextArea = React.forwardRef(
   ) => {
     const animation = {
       hidden: {
-        opacity: opacity,
+        opacity: opacity ? opacity : 1,
         y: y,
         x: x,
       },

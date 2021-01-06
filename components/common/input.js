@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
 import { motion } from "framer-motion";
@@ -16,6 +16,7 @@ export const Input = React.forwardRef(
       doSubmit,
       value,
       marginLeft,
+      autoFocus,
       marginRight,
       tabIndex,
       defaultValue,
@@ -28,7 +29,7 @@ export const Input = React.forwardRef(
   ) => {
     const animation = {
       hidden: {
-        opacity: opacity,
+        opacity: opacity === undefined ? 1 : opacity,
         y: y,
         x: x,
       },
@@ -55,6 +56,7 @@ export const Input = React.forwardRef(
             onChange={onChange}
             placeholder={label}
             value={value}
+            autoFocus={autoFocus}
             defaultValue=""
             maxLength={maxLength}
             data-testid={`${name}-input`}
@@ -114,7 +116,6 @@ const TextInput = styled.input`
   padding: 14px 14px 14px 12px;
   font-size: 1rem;
   border-radius: 9px;
-  outline: none;
   margin: 0px;
   box-sizing: border-box;
   font-weight: 500;
@@ -123,6 +124,9 @@ const TextInput = styled.input`
   letter-spacing: 1px;
   color: ${({ theme }) => theme.colors.fontColor};
   border: none;
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
 `;
 
 const ErrorContainer = styled.div`

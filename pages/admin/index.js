@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import AppContext from "../../context/appContext";
 import { useRouter } from "next/router";
 import AdminSidebar from "../../components/AdminSidebar";
 import { getCurrentUser } from "../api/auth";
 
 const Admin = () => {
-  const context = useContext(AppContext);
   const [user, setUser] = useState(null);
   const router = useRouter();
 
