@@ -1,4 +1,7 @@
 import App from "next/app";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import * as gtag from "../lib/gtag";
 import styled from "styled-components";
 import { ThemeProvider } from "styled-components";
 import logger from "../pages/api/logger";
@@ -23,6 +26,18 @@ const theme = {
 };
 
 const MyApp = ({ Component, pageProps }) => {
+  // Google analytics
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
+
   const handleSignIn = async (formData) => {
     const user = await signIn(formData);
     return user;
