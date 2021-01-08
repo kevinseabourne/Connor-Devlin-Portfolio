@@ -28,15 +28,16 @@ export async function signIn(formData) {
   );
   const user = {
     token: data.idToken,
-    expiry: new Date(),
+    expiry: new Date().toString(),
   };
-  localStorage.setItem("user", user);
+  localStorage.setItem("user", JSON.stringify(user));
   return data;
 }
 
 export function getCurrentUser() {
   try {
-    const { token } = localStorage.getItem("user");
+    const userObj = JSON.parse(localStorage.getItem("user"));
+    const { token } = userObj;
     const expired = userSessionExpired();
     if (!expired) {
       return jwtDecode(token);
@@ -53,18 +54,26 @@ export function signOut() {
 }
 
 export function userSessionExpired() {
-  const { token, expiry } = localStorage.getItem("user");
+  const userObj = JSON.parse(localStorage.getItem("user"));
+  const { token, expiry } = userObj;
+
   const currentDate = new Date();
+  const tokenExpiryDate = new Date(expiry);
+
   const timeDifference = Math.floor(
     (Date.UTC(
       currentDate.getFullYear(),
       currentDate.getMonth(),
       currentDate.getDate()
     ) -
-      Date.UTC(expiry.getFullYear(), expiry.getMonth(), expiry.getDate())) /
+      Date.UTC(
+        tokenExpiryDate.getFullYear(),
+        tokenExpiryDate.getMonth(),
+        tokenExpiryDate.getDate()
+      )) /
       (1000 * 60 * 60 * 24)
   );
-
+  debugger;
   // if the admin has not visited the site for 7 days then sign them out.
   if (timeDifference >= 7) {
     signOut();
@@ -73,9 +82,9 @@ export function userSessionExpired() {
     // reset the expiry time instead of automatically signing them out after 7 days logged in.
     const user = {
       token: token,
-      exipiry: new Date(),
+      expiry: new Date().toString(),
     };
-    localStorage.setItem("user", user);
+    localStorage.setItem("user", JSON.stringify(user));
   }
   return false;
 }
