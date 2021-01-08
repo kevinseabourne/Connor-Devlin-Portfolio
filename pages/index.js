@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AnimateSharedLayout } from "framer-motion";
 import DynamicHead from "../components/dynamicHead";
 import Banner from "../components/banner";
 import ExampleVideo from "../components/exampleVideo";
@@ -7,13 +8,15 @@ import HomePageContact from "../components/homepage-contact";
 
 export default function Home() {
   return (
-    <Container>
-      <DynamicHead title="Connor Devlin Media" urlQuery="/" />
-      <Banner />
-      <ExampleVideo />
-      <Clients />
-      <HomePageContact />
-    </Container>
+    <AnimateSharedLayout>
+      <Container>
+        <DynamicHead title="Connor Devlin Media" urlQuery="/" />
+        <Banner />
+        <ExampleVideo />
+        <Clients />
+        <HomePageContact />
+      </Container>
+    </AnimateSharedLayout>
   );
 }
 
