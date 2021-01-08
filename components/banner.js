@@ -20,11 +20,11 @@ const Banner = () => {
 
   const textAnimation = {
     hidden: {
-      x: -40,
+      // x: -40,
       opacity: 0,
     },
     show: {
-      x: 0,
+      // x: 0,
       opacity: 1,
       transition: {
         type: "spring",
@@ -34,11 +34,11 @@ const Banner = () => {
 
   const imageAnimation = {
     hidden: {
-      x: 40,
+      // x: 40,
       opacity: 0,
     },
     show: {
-      x: 0,
+      // x: 0,
       opacity: 1,
       transition: {
         type: "spring",
