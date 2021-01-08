@@ -47,7 +47,7 @@ const Banner = () => {
   };
   return (
     <AnimateSharedLayout>
-      <Container variants={container} initial="hidden" animate="show">
+      <Container layout>
         <InnerContainer>
           <InfoContainer>
             <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
