@@ -90,7 +90,7 @@ const Banner = () => {
 
 export default Banner;
 
-const Container = styled(motion.div)`
+const Container = styled.div`
   height: calc(100vh - 75px);
   width: 100%;
   display: flex;
@@ -110,7 +110,7 @@ const Container = styled(motion.div)`
   }
 `;
 
-const InnerContainer = styled(motion.div)`
+const InnerContainer = styled.div`
   padding: 0px 50px;
   width: 100%;
   box-sizing: border-box;
@@ -132,7 +132,7 @@ const InnerContainer = styled(motion.div)`
   }
 `;
 
-const InfoContainer = styled(motion.div)`
+const InfoContainer = styled.div`
   display: flex;
   max-width: 450px;
   width: 100%;
@@ -269,7 +269,7 @@ const ReadMoreLink = styled(motion.a)`
   }
 `;
 
-const ImageContainer = styled(motion.div)`
+const ImageContainer = styled.div`
   max-width: 700px;
   width: 100%;
   margin-bottom: 75px;
