@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <Container>
       <DynamicHead title="Connor Devlin Media" urlQuery="/" />
-      {/* <Banner /> */}
+      <Banner />
       <ExampleVideo />
       <Clients />
       <HomePageContact />
