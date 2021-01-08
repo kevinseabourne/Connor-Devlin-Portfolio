@@ -115,9 +115,9 @@ const AdminSidebar = () => {
   return (
     <Sidebar>
       <LinksContainer>
-        {links.map((link) => (
+        {links.map((link, index) => (
           <Link
-            href="/admin/[id]"
+            href={index === 0 ? "/admin" : "/admin/[id]"}
             as={link.route}
             key={links.indexOf(link)}
             passHref
