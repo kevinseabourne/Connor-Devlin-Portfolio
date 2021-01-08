@@ -34,11 +34,11 @@ const Banner = () => {
 
   const imageAnimation = {
     hidden: {
-      // x: 40,
+      x: 40,
       opacity: 0,
     },
     show: {
-      // x: 0,
+      x: 0,
       opacity: 1,
       transition: {
         type: "spring",
@@ -71,7 +71,7 @@ const Banner = () => {
                 </ReadMoreLink>
               </Link>
             </InfoContainer>
-            <ImageContainer variants={imageAnimation}>
+            <ImageContainer layout variants={imageAnimation}>
               <ImageLoader
                 maxWidth="inherit"
                 placeholderSize="66.66%"
@@ -198,14 +198,14 @@ const FirstName = styled(motion.h1)`
     bottom: 0;
     left: 0;
   }
-  @media (max-width: 450px) {
+  @media (max-width: 570px) {
     font-size: 2.3rem;
   }
   @media (max-width: 350px) {
     font-size: 2rem;
   }
   @media (max-width: 300px) {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 `;
 
@@ -216,14 +216,14 @@ const LastName = styled(motion.h1)`
   text-align: center;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
-  @media (max-width: 450px) {
+  @media (max-width: 570px) {
     font-size: 2.3rem;
   }
   @media (max-width: 350px) {
     font-size: 2rem;
   }
   @media (max-width: 300px) {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 `;
 
