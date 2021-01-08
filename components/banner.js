@@ -110,7 +110,7 @@ const Container = styled.div`
   }
 `;
 
-const InnerContainer = styled.div`
+const InnerContainer = styled(motion.div)`
   padding: 0px 50px;
   width: 100%;
   box-sizing: border-box;
@@ -132,7 +132,7 @@ const InnerContainer = styled.div`
   }
 `;
 
-const InfoContainer = styled.div`
+const InfoContainer = styled(motion.div)`
   display: flex;
   max-width: 450px;
   width: 100%;
@@ -269,7 +269,7 @@ const ReadMoreLink = styled(motion.a)`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled(motion.div)`
   max-width: 700px;
   width: 100%;
   margin-bottom: 75px;
