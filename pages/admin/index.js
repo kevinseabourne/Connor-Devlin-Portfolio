@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import AdminSidebar from "../../components/AdminSidebar";
 import { getCurrentUser } from "../api/auth";
+import AdminDashBoard from "../../components/adminDashBoard";
 
 const Admin = () => {
   const [user, setUser] = useState(null);
@@ -21,6 +22,7 @@ const Admin = () => {
   return !user ? null : (
     <Container>
       <AdminSidebar />
+      <AdminDashBoard />
     </Container>
   );
 };
