@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import ImageLoader from "./common/imageLoader";
 import topWave from "../public/images/top-wave.svg";
-import { motion } from "framer-motion";
+import { motion, AnimateSharedLayout } from "framer-motion";
 
 const Banner = () => {
   const container = {
@@ -46,51 +46,54 @@ const Banner = () => {
     },
   };
   return (
-    <Container variants={container} initial="hidden" animate="show">
-      <InnerContainer>
-        <InfoContainer>
-          <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
-          <Name variants={textAnimation}>
-            <FirstName>CONNOR</FirstName>
-            <LastName>DEVLIN.</LastName>
-          </Name>
-          <Description variants={textAnimation}>
-            Digital media producer and filmmaker based out of Perth WA. Creating
-            videos for weddings, businesses and everything in between.
-          </Description>
-          <Link href="/about" passHref>
-            <ReadMoreLink tabIndex="0" role="button" variants={textAnimation}>
-              Read More
-            </ReadMoreLink>
-          </Link>
-        </InfoContainer>
-        <ImageContainer variants={imageAnimation}>
-          <ImageLoader
-            maxWidth="inherit"
-            placeholderSize="66.66%"
-            borderRadius="19px"
-            alt="Connor Devlin"
-            opacity={0}
-            boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
-            src="https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=701"
-            srcSet="
+    <AnimateSharedLayout>
+      <Container variants={container} initial="hidden" animate="show">
+        <InnerContainer>
+          <InfoContainer>
+            <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
+            <Name variants={textAnimation}>
+              <FirstName>CONNOR</FirstName>
+              <LastName>DEVLIN.</LastName>
+            </Name>
+            <Description variants={textAnimation}>
+              Digital media producer and filmmaker based out of Perth WA.
+              Creating videos for weddings, businesses and everything in
+              between.
+            </Description>
+            <Link href="/about" passHref>
+              <ReadMoreLink tabIndex="0" role="button" variants={textAnimation}>
+                Read More
+              </ReadMoreLink>
+            </Link>
+          </InfoContainer>
+          <ImageContainer variants={imageAnimation}>
+            <ImageLoader
+              maxWidth="inherit"
+              placeholderSize="66.66%"
+              borderRadius="19px"
+              alt="Connor Devlin"
+              opacity={0}
+              boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
+              src="https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=701"
+              srcSet="
             https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=622 1200w,
             https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=522 1100w,
             https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=501 1024w,
             https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=386 425w,
             https://chpistel.sirv.com/Connor-Portfolio/Connor%20Devlin%20Media.png?w=336 375w,
           "
-          />
-        </ImageContainer>
-      </InnerContainer>
-      <BottomWave src={topWave} alt="wave" />
-    </Container>
+            />
+          </ImageContainer>
+        </InnerContainer>
+        <BottomWave src={topWave} alt="wave" />
+      </Container>
+    </AnimateSharedLayout>
   );
 };
 
 export default Banner;
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   height: calc(100vh - 75px);
   width: 100%;
   display: flex;
