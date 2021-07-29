@@ -7,7 +7,9 @@ const HomePageContact = () => {
       <Link href="/contact">
         <ContactButton>CONTACT</ContactButton>
       </Link>
-      <CopyRight>Copyright © 2020 Connor Devlin</CopyRight>
+      <CopyRight>
+        Copyright © {new Date().getFullYear()} Connor Devlin
+      </CopyRight>
     </Container>
   );
 };
@@ -46,6 +48,9 @@ const ContactButton = styled.button`
     color: ${({ theme }) => theme.colors.secondary};
     background-color: ${({ theme }) => theme.colors.fontColor};
   }
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
 `;
 
 const CopyRight = styled.span`
@@ -59,5 +64,3 @@ const CopyRight = styled.span`
     font-size: 0.8rem;
   }
 `;
-
-const Title = styled.h1``;

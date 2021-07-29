@@ -1,85 +1,42 @@
+import PropTypes from "prop-types";
 import styled from "styled-components";
-import ErrorMessage from "../../../components/common/errorMessage";
 import AdminAbout from "../../../components/adminAbout";
-import AdminContentPage from "../../../components/common/adminContentPage";
+import ContentPage from "../../../components/common/contentPage";
 import AdminAddPricing from "../../../components/adminAddPricing";
 import AdminEditPricing from "../../../components/adminEditPricing";
 import AdminAddContent from "../../../components/adminAddContent";
 import AdminEditContent from "../../../components/adminEditContent";
-import AdminDeleteContent from "../../../components/adminDeleteContent";
-import { getAllWeddings } from "../../api/weddings";
-import { getAllCorporate } from "../../api/corporate";
+import { getContent } from "../../api/content";
 import { getAllPricingPackages } from "../../api/pricing";
 import { getAboutMe } from "../../api/about";
 import AdminSidebar from "../../../components/AdminSidebar";
 
 const AdminRoute = ({ params, data }) => {
-  switch (params.id) {
-    case "about":
-      return data ? (
-        <Container>
-          <AdminSidebar />
-          <AdminAbout data={data} />
-        </Container>
-      ) : (
-        <ErrorMessage />
-      );
-    case "weddings":
-      return data ? (
-        <Container>
-          <AdminSidebar />
-          <AdminContentPage data={data} page="weddings" />
-        </Container>
-      ) : (
-        <ErrorMessage />
-      );
-    case "corporate":
-      return data ? (
-        <Container>
-          <AdminSidebar />
-          <AdminContentPage data={data} page="corporate" />
-        </Container>
-      ) : (
-        <ErrorMessage />
-      );
-    case "add-pricing":
-      return (
-        <Container>
-          <AdminSidebar />
-          <AdminAddPricing data={data} />
-        </Container>
-      );
-    case "edit-pricing":
-      return (
-        <Container>
-          <AdminSidebar />
-          <AdminEditPricing />
-        </Container>
-      );
-    case "add-content":
-      return (
-        <Container>
-          <AdminSidebar />
-          <AdminAddContent />
-        </Container>
-      );
-    case "edit-content":
-      return (
-        <Container>
-          <AdminSidebar />
-          <AdminEditContent />
-        </Container>
-      );
-    case "delete-content":
-      return (
-        <Container>
-          <AdminSidebar />
-          <AdminDeleteContent />
-        </Container>
-      );
-    default:
-      return <Container />;
-  }
+  const url = params.id;
+  return (
+    <Container>
+      <AdminSidebar />
+      {url === "about" && <AdminAbout data={data} />}
+      {url === "weddings" && (
+        <ContentPage
+          data={data}
+          selectedData="weddings"
+          showAdminContentData={true}
+        />
+      )}
+      {url === "corporate" && (
+        <ContentPage
+          data={data}
+          selectedData="corporate"
+          showAdminContentData={true}
+        />
+      )}
+      {url === "add-pricing" && <AdminAddPricing data={data} />}
+      {url === "edit-pricing" && <AdminEditPricing />}
+      {url === "add-content" && <AdminAddContent />}
+      {url === "edit-content" && <AdminEditContent />}
+    </Container>
+  );
 };
 
 export async function getStaticPaths() {
@@ -105,10 +62,7 @@ export async function getStaticProps({ params }) {
     };
   }
   if (params.id === "weddings" || params.id === "corporate") {
-    const data =
-      params.id === "weddings"
-        ? await getAllWeddings()
-        : await getAllCorporate();
+    const data = await getContent(params.id);
 
     return {
       props: data ? { data, params } : { data: null, params },
@@ -127,6 +81,13 @@ export async function getStaticProps({ params }) {
 }
 
 export default AdminRoute;
+
+AdminRoute.propTypes = {
+  params: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  data: PropTypes.any,
+};
 
 const Container = styled.div`
   height: 100%;

@@ -6,13 +6,13 @@ describe("Corporate Page Tests", () => {
       cy.wrap(item).scrollIntoView().wait(500).click();
 
       cy.findByTestId("videoOverlay").should("be.visible");
-      cy.findByTestId("loadingSpinner").should("be.visible");
+      cy.findByLabelText("loading spinner").should("be.visible");
 
       cy.findByTestId("video").should("be.visible");
 
       cy.findByTestId("videoOverlay").wait(500).click("left");
 
-      cy.findByTestId("videoOverlay").should("not.be.visible");
+      cy.findByTestId("videoOverlay").should("not.exist");
     });
   });
 
@@ -23,14 +23,33 @@ describe("Corporate Page Tests", () => {
       cy.wrap(item).scrollIntoView().wait(500).click();
 
       cy.findByTestId("videoOverlay").should("be.visible");
-      cy.findByTestId("loadingSpinner").should("be.visible");
+      cy.findByLabelText("loading spinner").should("be.visible");
 
       cy.findByTestId("video").should("be.visible");
 
       cy.get("body").type("{esc}");
 
-      cy.findByTestId("videoOverlay").should("not.be.visible");
+      cy.findByTestId("videoOverlay").should("not.exist");
     });
+  });
+
+  it("should render an image for each element", () => {
+    cy.visit("/corporate");
+
+    cy.scrollTo(0, 800);
+
+    const images = cy.findAllByTestId("photo");
+
+    images.should("be.visible");
+  });
+
+  it("should render a play icon for each element", () => {
+    cy.visit("/corporate");
+
+    cy.scrollTo(0, 800);
+    const playIcon = cy.findAllByAltText("play Icon");
+
+    playIcon.should("be.visible");
   });
 
   it("should navigate to the corporate pricing page after clicking the pricing button", () => {

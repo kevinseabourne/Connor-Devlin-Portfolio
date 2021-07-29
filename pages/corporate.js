@@ -1,20 +1,17 @@
 import styled from "styled-components";
 import ContentPage from "../components/common/contentPage";
-import { getAllCorporate } from "./api/corporate";
-import ErrorMessage from "../components/common/errorMessage";
+import { getContent } from "./api/content";
 
 const Corporate = ({ data }) => {
-  return data ? (
+  return (
     <Container>
-      <ContentPage data={data} page="corporate" />
+      <ContentPage data={data} selectedData="corporate" />
     </Container>
-  ) : (
-    <ErrorMessage />
   );
 };
 
 export async function getStaticProps() {
-  const data = await getAllCorporate();
+  const data = await getContent("corporate");
   return {
     props: data ? { data } : { data: null },
   };

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
 import popSound from "../../public/sounds/pop_waterdrip_hi.mp3";
@@ -19,6 +20,8 @@ export const InputWithIcon = React.forwardRef(
       value,
       marginLeft,
       marginRight,
+      marginTop,
+      marginBottom,
       defaultValue,
       toolTipMessage,
       icon,
@@ -30,6 +33,7 @@ export const InputWithIcon = React.forwardRef(
       toolTipImagePlaceHolderSize,
       toolTipImageBorderRadius,
       opacity,
+      scale,
       y,
       x,
       ...rest
@@ -41,18 +45,30 @@ export const InputWithIcon = React.forwardRef(
 
     const animation = {
       hidden: {
-        opacity: opacity ? opacity : 1,
+        scale: scale == undefined ? 1 : scale,
+        opacity: opacity == undefined ? 1 : opacity,
         y: y ? y : 0,
         x: x ? x : 0,
       },
       show: {
+        scale: 1,
         opacity: 1,
         y: 0,
         x: 0,
       },
     };
+
+    const handleKeyDown = (e) => {
+      if (e.key === 13 || e.keyCode === 13) {
+        play();
+      }
+      setToolTipOpen(!toolTipOpen);
+    };
+
     return (
       <Container
+        marginTop={marginTop}
+        marginBottom={marginBottom}
         marginLeft={marginLeft}
         marginRight={marginRight}
         variants={animation}
@@ -69,7 +85,7 @@ export const InputWithIcon = React.forwardRef(
             value={value}
             defaultValue=""
             maxLength={maxLength}
-            data-testid={`${name}-input`}
+            aria-label={`${name}-input`}
             id="innerLabel"
           />
           {icon && (
@@ -81,11 +97,7 @@ export const InputWithIcon = React.forwardRef(
                 setToolTipOpen(true);
               }}
               onMouseLeave={() => setToolTipOpen(false)}
-              onKeyDown={(e) => {
-                const key = e.key === 13 || e.keyCode === 13;
-                key && play();
-                setToolTipOpen(!toolTipOpen);
-              }}
+              onKeyDown={handleKeyDown}
               onBlur={() => setToolTipOpen(false)}
             >
               <ImageLoader
@@ -97,6 +109,7 @@ export const InputWithIcon = React.forwardRef(
                 opacity={0}
                 scale={0.9}
                 hover={true}
+                alt="calender"
               />
             </IconBox>
           )}
@@ -128,9 +141,11 @@ export const InputWithIcon = React.forwardRef(
               timeout={250}
               unmountOnExit
             >
-              <ErrorContainer>
+              <ErrorContainer aria-label={`${name}-error-message`}>
                 <ImageLoader
-                  lazyLoad={true}
+                  opacity={0}
+                  scale={0}
+                  alt="error icon"
                   maxWidth="15px"
                   placeholderSize="100%"
                   src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
@@ -145,9 +160,40 @@ export const InputWithIcon = React.forwardRef(
   }
 );
 
+InputWithIcon.propTypes = {
+  label: PropTypes.string,
+  error: PropTypes.object,
+  maxLength: PropTypes.string,
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+  name: PropTypes.string,
+  doSubmit: PropTypes.func,
+  value: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  defaultValue: PropTypes.string,
+  toolTipMessage: PropTypes.string,
+  icon: PropTypes.string,
+  iconMaxWidth: PropTypes.string,
+  iconPlaceHolderSize: PropTypes.string,
+  iconBorderRadius: PropTypes.string,
+  toolTipImage: PropTypes.string,
+  toolTipMaxWidth: PropTypes.string,
+  toolTipImagePlaceHolderSize: PropTypes.string,
+  toolTipImageBorderRadius: PropTypes.string,
+  opacity: PropTypes.number,
+  scale: PropTypes.number,
+  y: PropTypes.number,
+  x: PropTypes.number,
+};
+
 const Container = styled(motion.div)`
   width: 100%;
   margin-bottom: 22px;
+  margin-top: ${({ marginTop }) => marginTop};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
   margin-left: ${({ marginLeft }) => marginLeft};
   margin-right: ${({ marginRight }) => marginRight};
   @media (max-width: 609px) {
@@ -211,9 +257,10 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  border: 1px solid black;
   border-radius: 9px;
   position: relative;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 `;
 
 const TextInput = styled.input`
@@ -222,11 +269,11 @@ const TextInput = styled.input`
   border-radius: 9px;
   outline: none;
   margin: 0px;
+  margin-top: 3px;
   box-sizing: border-box;
   font-weight: 500;
   font-family: inherit;
   width: 100%;
-  letter-spacing: 1px;
   color: ${({ theme }) => theme.colors.fontColor};
   border: none;
 `;
@@ -268,12 +315,13 @@ const ErrorContainer = styled.div`
   padding-right: 12px;
   display: flex;
   align-items: center;
-  border: 1.2px solid red;
+  border: 2px solid #f1535e;
   border-radius: 9px;
-  letter-spacing: 1px;
   padding-top: 10px;
   padding-bottom: 10px;
   flex-direction: row;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   &.errorAnimation-enter {
     transform: scale(0.4);

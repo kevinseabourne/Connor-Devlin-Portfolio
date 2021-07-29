@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import DynamicHead from "../dynamicHead";
+import { errorMessage } from "./utils/errorMessage";
 import styled from "styled-components";
 import bottomWave from "../../public/images/top-wave.svg";
 import { useForm } from "react-hook-form";
@@ -11,11 +14,13 @@ import { LoadingSpinner } from "../loading-spinner";
 import { motion } from "framer-motion";
 
 const ContactForm = ({ data }) => {
+  const timeout = useRef(null);
   const [status, setStatus] = useState("idle");
   const [packages, setPackages] = useState([]);
 
   useEffect(() => {
     handleFormPackages();
+    return () => clearTimeout(timeout.current);
   }, []);
 
   const {
@@ -80,17 +85,17 @@ const ContactForm = ({ data }) => {
   ];
 
   const onSubmit = async (data) => {
-    if (status !== "pending") {
-      setStatus("pending");
-      const response = await sendEmail(data);
-      if (response.status === 200) {
-        setStatus("resolved");
-
-        // clear inputs
-        setValue("dayPicker", "");
-        setValue("topic", "");
-        reset();
-      }
+    setStatus("pending");
+    const response = await sendEmail(data);
+    if (response && response.status === 200) {
+      // clear inputs
+      setValue("dayPicker", "");
+      setValue("topic", "");
+      reset();
+      setStatus("resolved");
+      timeout.current = setTimeout(() => setStatus("idle"), 3000);
+    } else {
+      errorMessage();
     }
   };
 
@@ -107,10 +112,14 @@ const ContactForm = ({ data }) => {
   };
 
   const containerAnimation = {
-    hidden: {},
+    hidden: {
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
     show: {
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.15,
       },
     },
   };
@@ -118,7 +127,7 @@ const ContactForm = ({ data }) => {
   const titleAnimation = {
     hidden: {
       opacity: 0,
-      y: 12,
+      y: 20,
     },
     show: {
       opacity: 1,
@@ -129,27 +138,26 @@ const ContactForm = ({ data }) => {
   const waveAnimation = {
     hidden: {
       opacity: 0,
-      x: 12,
-      y: 22,
+      y: 20,
     },
     show: {
       opacity: 1,
-      x: 0,
       y: 0,
     },
   };
 
   return (
     <Container variants={containerAnimation} initial="hidden" animate="show">
+      <DynamicHead title="Contact - Connor Devlin" urlQuery="/contact" />
       <Title variants={titleAnimation}>Contact</Title>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} aria-label="contact form">
         <Input
           name="name"
           label="Name"
           ref={register(schema.name)}
           error={errors.name}
           opacity={0}
-          y={12}
+          y={20}
         />
         <Input
           name="email"
@@ -157,7 +165,7 @@ const ContactForm = ({ data }) => {
           ref={register(schema.email)}
           error={errors.email}
           opacity={0}
-          y={12}
+          y={20}
         />
         <InnerContainer>
           <DayPicker
@@ -169,7 +177,7 @@ const ContactForm = ({ data }) => {
             error={errors.dayPicker}
             marginRight="5px"
             opacity={0}
-            y={12}
+            y={20}
           />
           <ReactSelect
             control={control}
@@ -193,8 +201,19 @@ const ContactForm = ({ data }) => {
           opacity={0}
           y={12}
         />
-        <SubmitButton type="submit" variants={titleAnimation}>
-          {status !== "pending" ? "Send" : <LoadingSpinner size="30px" />}
+        <SubmitButton
+          type="submit"
+          aria-label="submit button"
+          variants={titleAnimation}
+          disabled={status === "pending" ? true : false}
+        >
+          {status === "pending" ? (
+            <LoadingSpinner size="30px" />
+          ) : status === "resolved" ? (
+            "Success"
+          ) : (
+            "Send"
+          )}
         </SubmitButton>
       </Form>
       <BottomWave src={bottomWave} variants={waveAnimation} />
@@ -203,6 +222,10 @@ const ContactForm = ({ data }) => {
 };
 
 export default ContactForm;
+
+ContactForm.propTypes = {
+  data: PropTypes.array.isRequired,
+};
 
 const Container = styled(motion.div)`
   height: 100%;
@@ -260,18 +283,23 @@ const SubmitButton = styled(motion.button)`
   position: relative;
   font-weight: 600;
   transition: all 0.2s ease;
-  outline: none;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
   &:hover {
     cursor: pointer;
   }
-  &:focus {
-    outline: none;
-  }
   &:active {
     transform: scale(0.95);
-    outline: 0;
+  }
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+  @media (max-width: 420px) {
+    width: 100%;
+    min-width: 100%;
+  }
+  @media (max-width: 250px) {
+    padding: 18px 40px;
   }
 `;
 

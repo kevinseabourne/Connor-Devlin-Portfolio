@@ -1,32 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import ImageLoader from "../components/common/imageLoader";
-import { DeletePopupOverlay } from "./deletePopupOverlay";
+import DeletePopUp from "./common/deletePopUp";
 import { usePrevious } from "./common/utils/hooks";
+import { isArrayEmpty } from "./common/utils/isEmpty";
 import styled from "styled-components";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
 const WeddingPricingPackages = ({
   packages,
+  status,
   operation,
   handleClick,
-  page,
+  selectedData,
   showAdminContent,
   selectedItem,
+  showPackagesContent,
+  handleSelectedPackageOnDelete,
   handleDeletePricingPackage,
 }) => {
   const [stateChange, setStateChange] = useState(false);
-  const [deletePopup, setDeletePopup] = useState(false);
-  const prevDeletePopup = usePrevious(deletePopup);
+  const [popUpOpen, setPopUpOpen] = useState(false);
+  const prevDeletePopup = usePrevious(popUpOpen);
   const deleteIconRef = useRef(new Array());
-  const deletePopupRef = useRef(null);
   const timeout = useRef(null);
-
-  useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     setStateChange(true);
@@ -34,12 +31,12 @@ const WeddingPricingPackages = ({
       setStateChange(false);
     }, 1000);
     return () => clearTimeout(timeout.current);
-  }, [page]);
+  }, [selectedData]);
 
   useEffect(() => {
     // keyboard accessibility
     // return focus back to mapped element after opening then closing an overlay onKeyDown
-    if (selectedItem && !deletePopup && prevDeletePopup) {
+    if (selectedItem && !popUpOpen && prevDeletePopup) {
       // filter out null values
       deleteIconRef.current = deleteIconRef.current.filter((i) => i);
       // everytime a package is selected the deleteIcon of the
@@ -47,30 +44,28 @@ const WeddingPricingPackages = ({
       const index = deleteIconRef.current.length - 1;
       deleteIconRef.current[index].focus();
     }
-  }, [deletePopup, prevDeletePopup, selectedItem]);
+  }, [popUpOpen, prevDeletePopup, selectedItem]);
 
-  const handleClickOutside = (e) => {
-    if (deletePopupRef.current && !deletePopupRef.current.contains(e.target)) {
-      setDeletePopup(false);
-    }
+  const toggleDeletePopUp = () => {
+    // you cannot delete all pricing packages
+    setPopUpOpen(!popUpOpen);
   };
 
-  const handleDeleteContentPopUp = () => {
-    setDeletePopup(!deletePopup);
+  const closeDeletePopUp = () => {
+    setPopUpOpen(false);
   };
 
   const parent = {
     hidden: {
       transition: {
-        delayChildren: 0,
-        staggerChildren: 0,
+        staggerChildren: 0.9,
         staggerDirection: -1,
       },
     },
     show: {
       transition: {
         delayChildren: stateChange ? 0.7 : 0,
-        staggerChildren: 0.2,
+        staggerChildren: 0.4,
         staggerDirection: 1,
       },
     },
@@ -128,27 +123,42 @@ const WeddingPricingPackages = ({
     },
   };
 
-  return (
+  return isArrayEmpty(packages) ? (
     <AnimateSharedLayout>
-      <PackagesContainer variants={parent} layout>
-        {packages.map((packageItem) => (
+      <PackagesContainer
+        initial="hidden"
+        animate="show"
+        variants={parent}
+        exit="hidden"
+        layout
+      >
+        {packages.map((packageItem, index) => (
           <Package
-            key={packageItem.id}
+            key={index} // would have used 'id' as the key but. A test had a weird error and using index instead got rid of it.
             variants={child}
             layoutId={packageItem.id}
-            initial="hidden"
             onClick={() => handleClick(packageItem.id)}
             operation={operation}
+            data-testid="pricing package"
           >
             <InnerPackageContainer>
-              <Name>{packageItem.packageName}</Name>
-              <Price>${packageItem.price}</Price>
-              <Description>{packageItem.description}</Description>
-              {packageItem.packageDetails.map((item, index) => (
-                <Item key={index}>{item}</Item>
-              ))}
+              <Name data-testid="package name">{packageItem.packageName}</Name>
+              <Price data-testid="package price">${packageItem.price}</Price>
+              <Description data-testid="package description">
+                {packageItem.description}
+              </Description>
+              <PackageDetailsContainer data-testid="package details">
+                {packageItem.packageDetails.map((item, index) => (
+                  <Item key={index}>{item}</Item>
+                ))}
+              </PackageDetailsContainer>
             </InnerPackageContainer>
-            <Button disabled={showAdminContent ? true : false}>Contact</Button>
+            <Button
+              disabled={showAdminContent ? true : false}
+              data-testid={`contact-button-${index}`}
+            >
+              Contact
+            </Button>
 
             {showAdminContent && (
               <SelectedPackageButton
@@ -181,9 +191,12 @@ const WeddingPricingPackages = ({
                   variants={buttonAnimation}
                   onKeyDown={(e) => {
                     const key = e.key === 13 || e.keyCode === 13;
-                    key && handleDeleteContentPopUp();
+                    key && toggleDeletePopUp();
                   }}
-                  onClick={handleDeleteContentPopUp}
+                  disabled={
+                    status !== "pending" && packages.length > 1 ? false : true
+                  }
+                  onClick={toggleDeletePopUp}
                   animate={
                     selectedItem.id === packageItem.id ? "show" : "hidden"
                   }
@@ -193,6 +206,7 @@ const WeddingPricingPackages = ({
                     maxWidth="inherit"
                     placeholderSize="100%"
                     hover={true}
+                    alt="delete"
                     src={
                       "https://chpistel.sirv.com/Connor-Portfolio/error.png?w=60"
                     }
@@ -204,21 +218,37 @@ const WeddingPricingPackages = ({
         ))}
       </PackagesContainer>
       <AnimatePresence>
-        {deletePopup && (
-          <DeletePopupOverlay
-            popUpOpen={deletePopup}
-            closePopup={handleDeleteContentPopUp}
-            handleDeletePricingPackage={handleDeletePricingPackage}
-            page={page}
-            ref={deletePopupRef}
+        {showAdminContent && popUpOpen && (
+          <DeletePopUp
+            popUpOpen={popUpOpen}
+            togglePopUp={toggleDeletePopUp}
+            closePopUp={closeDeletePopUp}
+            handleDelete={handleDeletePricingPackage}
+            showData={showPackagesContent}
+            changeSeletedItemOnDelete={handleSelectedPackageOnDelete}
           />
         )}
       </AnimatePresence>
     </AnimateSharedLayout>
+  ) : (
+    ""
   );
 };
 
 export default WeddingPricingPackages;
+
+WeddingPricingPackages.propTypes = {
+  packages: PropTypes.array,
+  status: PropTypes.string,
+  operation: PropTypes.string,
+  handleClick: PropTypes.func,
+  selectedData: PropTypes.string,
+  showAdminContent: PropTypes.bool,
+  selectedItem: PropTypes.object,
+  showPackagesContent: PropTypes.func,
+  handleSelectedPackageOnDelete: PropTypes.func,
+  handleDeletePricingPackage: PropTypes.func,
+};
 
 const PackagesContainer = styled(motion.div)`
   display: grid;
@@ -303,6 +333,13 @@ const Description = styled.p`
   width: 100%;
   letter-spacing: 0.2px;
   border-bottom: 1px solid #efefef;
+`;
+
+const PackageDetailsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 const Item = styled.span`

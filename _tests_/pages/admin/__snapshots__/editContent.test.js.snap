@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Admin Edit Wedding Content Should show a loading skeleton on each corporate item and once loaded show an image and data: 
+      Array [
+        "Company 1 Name Here",
+        "Company 2 Name Here",
+        "Company 3 Name Here",
+      ]
+     1`] = `
+Array [
+  "Company 1 Name Here",
+  "Company 2 Name Here",
+  "Company 3 Name Here",
+]
+`;
+
+exports[`Admin Edit Wedding Content Should show a loading skeleton on each wedding item and once loaded show an image and data: 
+      Array [
+        "Jamie Mason
+       John Wayne",
+        "Alex Johnson
+       Chris Addams",
+        "Rose Wood
+       Ryan Davis",
+      ]
+     1`] = `
+Array [
+  "Jamie Mason 
+ John Wayne",
+  "Alex Johnson 
+ Chris Addams",
+  "Rose Wood 
+ Ryan Davis",
+]
+`;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import Link from "next/link";
@@ -6,14 +6,16 @@ import Image from "next/image";
 import BurgerBar from "./common/burgerBar";
 
 const Header = () => {
-  const ref = useRef(null);
+  // Cypress Testing Coverage //
+  /* istanbul ignore file */
   const [showSkipLink, setShowSkipLink] = useState(false);
+  const [renderLinks, setRenderLinks] = useState(false);
   const [links] = useState([
-    { title: "About", link: "/about" },
-    { title: "Weddings", link: "/weddings" },
-    { title: "Corporate", link: "/corporate" },
-    { title: "Pricing", link: "/pricing" },
-    { title: "Contact", link: "/contact" },
+    { title: "About", route: "/about" },
+    { title: "Weddings", route: "/weddings" },
+    { title: "Corporate", route: "/corporate" },
+    { title: "Pricing", route: "/pricing" },
+    { title: "Contact", route: "/contact" },
   ]);
   const [adminLinks] = useState([
     {
@@ -58,23 +60,17 @@ const Header = () => {
       route: "/admin/edit-content",
     },
   ]);
-  const [burgerOpen, setBurgerOpen] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
+    window.innerWidth > 1024 && setRenderLinks(true);
+    window.addEventListener("resize", handleWindowResize);
+    return () => window.removeEventListener("resize", handleWindowResize);
   }, []);
 
-  const handleClickOutside = (e) => {
-    if (ref.current && !ref.current.contains(e.target)) {
-      setBurgerOpen(false);
+  const handleWindowResize = () => {
+    if (window.innerWidth > 1024) {
+      setRenderLinks(true);
     }
-  };
-
-  const handleBurgerClick = () => {
-    setBurgerOpen(!burgerOpen);
   };
   return (
     <Container>
@@ -88,31 +84,25 @@ const Header = () => {
           Skip to Content
         </SkipHeaderLink>
         <Link href="/" passHref>
-          <NameContainer>
-            <Logo>
-              <Image
-                src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
-                width={225}
-                height={29}
-                alt="Connor Devlin Media"
-              />
-            </Logo>
-          </NameContainer>
+          <Logo aria-label="logo">
+            <Image
+              src="https://chpistel.sirv.com/Connor-Portfolio/cdlogo.png?w=225&png.optimize=true"
+              width={225}
+              height={29}
+              alt="Connor Devlin Media"
+            />
+          </Logo>
         </Link>
-        <LinksContainer>
-          {links.map((link) => (
-            <Link key={links.indexOf(link)} href={link.link} passHref>
-              <LinkTitle>{link.title}</LinkTitle>
-            </Link>
-          ))}
-        </LinksContainer>
-        <BurgerBar
-          ref={ref}
-          adminLinks={adminLinks}
-          handleBurgerClick={handleBurgerClick}
-          burgerOpen={burgerOpen}
-          links={links}
-        />
+        {renderLinks && (
+          <LinksContainer>
+            {links.map((link) => (
+              <Link key={links.indexOf(link)} href={link.route} passHref>
+                <LinkTitle>{link.title}</LinkTitle>
+              </Link>
+            ))}
+          </LinksContainer>
+        )}
+        <BurgerBar adminLinks={adminLinks} links={links} />
       </InnerContainer>
     </Container>
   );
@@ -140,6 +130,7 @@ const InnerContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 const SkipHeaderLink = styled.a`
@@ -160,35 +151,36 @@ const SkipHeaderLink = styled.a`
   }
 `;
 
-const NameContainer = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-left: 50px;
-  z-index: 0;
-  position: relative;
-  &:hover {
-    cursor: pointer;
-  }
-  @media (max-width: 1024px) {
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    margin-left: 0px;
-  }
-  @media (max-width: 414px) {
-    position: relative;
-    margin-left: 20px;
-    left: 0%;
-  }
-  @media (max-width: 330px) {
-    margin-left: 20px;
-  }
-`;
+// const NameContainer = styled.a`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   flex-direction: column;
+//   margin-left: 50px;
+//   z-index: 0;
+//   position: relative;
+//   &:hover {
+//     cursor: pointer;
+//   }
+//   @media (max-width: 1024px) {
+//     position: absolute;
+//     left: 50%;
+//     right: 50%;
+//     margin-left: 0px;
+//   }
+//   @media (max-width: 414px) {
+//     position: relative;
+//     margin-left: 20px;
+//     left: 0%;
+//   }
+//   @media (max-width: 330px) {
+//     margin-left: 20px;
+//   }
+// `;
 
-const Logo = styled.div`
-  z-index: -1;
+const Logo = styled.a`
+  ${"" /* z-index: -1; */}
+  margin-left: 50px;
   width: 240px;
   @media (max-width: 680px) {
     width: 220px;
@@ -208,6 +200,7 @@ const LinksContainer = styled.div`
   z-index: 1;
   @media (max-width: 1024px) {
     display: none;
+    visibility: hidden;
   }
 `;
 
@@ -225,6 +218,7 @@ const LinkTitle = styled.a`
   }
   @media (max-width: 1024px) {
     display: none;
+    visibility: hidden;
   }
   @media (max-width: 424px) {
     font-size: 1rem;

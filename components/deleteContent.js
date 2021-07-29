@@ -1,10 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import styled, { createGlobalStyle } from "styled-components";
-import { deleteWedding } from ".././pages/api/weddings";
-import { deleteCorporate } from ".././pages/api/corporate";
-import { useForm } from "react-hook-form";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { LoadingSpinner } from "./loading-spinner";
 import useSound from "use-sound";
 import ImageLoader from "./common/imageLoader";
 import popSound from ".././public/sounds/music_kalimba_off.mp3";
@@ -46,9 +42,12 @@ const DeleteContent = ({ handleDeleteContentPopUp, selectedVideo }) => {
 
 export default DeleteContent;
 
-const Container = styled.div``;
+DeleteContent.propTypes = {
+  handleDeleteContentPopUp: PropTypes.func.isRequired,
+  selectedVideo: PropTypes.object,
+};
 
-const DeleteIconContainer = styled.div`
+const DeleteIconContainer = styled(motion.div)`
   position: absolute;
   width: 30px;
   top: 15px;

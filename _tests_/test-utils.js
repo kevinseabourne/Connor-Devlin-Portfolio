@@ -8,6 +8,9 @@ import AppContext from "../context/appContext";
 import { GlobalStyle } from "../globalStyle";
 import Header from "../components/header";
 import { ToastContainer } from "react-toastify";
+import Link from "next/link";
+
+jest.mock("next/link", () => ({ children }) => children);
 
 const theme = {
   colors: {

@@ -2,6 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import http from "./httpService";
 import jwtDecode from "jwt-decode";
+import { isArrayEmpty } from "../../components/common/utils/isEmpty";
 
 const config_ = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,26 +13,35 @@ const config_ = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(config_);
-}
+// if (!isArrayEmpty(firebase.apps)) {
+//   firebase.initializeApp(config_);
+// }
 
 export async function signIn(formData) {
-  const { data } = await http.post(
-    process.env.NEXT_PUBLIC_FIREBASE_SIGNIN_ENDPOINT +
-      process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    {
-      email: formData.username,
-      password: formData.password,
-      returnSecureToken: true,
+  try {
+    const { data } = await http.post(
+      process.env.NEXT_PUBLIC_FIREBASE_SIGNIN_ENDPOINT +
+        process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      {
+        email: formData.email,
+        password: formData.password,
+        returnSecureToken: true,
+      }
+    );
+    const user = {
+      token: data.idToken,
+      expiry: new Date().toString(),
+    };
+    localStorage.setItem("user", JSON.stringify(user));
+    return data;
+  } catch (ex) {
+    const errorMessage = ex.response.data.error.message;
+    if (errorMessage.includes("EMAIL")) {
+      return { type: "error", name: "email", message: "Invalid Email" };
+    } else if (errorMessage.includes("PASSWORD")) {
+      return { type: "error", name: "password", message: "Invalid Password" };
     }
-  );
-  const user = {
-    token: data.idToken,
-    expiry: new Date().toString(),
-  };
-  localStorage.setItem("user", JSON.stringify(user));
-  return data;
+  }
 }
 
 export function getCurrentUser() {
@@ -73,7 +83,6 @@ export function userSessionExpired() {
       )) /
       (1000 * 60 * 60 * 24)
   );
-  debugger;
   // if the admin has not visited the site for 7 days then sign them out.
   if (timeDifference >= 7) {
     signOut();

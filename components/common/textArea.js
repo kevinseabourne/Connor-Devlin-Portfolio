@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ImageLoader from "./imageLoader";
@@ -9,15 +10,19 @@ export const TextArea = React.forwardRef(
     {
       label,
       error,
-      maxLength,
       onChange,
       onClick,
       name,
       doSubmit,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
       value,
       defaultValue,
       x,
       y,
+      scale,
       opacity,
       ...rest
     },
@@ -25,18 +30,26 @@ export const TextArea = React.forwardRef(
   ) => {
     const animation = {
       hidden: {
-        opacity: opacity ? opacity : 1,
-        y: y,
-        x: x,
+        scale: scale == undefined ? 1 : scale,
+        opacity: opacity == undefined ? 1 : opacity,
+        y: y ? y : 0,
+        x: x ? x : 0,
       },
       show: {
+        scale: 1,
         opacity: 1,
         y: 0,
         x: 0,
       },
     };
     return (
-      <Container variants={animation}>
+      <Container
+        variants={animation}
+        marginTop={marginTop}
+        marginBottom={marginBottom}
+        marginLeft={marginLeft}
+        marginRight={marginRight}
+      >
         <Label>{label}</Label>
         <InputContainer>
           <TextAreaInput
@@ -48,8 +61,7 @@ export const TextArea = React.forwardRef(
             placeholder={label}
             value={value}
             defaultValue={defaultValue}
-            maxLength={maxLength}
-            data-testid={`${name}-input`}
+            aria-label={`${name}-input`}
           />
         </InputContainer>
         <TransitionGroup component={null}>
@@ -60,9 +72,11 @@ export const TextArea = React.forwardRef(
               timeout={250}
               unmountOnExit
             >
-              <ErrorContainer>
+              <ErrorContainer aria-label={`${name}-error-message`}>
                 <ImageLoader
-                  lazyLoad={true}
+                  opacity={0}
+                  scale={0}
+                  alt="error icon"
                   maxWidth="15px"
                   placeholderSize="100%"
                   src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
@@ -77,14 +91,36 @@ export const TextArea = React.forwardRef(
   }
 );
 
+TextArea.propTypes = {
+  label: PropTypes.string,
+  error: PropTypes.object,
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+  name: PropTypes.string,
+  doSubmit: PropTypes.func,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+  value: PropTypes.string,
+  defaultValue: PropTypes.string,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  scale: PropTypes.number,
+  opacity: PropTypes.number,
+};
+
 const Container = styled(motion.div)`
   width: 100%;
   margin-bottom: 22px;
+  margin-top: ${({ marginTop }) => marginTop};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
+  margin-left: ${({ marginLeft }) => marginLeft};
+  margin-right: ${({ marginRight }) => marginRight};
 `;
 
 const Label = styled.label`
   font-size: 1rem;
-  margin-bottom: 3px;
   margin-left: 9px;
 `;
 
@@ -92,8 +128,10 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border: 1px solid black;
+  margin-top: 3px;
   border-radius: 9px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 `;
 
 const TextAreaInput = styled.textarea`
@@ -103,11 +141,11 @@ const TextAreaInput = styled.textarea`
   outline: none;
   box-sizing: border-box;
   font-weight: 500;
-  letter-spacing: 1px;
   font-family: inherit;
   width: 100%;
   color: ${({ theme }) => theme.colors.fontColor};
   border: none;
+  resize: none;
 `;
 
 const ErrorContainer = styled.div`
@@ -116,11 +154,14 @@ const ErrorContainer = styled.div`
   padding-right: 12px;
   display: flex;
   align-items: center;
-  border: 1.2px solid red;
+  border: 2px solid #f1535e;
+  background-color: white;
   border-radius: 9px;
   padding-top: 10px;
   padding-bottom: 10px;
   flex-direction: row;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   &.errorAnimation-enter {
     transform: scale(0.4);

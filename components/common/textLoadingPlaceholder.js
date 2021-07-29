@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { motion, AnimatePresence } from "framer-motion";
 import styled from "styled-components";
 
@@ -34,6 +35,7 @@ const TextLoadingPlaceholder = ({
         marginLeft={marginLeft}
         marginRight={marginRight}
         borderRadius={borderRadius}
+        data-testid="text-loading-skeleton"
       >
         <Placeholder
           initial={{ x: "-100%" }}
@@ -50,6 +52,18 @@ const TextLoadingPlaceholder = ({
 };
 
 export default TextLoadingPlaceholder;
+
+TextLoadingPlaceholder.propTypes = {
+  duration: PropTypes.number,
+  maxWidth: PropTypes.string,
+  height: PropTypes.string,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+  borderRadius: PropTypes.string,
+  contentLoaded: PropTypes.bool,
+};
 
 const PlaceHolderContainer = styled(motion.div)`
   width: 100%;

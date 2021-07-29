@@ -1,5 +1,4 @@
 import logger from "./logger";
-import { toast } from "react-toastify";
 import emailjs from "emailjs-com";
 
 export async function sendEmail(data) {
@@ -26,14 +25,6 @@ export async function sendEmail(data) {
     })
     .catch((error) => {
       if (error && error.status >= 400 && error.status < 500) {
-        toast.error("An unexpected error has occurred", {
-          position: "bottom-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
         logger.log(error);
       }
     });

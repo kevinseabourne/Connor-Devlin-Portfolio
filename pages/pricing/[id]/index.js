@@ -10,8 +10,10 @@ const Pricing = ({ params, data }) => {
     ) : (
       <ErrorMessage />
     )
+  ) : data ? (
+    <CorporatePricing data={data} />
   ) : (
-    <CorporatePricing />
+    <ErrorMessage />
   );
 };
 
@@ -30,10 +32,12 @@ export async function getStaticProps({ params }) {
     return {
       props: data ? { data, params } : { data: null, params },
     };
+  } else {
+    const data = await getAllPricingPackages();
+    return {
+      props: data ? { data, params } : { data: null, params },
+    };
   }
-  return {
-    props: { params },
-  };
 }
 
 export default Pricing;

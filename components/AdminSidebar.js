@@ -12,6 +12,7 @@ const AdminSidebar = () => {
   const context = useContext(AppContext);
   const { handleSignOut } = context;
   const router = useRouter();
+
   const [links] = useState([
     {
       icon:
@@ -111,7 +112,6 @@ const AdminSidebar = () => {
       visibility: "visible",
     },
   };
-
   return (
     <Sidebar>
       <LinksContainer>
@@ -120,7 +120,6 @@ const AdminSidebar = () => {
             href={index === 0 ? "/admin" : "/admin/[id]"}
             as={link.route}
             key={links.indexOf(link)}
-            passHref
           >
             <LinkContainer
               variants={linkAnimation}
@@ -134,6 +133,7 @@ const AdminSidebar = () => {
               >
                 <ImageLoader
                   itemId={link.route}
+                  alt={link.title}
                   maxWidth="30px"
                   placeholderSize="100%"
                   hover={true}
@@ -141,7 +141,9 @@ const AdminSidebar = () => {
                   src={link.icon}
                   handleOnLoadOutside={handleOnLoadOutside}
                 />
-                <LinkTitle>{link.title}</LinkTitle>
+                <LinkTitle aria-label={`admin ${link.title}`}>
+                  {link.title}
+                </LinkTitle>
               </InnerLinkContainer>
               <AnimatePresence>
                 {!contentLoaded && (
@@ -187,6 +189,7 @@ const AdminSidebar = () => {
             width="30px"
             placeholderSize="100%"
             hover={true}
+            alt="sign out"
             handleOnLoadOutside={handleOnLoadOutside}
             src="https://chpistel.sirv.com/Connor-Portfolio/logout%20(1).png?w=30"
           />

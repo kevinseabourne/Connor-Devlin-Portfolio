@@ -1,54 +1,120 @@
 import { createGlobalStyle } from "styled-components";
-import fancyFont from "./fonts/exmouth_.ttf";
-import KarlaExtraBold from "./fonts/Karla-ExtraBold.ttf";
-import KarlaBold from "./fonts/Karla-Bold.ttf";
-import KarlaSemiBold from "./fonts/Karla-SemiBold.ttf";
-import KarlaRegular from "./fonts/Karla-Regular.ttf";
-import AttractTypeReborn from "./fonts/Attractype Reborn.ttf";
+import fancyFont from "./public/fonts/exmouth_.ttf";
+import KarlaExtraBold from "./public/fonts/Karla-ExtraBold.ttf";
+import KarlaBold from "./public/fonts/Karla-Bold.ttf";
+import KarlaSemiBold from "./public/fonts/Karla-SemiBold.ttf";
+import KarlaRegular from "./public/fonts/Karla-Regular.ttf";
+import AttractTypeReborn from "./public/fonts/Attractype Reborn.ttf";
 
 export const GlobalStyle = createGlobalStyle`
 
 @font-face {
   font-family: "Att-reborn";
+    font-display: optional;
+    unicode-range: U+000-5FF;
   src: url(${AttractTypeReborn});
 }
 
 @font-face {
+  font-family: Att-reborn-fallback;
+  src: local(Brush Script MT);
+  size-adjust: 99%;
+  advance-override: 10;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: normal;
+}
+
+@font-face {
   font-family: "Karla-ExtraBold";
+    font-display: optional;
+    unicode-range: U+000-5FF;
   src: url(${KarlaExtraBold});
 }
 
 @font-face {
+  font-family: Karla-ExtraBold-fallback;
+  src: local(Arial);
+  advance-override: 10;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: normal;
+}
+
+@font-face {
   font-family: "Karla-Bold";
+    font-display: optional;
+    unicode-range: U+000-5FF;
   src: url(${KarlaBold});
 }
 
 @font-face {
+  font-family: Karla-Bold-fallback;
+  src: local(Arial);
+  advance-override: 10;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: normal;
+}
+
+@font-face {
   font-family: "Karla-SemiBold";
+    font-display: optional;
+    unicode-range: U+000-5FF;
   src: url(${KarlaSemiBold});
 }
 
 @font-face {
+  font-family: Karla-SemiBold-fallback;
+  src: local(Arial);
+  advance-override: 10;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: normal;
+}
+
+@font-face {
   font-family: "Karla-Regular";
+    font-display: optional;
+    unicode-range: U+000-5FF;
   src: url(${KarlaRegular});
+}
+
+@font-face {
+  font-family: Karla-Regular-fallback;
+  src: local(Arial);
+  advance-override: 10;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: normal;
 }
 
 
   @font-face {
     font-family: "exmouth";
+      font-display: optional;
+      unicode-range: U+000-5FF;
     src: url(${fancyFont});
   }
 
+  @font-face {
+  font-family: exmouth-fallback;
+  src: local(Arial);
+  advance-override: 10;
+  ascent-override: 100%;
+  descent-override: 20%;
+  line-gap-override: normal;
+}
+
   body {
     margin: 0;
-    font-family: "Karla-Bold", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-      "Helvetica Neue", sans-serif;
+    font-family: "Karla-Bold", "Karla-Bold-fallback", sans-serif;
     color: rgb(60, 60, 60);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: 0px;
     line-height: 1.47;
+    font-weight: 600;
     height: 100vh;
     background-color: E7ECEF;
     scroll-behavior: smooth;

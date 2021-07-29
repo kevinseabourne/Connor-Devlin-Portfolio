@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { TextArea } from "./common/textArea";
 import { LoadingSpinner } from "./loading-spinner";
 import { getAboutMe, updateAboutMe } from ".././pages/api/about";
 import { motion, AnimateSharedLayout } from "framer-motion";
+import { errorMessage } from "./common/utils/errorMessage";
 
 const AdminAbout = ({ data }) => {
   const [state, setState] = useState("");
@@ -12,37 +14,57 @@ const AdminAbout = ({ data }) => {
   const timeout = useRef(null);
 
   useEffect(() => {
-    const { description } = data;
-    setState(description);
+    if (data) {
+      const { description } = data;
+      setState(description);
+    } else {
+      errorMessage();
+    }
     return () => clearTimeout(timeout.current);
   }, []);
 
   const { register, handleSubmit, reset, errors } = useForm();
 
-  const onSubmit = async (data) => {
-    const { about } = data;
+  const schema = {
+    about: {
+      required: "About section cannot be empty !",
+      minLength: { value: 20, message: "About section is too short !" },
+    },
+  };
+
+  const onSubmit = async ({ about }) => {
     setStatus("pending");
     const aboutMe = about.replace(/\r?\n/g, "\n");
-    await updateAboutMe(aboutMe);
-    const response = await getAboutMe();
-    const { description } = response;
-    setState(description);
-    reset();
-    setStatus("resolved");
-    timeout.current = setTimeout(() => setStatus("idle"), 3000);
+    const response = await updateAboutMe(aboutMe);
+    if (response && response.status === 200) {
+      const aboutResponse = await getAboutMe();
+      if (aboutResponse && aboutResponse.status === 200) {
+        const { description } = aboutResponse;
+        setState(description);
+        reset();
+        setStatus("resolved");
+        timeout.current = setTimeout(() => setStatus("idle"), 3000);
+      } else {
+        errorMessage();
+      }
+    } else {
+      errorMessage();
+    }
   };
 
   return (
     <AnimateSharedLayout>
       <Container layout>
         <Title>Preview</Title>
-        <About layout>{state}</About>
+        <About aria-label="about description" layout>
+          {state}
+        </About>
         <Title layout>Edit About Me Content</Title>
         <Form onSubmit={handleSubmit(onSubmit)} layout>
           <TextArea
             name="about"
             label="About Me"
-            ref={register}
+            ref={register(schema.about)}
             error={errors.about}
           />
           <SubmitButton
@@ -66,6 +88,10 @@ const AdminAbout = ({ data }) => {
 };
 
 export default AdminAbout;
+
+AdminAbout.propTypes = {
+  data: PropTypes.any,
+};
 
 const Container = styled(motion.div)`
   min-height: calc(100vh - 75px);

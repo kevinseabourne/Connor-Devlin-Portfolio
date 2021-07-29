@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
 
 export const LoadingSpinner = React.forwardRef(
@@ -9,7 +10,7 @@ export const LoadingSpinner = React.forwardRef(
         viewBox="0 0 66 66"
         size={size}
         zIndex={zIndex}
-        data-testid="loadingSpinner"
+        aria-label="loading spinner"
         stroke={stroke}
       >
         <circle
@@ -24,6 +25,12 @@ export const LoadingSpinner = React.forwardRef(
     );
   }
 );
+
+LoadingSpinner.propTypes = {
+  size: PropTypes.string,
+  stroke: PropTypes.string,
+  zIndex: PropTypes.number,
+};
 
 const rotation = keyframes`
 0% {

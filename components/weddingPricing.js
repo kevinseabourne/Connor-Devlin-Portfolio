@@ -1,5 +1,6 @@
-import styled from "styled-components";
 import React, { useState, useRef } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 import topWave from "../public/images/top-wave.svg";
 import downWave from "../public/images/wave3.svg";
 import ContactForm from "./common/contactForm";
@@ -8,43 +9,37 @@ import WeddingPricingAddOns from "./weddingPricingAddOns";
 
 const WeddingPricing = ({ data }) => {
   const contactRef = useRef(null);
-
   const [questions] = useState([
     {
       question:
-        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
+        "If I choose the standard package what parts of the wedding can be part of the coverage ?",
       answer:
-        "we can cover any part of the wedding from pre ceremony to reception",
+        "we can cover any part of the wedding from pre ceremony to reception.",
+    },
+    {
+      question: "What is the highlights video ?",
+      answer:
+        "All the best moments from your wedding day edited together beautifully in your very own personalised wedding movie.",
+    },
+    {
+      question: "How long will the highlights video take for me to recieve ?",
+      answer:
+        "Depending on the length of the video it can take a couple of week to at most 2 - 3 months. Don't worry you will be given an estimated time of arrival.",
+    },
+    {
+      question: "How do I book a package ?",
+      answer:
+        "Contact me in the form below, select the package you will like and I will be in touch with you.",
     },
     {
       question:
-        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
+        "I need a last minute wedding videographer is there any point in getting in touch with you ? and do you charger extra for last minute bookings ?",
       answer:
-        "we can cover any part of the wedding from pre ceremony to reception",
+        "I am usually booked in advance but feel free to contact me. Rest assured, There's absolutely no extra cost for last minute bookings.",
     },
     {
-      question:
-        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
-      answer:
-        "we can cover any part of the wedding from pre ceremony to reception",
-    },
-    {
-      question:
-        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
-      answer:
-        "we can cover any part of the wedding from pre ceremony to reception",
-    },
-    {
-      question:
-        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
-      answer:
-        "we can cover any part of the wedding from pre ceremony to reception",
-    },
-    {
-      question:
-        "If i choose the standard package what parts of the wedding can be part of the coverage ?",
-      answer:
-        "we can cover any part of the wedding from pre ceremony to reception",
+      question: "Do you travel to regional Australia or overseas ?",
+      answer: "Absolutely! I can travel anywhere over Australia or overseas",
     },
   ]);
 
@@ -69,8 +64,8 @@ const WeddingPricing = ({ data }) => {
       <FAQContainer>
         <FAQTitle>FAQ</FAQTitle>
         <FAQInnerContainer>
-          {questions.map((QandA) => (
-            <FAQItem key={questions.indexOf(QandA)}>
+          {questions.map((QandA, index) => (
+            <FAQItem key={index}>
               <Question>{QandA.question}</Question>
               <Answer>{QandA.answer}</Answer>
             </FAQItem>
@@ -86,6 +81,10 @@ const WeddingPricing = ({ data }) => {
 };
 
 export default WeddingPricing;
+
+WeddingPricing.propTypes = {
+  data: PropTypes.any,
+};
 
 const Container = styled.div`
   width: 100%;
@@ -149,7 +148,7 @@ const FAQInnerContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(30px, 360px));
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   grid-auto-flow: row;
   grid-column-end: auto;
   padding: 0 20px;

@@ -2,7 +2,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import moment from "moment";
 import { getVimeoData } from "./vimeo";
-import { toast } from "react-toastify";
 import logger from "./logger";
 
 const config_ = {
@@ -30,7 +29,7 @@ export async function getAllWeddings() {
       const weddings = await db
         .collection("weddings")
         .orderBy("date", "desc")
-        .limit(20)
+        .limit(12)
         .get()
         .then(function (querySnapshot) {
           let data = [];
@@ -44,14 +43,6 @@ export async function getAllWeddings() {
           return data;
         })
         .catch(function (error) {
-          toast.error("An unexpected error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return weddings;
@@ -72,28 +63,24 @@ export async function getNextWeddings(lastIndex) {
         .collection("weddings")
         .orderBy("date", "desc")
         .startAfter(lastIndex.date)
-        .limit(20)
+        .limit(12)
         .get()
         .then(function (querySnapshot) {
           let data = [];
           querySnapshot.forEach(function (doc) {
             let item = doc.data();
+            // const dateString = item.date.toDate();
+            // item.date = moment(dateString).format("DD/MM/YYYY");
+
             const dateString = item.date.toDate();
             item.date = moment(dateString).format("DD/MM/YYYY");
+            // item.date = item.date.toDate().format("dd-mm-yy");
             item.id = doc.id;
             data.push(item);
           });
           return data;
         })
         .catch(function (error) {
-          toast.error("An unexpected error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return weddings;
@@ -126,16 +113,9 @@ export async function addWedding(data) {
           duration: updatedData.duration,
           testimonial: updatedData.testimonial,
           videoId: updatedData.weddingVideoId,
+          imageLoaded: false,
         })
         .catch(function (error) {
-          toast.error("An unexpected error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return weddings;
@@ -171,14 +151,6 @@ export async function editWedding(data) {
           videoId: updatedData.weddingVideoId,
         })
         .catch(function (error) {
-          toast.error("An unexpected error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return weddings;
@@ -200,14 +172,6 @@ export async function deleteWedding(data) {
         .doc(data.id)
         .delete()
         .catch(function (error) {
-          toast.error("An unexpected error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return weddings;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ImageLoader from "./common/imageLoader";
 import downWave from "../public/images/wave3.svg";
@@ -27,7 +27,7 @@ const Clients = () => {
 
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: "0px 0px",
+    rootMargin: "150px 0px",
   });
 
   const container = {
@@ -58,23 +58,22 @@ const Clients = () => {
 
   return (
     <Container
-      ref={ref}
       variants={container}
       initial="hidden"
       animate={inView ? "show" : "hidden"}
-      exit="hidden"
     >
       <Wave src={downWave} alt="wave" />
       <Title variants={titleAnimation}>Clients</Title>
-      <IconsContainer>
-        {state.map((image) => (
-          <ImageContainer key={state.indexOf(image)} variants={imageAnimation}>
+      <IconsContainer ref={ref}>
+        {state.map((image, index) => (
+          <ImageContainer key={index} variants={imageAnimation}>
             <ImageLoader
               maxWidth="215px"
               placeholderSize="75.7%"
               borderRadius="8px"
               centerImage={true}
-              alt={image.title}
+              opacity={0}
+              alt={`${image.title} icon`}
               src={image.url}
             />
           </ImageContainer>

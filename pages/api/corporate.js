@@ -2,7 +2,6 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import moment from "moment";
 import { getVimeoData } from "./vimeo";
-import { toast } from "react-toastify";
 import logger from "./logger";
 
 const config_ = {
@@ -44,14 +43,6 @@ export async function getAllCorporate() {
           return data;
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return corporate;
@@ -86,14 +77,6 @@ export async function getNextCorporate() {
           return data;
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return corporate;
@@ -102,7 +85,6 @@ export async function getNextCorporate() {
 }
 
 export async function addCorporate(data) {
-  const updatedData = await getVimeoData(data);
   const response = await firebase
     .auth()
     .signInWithEmailAndPassword(
@@ -122,16 +104,9 @@ export async function addCorporate(data) {
           video: `https://player.vimeo.com/video/${updatedData.videoId}?autoplay=1`,
           duration: updatedData.duration,
           videoId: updatedData.corporateVideoId,
+          imageLoaded: false,
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return corporate;
@@ -163,14 +138,6 @@ export async function editCorporate(data) {
           videoId: updatedData.corporateVideoId,
         })
         .catch(function (error) {
-          toast.error("An error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return corporate;
@@ -192,14 +159,6 @@ export async function deleteCorporate(data) {
         .doc(data.id)
         .delete()
         .catch(function (error) {
-          toast.error("An error has occurred", {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
           logger.log(error);
         });
       return corporate;

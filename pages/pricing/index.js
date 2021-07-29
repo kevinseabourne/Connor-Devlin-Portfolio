@@ -32,7 +32,7 @@ const Pricing = () => {
       scale: 1,
       y: 0,
       transition: {
-        delayChildren: 0.7,
+        delayChildren: 0.1,
         staggerChildren: 0.2,
       },
     },
@@ -61,12 +61,10 @@ const Pricing = () => {
   const waveAnimation = {
     hidden: {
       opacity: 0,
-      x: 12,
       y: 22,
     },
     show: {
       opacity: 1,
-      x: 0,
       y: 0,
     },
   };
@@ -74,7 +72,7 @@ const Pricing = () => {
     <Container variants={staggerAnimation} initial="hidden" animate="show">
       <Title variants={titleAnimation}>Pricing</Title>
       <InnerContainer>
-        <Link href="/pricing/[id]" as="/pricing/weddings">
+        <Link href="/pricing/[id]" as="/pricing/weddings" passHref>
           <PricingContainer
             variants={childAnimation}
             whileHover={{ scale: 1.01 }}
@@ -82,17 +80,20 @@ const Pricing = () => {
           >
             <ImageLoader
               maxWidth="inherit"
-              width="inherit"
+              width="100%"
+              opacity={0}
+              centerImage={true}
               placeholderSize="66.66%"
               borderRadius="19px"
               hover={true}
+              alt="weddings"
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
               src="https://chpistel.sirv.com/Connor-Portfolio/wedding-pricing.jpeg?w=900"
             />
             <Label variants={labelAnimation}>Weddings</Label>
           </PricingContainer>
         </Link>
-        <Link href="/pricing/[id]" as="pricing/corporate">
+        <Link href="/pricing/[id]" as="/pricing/corporate" passHref>
           <PricingContainer
             variants={childAnimation}
             whileHover={{ scale: 1.01 }}
@@ -100,10 +101,13 @@ const Pricing = () => {
           >
             <ImageLoader
               maxWidth="inherit"
-              width="inherit"
+              opacity={0}
+              width="100%"
+              centerImage={true}
               placeholderSize="66.66%"
               borderRadius="19px"
               hover={true}
+              alt="corporate"
               boxShadow="0px 20px 40px rgba(0,0,0,0.4)"
               src="https://chpistel.sirv.com/Connor-Portfolio/corporate-pricing.jpeg?w=900"
             />
@@ -126,6 +130,10 @@ const Container = styled(motion.div)`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+  overflow: hidden;
+  @media (max-width: 1024px) {
+    overflow: auto;
+  }
 `;
 
 const Title = styled(motion.h1)`
@@ -144,7 +152,6 @@ const InnerContainer = styled(motion.div)`
   flex-direction: row;
   box-sizing: border-box;
   padding: 0px 9%;
-  margin-bottom: 2%;
   @media (max-width: 1024px) {
     flex-direction: column;
   }
@@ -156,13 +163,16 @@ const InnerContainer = styled(motion.div)`
   }
 `;
 
-const PricingContainer = styled(motion.div)`
-  max-width: 850px;
+const PricingContainer = styled(motion.a)`
   width: 100%;
+  max-width: 580px;
   text-align: center;
   position: relative;
   transform: scale(1);
   transition: transform 0.25s ease;
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
   &:hover {
     cursor: pointer;
     transform: scale(1.01);
@@ -212,12 +222,8 @@ const Label = styled(motion.span)`
 const BottomWave = styled(motion.img)`
   object-position: center;
   object-fit: cover;
+  bottom: 30px;
   margin-top: auto;
-  bottom: -20px;
-  left: -1px;
   width: 100%;
   z-index: -100;
-  @media (max-width: 1024px) {
-    bottom: -1px;
-  }
 `;

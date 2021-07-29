@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { LoadingSpinner } from "../loading-spinner";
 import { useInView } from "react-intersection-observer";
@@ -20,8 +21,6 @@ const ImageLoader = ({
   borderRadius,
   hover,
   duration,
-  transitionTiming,
-  transitionDuration,
   boxShadow,
   loadingSpinner, // true or false to show a loading spinner when the image is still loading
   centerImage,
@@ -38,8 +37,8 @@ const ImageLoader = ({
   const [isLoaded, setIsLoaded] = useState(false);
 
   const { ref, inView } = useInView({
-    triggerOnce: false,
-    rootMargin: "500px 0px",
+    triggerOnce: true,
+    rootMargin: "150px 0px",
   });
 
   const onLoad = () => {
@@ -51,10 +50,10 @@ const ImageLoader = ({
 
   const animation = {
     hidden: {
-      opacity: opacity === undefined ? 1 : opacity,
+      opacity: opacity == undefined ? 0 : opacity,
       y: y ? y : 0,
       x: x ? x : 0,
-      scale: scale === undefined ? 1 : scale,
+      scale: scale == undefined ? 1 : scale,
       filter: blur ? `blur(${blur}px)` : `blur(0px)`,
     },
     show: {
@@ -78,8 +77,12 @@ const ImageLoader = ({
       width={width}
       maxWidth={maxWidth}
       centerImage={centerImage}
+      variants={animation}
+      initial="hidden"
+      animate={isLoaded ? "show" : "hidden"}
     >
       <Placeholder
+        layout
         borderRadius={borderRadius}
         onClick={onClick}
         contentLoaded={contentLoaded}
@@ -89,9 +92,6 @@ const ImageLoader = ({
       />
       {src && inView && (
         <Image
-          variants={animation}
-          initial="hidden"
-          animate={isLoaded ? "show" : "hidden"}
           onLoad={onLoad}
           src={src}
           srcSet={srcSet}
@@ -99,8 +99,6 @@ const ImageLoader = ({
           alt={alt}
           key={keyValue}
           data-testid={dataTestId}
-          transitionTiming={transitionTiming}
-          transitionDuration={transitionDuration}
           hover={hover}
           borderRadius={borderRadius}
           boxShadow={boxShadow}
@@ -112,6 +110,35 @@ const ImageLoader = ({
 };
 
 export default ImageLoader;
+
+ImageLoader.propTypes = {
+  src: PropTypes.string.isRequired,
+  srcSet: PropTypes.string,
+  width: PropTypes.string,
+  maxWidth: PropTypes.string,
+  placeholderSize: PropTypes.string,
+  placeholderColor: PropTypes.string,
+  alt: PropTypes.string.isRequired,
+  itemId: PropTypes.string,
+  keyValue: PropTypes.string,
+  dataTestId: PropTypes.string,
+  onClick: PropTypes.func,
+  borderRadius: PropTypes.string,
+  hover: PropTypes.bool,
+  duration: PropTypes.number,
+  boxShadow: PropTypes.string,
+  loadingSpinner: PropTypes.bool,
+  centerImage: PropTypes.bool,
+  contentLoaded: PropTypes.bool,
+  handleOnLoadOutside: PropTypes.func,
+  y: PropTypes.number,
+  x: PropTypes.number,
+  zIndex: PropTypes.number,
+  blur: PropTypes.number,
+  scale: PropTypes.number,
+  opacity: PropTypes.number,
+  delay: PropTypes.number,
+};
 
 const ImageContainer = styled(motion.div)`
   display: flex;

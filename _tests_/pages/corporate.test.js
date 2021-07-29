@@ -1,45 +1,68 @@
 import React from "react";
-import Corporate from "../.././pages/corporate";
+import ContentPage from "../../components/common/contentPage";
 import { render } from ".././test-utils";
-import { waitFor } from "@testing-library/react";
+import { waitFor, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import {
   getAllCorporate,
   mockCorporateData,
 } from "../.././pages/api/corporate";
 import "@testing-library/jest-dom";
-import cloneDeep from "lodash/cloneDeep";
 
 jest.mock("../.././pages/api/corporate");
-jest.mock("lodash/cloneDeep", () =>
-  jest.fn().mockImplementation(() => mockCorporateData)
-);
+jest.mock("next/link", () => ({ children }) => children);
+jest.mock("next/image", () => ({ src, alt }) => <img src={src} alt={alt} />);
+
+// Cypress Test Coverage
+// - it should show a video when clicking on each item and close it when clicking outside the container
+// - it should show a video when clicking on each item and close it when you press the esc key
+// - it should render all images,
+// - it should render a play Icon for each video
+// - it should navigate to the corporate pricing page after clicking the pricing button link
+
+// ------------------------ Notes ------------------------ //
+// I could not test the images, due to jsdom not loading images
+// the image is hidden until onLoad is called and then the placeholder animates out
+// jsdom does not load images in tests, so onLoad is never called, this could not be tested in jest
+
+const { findByRole, findAllByAltText, getAllByTestId } = screen;
 
 describe("Corporate Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
+  it("should simulate a failed get request", async () => {
+    const data = null;
+    render(<ContentPage data={data} />);
+    const errorMessage = await findByRole("alert");
+
+    expect(errorMessage).toBeVisible();
+  });
+
   it("should render a Corporate title above videos", async () => {
     getAllCorporate.mockResolvedValue({ mockCorporateData });
-    const { findByRole } = render(<Corporate data={mockCorporateData} />);
+    render(<ContentPage data={mockCorporateData} />);
 
     const corporateTitle = await waitFor(() =>
       findByRole("heading", { name: /corporate/i })
     );
+
     expect(corporateTitle).toBeVisible();
   });
-  it("should render partner names for each wedding in correct order", async () => {
-    getAllCorporate.mockResolvedValue({ mockCorporateData });
-    const { getAllByTitle } = render(<Corporate data={mockCorporateData} />);
 
-    const renderedCorporateNames = getAllByTitle("contentName").map(
-      (item) => item.textContent
-    );
+  it("should render company title in correct order", async () => {
+    getAllCorporate.mockResolvedValue({ mockCorporateData });
+    render(<ContentPage data={mockCorporateData} />);
+
+    const renderedCorporateNames = screen
+      .getAllByTitle("contentName")
+      .map((item) => item.textContent);
 
     const fakeCorporateNames = mockCorporateData.map((item) => item.company);
 
     expect(renderedCorporateNames).toEqual(fakeCorporateNames);
+
     // chose a snapshot over map to cover the order in which it is rendered.
     expect(renderedCorporateNames).toMatchInlineSnapshot(`
       Array [
@@ -50,11 +73,31 @@ describe("Corporate Page", () => {
     `);
   });
 
-  it("should render a image for each wedding in correct order", async () => {
+  it("should render a loading skeleton for each of the image and title elements", async () => {
     getAllCorporate.mockResolvedValue({ mockCorporateData });
-    const { getAllByTestId } = render(<Corporate data={mockCorporateData} />);
+    render(<ContentPage data={mockCorporateData} />);
 
-    const corporateImages = await waitFor(() => getAllByTestId("weddingPhoto"));
+    const allImageLoadingSkeletons = await waitFor(() =>
+      getAllByTestId("image-video-loading-skeleton")
+    );
+
+    const allTextLoadingSkeletons = await waitFor(() =>
+      getAllByTestId("text-loading-skeleton")
+    );
+    allImageLoadingSkeletons.map((imageLoadingSkeleton) =>
+      expect(imageLoadingSkeleton).toBeInTheDocument()
+    );
+    allTextLoadingSkeletons.map((textLoadingSkeleton) =>
+      expect(textLoadingSkeleton).toBeInTheDocument()
+    );
+  });
+
+  it("should render a image for each video in correct order", async () => {
+    getAllCorporate.mockResolvedValue({ mockCorporateData });
+    render(<ContentPage data={mockCorporateData} />);
+
+    // could not use findByAlt due to different alt values
+    const corporateImages = await waitFor(() => getAllByTestId("photo"));
     const renderedCorporatePhotos = corporateImages.map((item) => item.src);
     const fakeCorporatePhotos = mockCorporateData.map(
       (item) => item.coverPhoto
@@ -64,51 +107,10 @@ describe("Corporate Page", () => {
     // chose a snapshot over map to cover check the order in which it is rendered.
     expect(renderedCorporatePhotos).toMatchInlineSnapshot(`
       Array [
-        "https://i.vimeocdn.com/video/944223589_960x540.jpg?r=pad",
-        "https://i.vimeocdn.com/video/944223589_960x540.jpg?r=pad",
-        "https://i.vimeocdn.com/video/944223589_960x540.jpg?r=pad",
+        "https://images.pexels.com/photos/5325104/pexels-photo-5325104.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "https://images.pexels.com/photos/5673492/pexels-photo-5673492.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+        "https://images.pexels.com/photos/5816297/pexels-photo-5816297.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
       ]
     `);
-  });
-
-  it("should render a play Icon for each wedding video", async () => {
-    getAllCorporate.mockResolvedValue({ mockCorporateData });
-    const { getAllByTestId, debug } = render(
-      <Corporate data={mockCorporateData} />
-    );
-
-    // Chose to use map over a snapshot test because all the icons are the same, so the order does not matter.
-    const playIcons = await waitFor(() => getAllByTestId("imageIcon"));
-    playIcons.map(async (icon) => await waitFor(() => icon.toBeVisible()));
-  });
-
-  it("should render three clients images", async () => {
-    getAllCorporate.mockResolvedValue({ mockCorporateData });
-    const { getByAltText } = render(<Corporate data={mockCorporateData} />);
-
-    const tlgImage = await waitFor(() => getByAltText("teach learn grow"));
-    const ecuImage = await waitFor(() =>
-      getByAltText("edith cowan university")
-    );
-    const kalamundaImage = await waitFor(() =>
-      getByAltText("city of kalamunda")
-    );
-
-    expect(tlgImage).toBeVisible();
-    expect(ecuImage).toBeVisible();
-    expect(kalamundaImage).toBeVisible();
-  });
-
-  it("should simulate a failed get request", async () => {
-    getAllCorporate.mockImplementation(() =>
-      Promise.reject("error").catch((error) => {
-        expect(error).toEqual("error");
-      })
-    );
-    const data = null;
-    const { getByRole } = render(<Corporate data={data} />);
-    const errorMessage = await waitFor(() => getByRole("alert"));
-
-    await waitFor(() => expect(errorMessage).toBeVisible());
   });
 });

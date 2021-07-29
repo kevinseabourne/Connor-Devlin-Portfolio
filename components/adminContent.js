@@ -1,204 +1,288 @@
-import styled, { createGlobalStyle } from "styled-components";
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 import Videos from "./common/videos";
 import {
-  getAllWeddings,
-  editWedding,
-  deleteWedding,
-} from ".././pages/api/weddings";
-import {
-  getAllCorporate,
-  editCorporate,
-  deleteCorporate,
-} from ".././pages/api/corporate";
-import _ from "lodash";
-import cloneDeep from "lodash/cloneDeep";
-import moment from "moment";
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+  getContent,
+  getMoreContent,
+  addContent,
+  editContent,
+  deleteContent,
+} from ".././pages/api/content";
+import { isArrayEmpty, isObjEmpty } from "./common/utils/isEmpty";
+import { motion, AnimateSharedLayout } from "framer-motion";
 import { handleWeddingNames } from "./common/utils/handleWeddingName";
 import { bundleDualInputValuesIntoObj } from "./common/utils/bundleDualInputValuesIntoObj";
 import AdminContentForm from "./common/adminContentForm";
 import popSound from ".././public/sounds/pop.mp3";
 import useSound from "use-sound";
-import { DeletePopupOverlay } from "./deletePopupOverlay";
 import AdminButtonsSection from "./common/adminButtonSections";
+import { errorMessage } from "./common/utils/errorMessage";
+import isEqual from "lodash.isequal";
+import moment from "moment";
 
 const AdminContent = ({ operation }) => {
   const [state, setState] = useState([]);
-  const [selectedVideo, setSelectedVideo] = useState({});
-  const [weddingsStatus, setWeddingsStatus] = useState("idle");
-  const [corporateStatus, setCorporateStatus] = useState("idle");
-  const [popUpOpen, setPopUpOpen] = useState(false);
-  const [page, setPage] = useState(null);
+  const [selectedData, setSelectedData] = useState(null);
+  const [selectedItem, setSelectedItem] = useState({});
+  const [sameSelectedData, setSameSelectedData] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [buttons] = useState([
+    { title: "Weddings", dataTitle: "weddings" },
+    { title: "Corporate", dataTitle: "corporate" },
+  ]);
+  const [videoOverlayOpen, setVideoOverlayOpen] = useState(false);
+  const [flexStart, setFlexStart] = useState(false);
+
   const timeout = useRef(null);
   const timeoutThird = useRef(null);
-  const popUpRef = useRef(null);
 
   const [play] = useSound(popSound, { volume: 0.2 });
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
     return () => {
-      clearTimeout(timeout.current);
       clearTimeout(timeoutThird.current);
-      window.removeEventListener("mousedown", handleClickOutside);
+      clearTimeout(timeout.current);
     };
   }, []);
 
-  const handleClick = (id) => {
-    const stateClone = _.cloneDeep(state);
-
-    const selected = stateClone.find((item) => item.id === id);
-    if (_.isEmpty(selectedVideo) || selected.id !== selectedVideo.id) {
-      play();
-      setSelectedVideo(selected);
+  useEffect(() => {
+    if (status === "pending" && !flexStart) {
+      setFlexStart(true);
+    } else if (status === "resolved") {
+      timeout.current = setTimeout(() => {
+        setStatus("idle");
+      }, 1000);
     }
-  };
+  }, [status]);
 
-  const handleWeddingPageChange = () => {
-    showWeddingContent();
-  };
-
-  const handleCorporatePageChange = () => {
-    showCorporateContent();
-  };
-
-  const showWeddingContent = async () => {
-    setWeddingsStatus("pending");
-    const response = await getAllWeddings();
-    const updatedWeddings = handleWeddingNames(response, true);
-    setState(updatedWeddings);
-    setSelectedVideo(updatedWeddings[0]);
-    setPage("weddings");
-    setWeddingsStatus("resolved");
-    timeoutThird.current = setTimeout(() => {
-      setWeddingsStatus("idle");
-    }, 1000);
-  };
-
-  const showCorporateContent = async () => {
-    setCorporateStatus("pending");
-    const response = await getAllCorporate();
-    setState(response);
-    setSelectedVideo(response[0]);
-    setPage("corporate");
-    setCorporateStatus("resolved");
-    timeoutThird.current = setTimeout(() => {
-      setCorporateStatus("idle");
-    }, 1000);
-  };
-
-  const handleEditWeddingSubmit = async (data) => {
-    const updatedData = bundleDualInputValuesIntoObj(
-      data,
-      "FirstName",
-      "lastName",
-      "partners"
+  const handleGetContent = async (newDataTitle, showDataAfterDelete) => {
+    newDataTitle ? setSameSelectedData(false) : setSameSelectedData(true);
+    status !== "pending" && setStatus("pending");
+    const response = await getContent(
+      newDataTitle ? newDataTitle : selectedData
     );
-    updatedData.id = selectedVideo.id;
-    const response = await editWedding(updatedData);
 
-    // get the latest data and update state with it.
-    const weddingData = await getAllWeddings();
-    const updatedWeddings = handleWeddingNames(weddingData, true);
-    setState(updatedWeddings);
-    updateSelectedVideo(updatedWeddings);
-    return response;
-  };
+    if (response) {
+      let data = response;
+      if (newDataTitle === "weddings") {
+        data = handleWeddingNames(response, true);
+      }
 
-  const handleEditCorporateSubmit = async (data) => {
-    // const updatedData = bundleDualInputValuesIntoObj(data);
-    updatedData.id = selectedVideo.id;
-    const response = await editCorporate(updatedData);
+      // prevent items from animating out if the new data request is the same as the current selectedData
 
-    // get the latest data and update state with it.
-    const corporateData = await getAllCorporate();
-    setState(corporateData);
+      newDataTitle && setSelectedData(newDataTitle);
+      operation === "Edit" &&
+        handleSelectedItemAfterDataRequest(
+          data,
+          newDataTitle,
+          showDataAfterDelete
+        );
+      setState(data);
 
-    updateSelectedVideo(corporateData);
-    return response;
-  };
-
-  const handleDeleteWeddingSubmit = async () => {
-    await deleteWedding(selectedVideo);
-
-    const weddingData = await getAllWeddings();
-    const updatedWeddings = handleWeddingNames(weddingData, true);
-
-    if (state.length === state.indexOf(selectedVideo)) {
-      setSelectedVideo(updatedWeddings[updatedWeddings.length]);
+      setStatus("resolved");
     } else {
-      setSelectedVideo(state.indexOf(selectedVideo) + 1);
+      errorMessage();
     }
-    setState(updatedWeddings);
-    return;
   };
 
-  const handleDeleteCorporateSubmit = async () => {
-    // get the latest data and update state with it.
-    await deleteCorporate(selectedVideo);
-    const corporateData = await getAllCorporate();
-    setState(corporateData);
+  const handleGetMoreContent = async () => {
+    setSameSelectedData(true);
+    setStatus("pending");
 
-    const corporateDataClone = cloneDeep(state);
+    const lastIndex = state[state.length - 1];
+    const lastIndexClone = { ...lastIndex };
 
-    const selectedVideoInState = corporateDataClone.find(
-      (item) => item.id === selectedVideo.id
-    );
+    lastIndexClone.date = moment(lastIndex.date, "DD-MM-YYYY").toDate();
 
-    const index =
-      corporateDataClone.length === index
-        ? corporateDataClone.indexOf(selectedVideoInState) - 1
-        : corporateDataClone.indexOf(selectedVideoInState) + 1;
+    const response = await getMoreContent(lastIndexClone, selectedData);
 
-    setSelectedVideo(corporateDataClone[index]);
+    let newData = [];
+    if (response) {
+      if (selectedData === "weddings") {
+        const updatedWeddingsData = handleWeddingNames(response);
+        newData = updatedWeddingsData;
+      } else {
+        newData = response;
+      }
+
+      setState([...state, ...newData]);
+    } else {
+      errorMessage();
+    }
+    setStatus("resolved");
   };
 
-  const updateSelectedVideo = (data) => {
-    const dataClone = _.cloneDeep(data);
-    const updatedSelectedVideo = dataClone.find(
-      (item) => item.id === selectedVideo.id
-    );
+  const handleAddContent = async (data) => {
+    setSameSelectedData(true);
+    setStatus("pending");
+
+    // organise data from form into an object that fits database requirments
+    let dataObj = {};
+    switch (selectedData) {
+      case "weddings":
+        const updatedData = bundleDualInputValuesIntoObj(
+          data,
+          "partnerFirstName",
+          "partnerLastName",
+          "firstName",
+          "lastName",
+          "partners"
+        );
+        dataObj = arrangeWeddingDataObj(updatedData);
+        break;
+      case "corporate":
+        dataObj = arrangeCorporateDataObj(data);
+        break;
+    }
+    // organise data from form into an object that fits database requirments
+    const response = await addContent(selectedData, dataObj);
+
+    if (response) {
+      await handleGetContent(null);
+      return true;
+    } else {
+      errorMessage();
+    }
+  };
+
+  const handleEditContent = async (data) => {
+    setSameSelectedData(true);
+    setStatus("pending");
+    // organise data from form into an object that fits database requirments
+    let dataObj = {};
+    switch (selectedData) {
+      case "weddings":
+        const updatedData = bundleDualInputValuesIntoObj(
+          data,
+          "partnerFirstName",
+          "partnerLastName",
+          "firstName",
+          "lastName",
+          "partners"
+        );
+        dataObj = arrangeWeddingDataObj(updatedData);
+        break;
+      case "corporate":
+        dataObj = arrangeCorporateDataObj(data);
+        break;
+    }
+
+    const response = await editContent(selectedData, selectedItem.id, dataObj);
+
+    if (response) {
+      await handleGetContent(null);
+      return true;
+    } else {
+      errorMessage();
+    }
+  };
+
+  const handleDeleteContent = async () => {
+    setSameSelectedData(true);
+    setStatus("pending");
+
+    const response = await deleteContent(selectedData, selectedItem.id);
+
+    if (response) {
+      handleGetContent(null, true);
+      return true;
+    } else {
+      errorMessage();
+    }
+  };
+
+  // ------------------------ Selected Item ------------------------ //
+
+  // handleSelectedItemAfterDataRequest
+  // this function updates the selectedItem in state. With it's corresponding item from the database,
+  // selectedItem may change from different data being selected (weddings,corporate),
+  // updating selectedItem with the data in the database or changing the selectedItem due that item being deleted in the database.
+
+  const handleSelectedItemAfterDataRequest = (
+    data,
+    newSelectedData,
+    showDataAfterDelete
+  ) => {
+    if (isObjEmpty(selectedItem) || newSelectedData) {
+      // The first item in state is selected by default on page load
+      setSelectedItem(data[0]);
+    } else if (!isObjEmpty(selectedItem) && showDataAfterDelete) {
+      // after delete
+      handleSelectedItemAfterDelete();
+    } else {
+      // after edit
+      handleSelectedItemAfterEdit(data);
+    }
+  };
+
+  const handleSelectedItemAfterClick = (id) => {
+    const selected = state.find((item) => item.id === id);
     if (
-      updatedSelectedVideo &&
-      !_.isEqual(selectedVideo, updatedSelectedVideo)
+      (operation === "Edit" && isObjEmpty(selectedItem)) ||
+      (operation === "Edit" && selected.id !== selectedItem.id)
     ) {
-      setSelectedVideo(updatedSelectedVideo);
+      play();
+    } else if (operation === "Add") {
+      setVideoOverlayOpen(!videoOverlayOpen);
+    }
+    setSelectedItem(selected);
+  };
+
+  const handleSelectedItemAfterEdit = (data) => {
+    if (!isObjEmpty(selectedItem)) {
+      const updatedSelectedItem = data.find(
+        (item) => item.id === selectedItem.id
+      );
+
+      if (!isEqual(selectedItem, updatedSelectedItem)) {
+        setSelectedItem(updatedSelectedItem);
+      }
     }
   };
 
-  const handleClickOutside = (e) => {
-    if (popUpRef.current && !popUpRef.current.contains(e.target)) {
-      setPopUpOpen(false);
-    }
+  const handleSelectedItemAfterDelete = () => {
+    const selectedItemIndex = state.indexOf(selectedItem);
+
+    const newSelectedItemIndex =
+      selectedItemIndex === 0 ? selectedItemIndex + 1 : selectedItemIndex - 1;
+    const newSelectedItem = state[newSelectedItemIndex];
+    setSelectedItem(newSelectedItem);
   };
 
-  const handleDeleteContentPopUp = () => {
-    setPopUpOpen(!popUpOpen);
+  const arrangeWeddingDataObj = (data) => {
+    return {
+      coverPhoto: data.coverPhoto,
+      location: {
+        state: data.stateTerritory.value,
+        suburb: data.suburb,
+      },
+      date: moment(data.date, "DD-MM-YYYY").toDate(),
+      partners: data.partners,
+      description: data.description,
+      video: `https://player.vimeo.com/video/${data.videoId}?autoplay=1`,
+      duration: data.duration,
+      testimonial: data.testimonial,
+      videoId: data.weddingVideoId,
+    };
   };
 
-  const dataResolved =
-    weddingsStatus !== "pending" && corporateStatus !== "pending"
-      ? true
-      : false;
+  const arrangeCorporateDataObj = (data) => {
+    return {
+      company: data.company,
+      coverPhoto: data.coverPhoto,
+      description: data.description,
+      date: moment(data.date, "DD-MM-YYYY").toDate(),
+      testimonial: data.corporateTestimonial,
+      video: `https://player.vimeo.com/video/${data.videoId}?autoplay=1`,
+      duration: data.duration,
+      videoId: data.corporateVideoId,
+    };
+  };
 
-  const defaultValues = dataResolved
-    ? page === "weddings"
-      ? {
-          weddingVideoId: selectedVideo.videoId,
-          partners: selectedVideo.partners,
-          stateTerritory: selectedVideo.location.state,
-          suburb: selectedVideo.location.suburb,
-          weddingDate: selectedVideo.date,
-          testimonial: selectedVideo.testimonial,
-        }
-      : {
-          corporateVideoId: selectedVideo.videoId,
-          company: selectedVideo.company,
-          jobDate: selectedVideo.date,
-          corporateTestimonial: selectedVideo.testimonial,
-        }
-    : {};
+  const closeOverlay = () => {
+    setVideoOverlayOpen(false);
+  };
 
   // Framer Motion Animation //
 
@@ -215,70 +299,53 @@ const AdminContent = ({ operation }) => {
       justifyContent: "flex-start",
       transition: {
         type: "spring",
-        delayChildren: 0.1,
-        staggerChildren: 0.7,
       },
     },
   };
 
+  const animationVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+  };
+
+  const formRenderCondition = sameSelectedData
+    ? sameSelectedData
+    : status !== "pending" && isArrayEmpty(state);
+
   return (
     <AnimateSharedLayout>
-      <Container
-        variants={variants}
-        initial="hidden"
-        animate={page ? "show" : "hidden"}
-      >
+      <Container variants={variants} initial="hidden" animate="show">
         <AdminButtonsSection
-          handleContentOnePageChange={handleWeddingPageChange}
-          handleContentTwoPageChange={handleCorporatePageChange}
-          contentOneStatus={weddingsStatus}
-          contentTwoStatus={corporateStatus}
-          buttonOneTitle={"Packages"}
-          buttonTwoTitle={"Add Ons"}
-          page={page}
+          handleButtonChange={handleGetContent}
+          buttons={buttons}
+          selectedData={selectedData}
+          operation={operation}
+          status={status}
+        />
+        <Videos
+          data={state}
+          selectedData={selectedData}
+          sameSelectedData={sameSelectedData}
+          handleGetMoreContent={handleGetMoreContent}
+          handleDeleteContent={handleDeleteContent}
+          status={status}
+          selectedItem={selectedItem}
+          videoOverlayOpen={videoOverlayOpen}
+          handleSelectedItemAfterClick={handleSelectedItemAfterClick}
+          showAdminContentData={true}
+          closeOverlay={closeOverlay}
           operation={operation}
         />
 
-        <AnimatePresence>
-          {dataResolved && (
-            <AnimateSharedLayout>
-              <Videos
-                data={state}
-                page={page}
-                selectedVideo={selectedVideo}
-                handleClick={handleClick}
-                showAdminContentData={true}
-                editDeleteContent={true}
-                handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
-                handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
-                handleDeleteContentPopUp={handleDeleteContentPopUp}
-              />
-            </AnimateSharedLayout>
-          )}
-        </AnimatePresence>
-
-        {page !== null && (
+        {formRenderCondition && (
           <AdminContentForm
-            page={page}
-            defaultValues={defaultValues}
-            dataResolved={dataResolved}
-            selectedVideo={selectedVideo}
-            handleWeddingSubmit={handleEditWeddingSubmit}
-            handleCorporateSubmit={handleEditCorporateSubmit}
-            selectedVideo={selectedVideo}
+            selectedData={selectedData}
+            selectedItem={selectedItem}
+            handleAddContent={handleAddContent}
+            handleEditContent={handleEditContent}
             operation={operation}
           />
         )}
-
-        <DeletePopupOverlay
-          popUpOpen={popUpOpen}
-          closePopup={handleDeleteContentPopUp}
-          selectedVideo={selectedVideo}
-          page={page}
-          handleDeleteWeddingSubmit={handleDeleteWeddingSubmit}
-          handleDeleteCorporateSubmit={handleDeleteCorporateSubmit}
-          ref={popUpRef}
-        />
       </Container>
     </AnimateSharedLayout>
   );
@@ -286,13 +353,15 @@ const AdminContent = ({ operation }) => {
 
 export default AdminContent;
 
+AdminContent.propTypes = {
+  operation: PropTypes.string.isRequired,
+};
+
 const Container = styled(motion.div)`
   width: calc(100% - 280px);
   min-height: calc(100vh - 75px);
-  transition: all 0.5s ease;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   margin-left: auto;
   background-image: ${({ theme }) =>
@@ -303,4 +372,8 @@ const Container = styled(motion.div)`
   @media (max-width: 1024px) {
     width: 100%;
   }
+`;
+
+const AnimationContainer = styled(motion.div)`
+  width: 100%;
 `;

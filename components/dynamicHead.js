@@ -1,4 +1,5 @@
 import Head from "next/head";
+import PropTypes from "prop-types";
 
 const DynamicHead = ({ title, description, urlQuery }) => {
   return (
@@ -17,3 +18,9 @@ const DynamicHead = ({ title, description, urlQuery }) => {
 };
 
 export default DynamicHead;
+
+DynamicHead.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  urlQuery: PropTypes.string,
+};

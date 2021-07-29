@@ -1,5 +1,4 @@
 import http from "./httpService";
-import { toast } from "react-toastify";
 import logger from "./logger";
 
 export async function getVimeoData(formData) {
@@ -15,8 +14,7 @@ export async function getVimeoData(formData) {
         },
       }
     );
-    const image = data.pictures.sizes[0].link;
-    const coverPhoto = image.replace("100x75.jpg?r=pad", "960x540.jpg?r=pad");
+    const coverPhoto = data.pictures.sizes[3].link;
     const description = data.description;
 
     const minutes = Math.floor(data.duration / 60);
@@ -36,14 +34,13 @@ export async function getVimeoData(formData) {
 
     return formData;
   } catch (error) {
-    toast.error("An unexpected error has occurred", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
     logger.log(error);
+
+    const errorMessage =
+      error.response.data.error_code === 2204
+        ? "Cannot access private video"
+        : error.response.data.error;
+
+    return { errorMessage };
   }
 }

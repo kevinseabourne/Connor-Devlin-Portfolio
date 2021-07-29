@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
-import lodash from "lodash";
 import { useForm } from "react-hook-form";
 import { Input } from "./input";
 import { InputWithIcon } from "./inputWithIcon";
 import { TextArea } from "./textArea";
+import { isObjEmpty } from "./utils/isEmpty";
 import { DayPicker } from "./dayPicker";
 import { ReactSelect } from "./select";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { getVimeoData } from "../../pages/api/vimeo";
 import ImageLoader from "./imageLoader";
 import downWave from "../../public/images/wave3.svg";
 import popSound from "../../public/sounds/pop_char.mp3";
@@ -15,21 +17,20 @@ import popDownSound from "../../public/sounds/pop_down.mp3";
 import successSound from "../../public/sounds/music_marimba_on_hi.mp3";
 import errorSound from "../../public/sounds/pad_soft_off.mp3";
 import useSound from "use-sound";
+import { errorMessage } from "./utils/errorMessage";
 
 const AdminContentForm = ({
-  page,
-  handleWeddingSubmit,
-  handleCorporateSubmit,
-  defaultValues,
+  selectedData,
+  handleEditContent,
+  handleAddContent,
   operation,
-  selectedVideo,
-  dataResolved,
+  selectedItem,
 }) => {
   const [partnersInputLength, setPartnersInputLength] = useState([
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
-  const [status, setStatus] = useState("idle");
+  const [formStatus, setFormStatus] = useState("idle");
   const [partnerFirstNameFocus, setPartnerFirstNameFocus] = useState(false);
   const {
     register,
@@ -37,6 +38,7 @@ const AdminContentForm = ({
     reset,
     control,
     errors,
+    setError,
     unregister,
     formState,
   } = useForm();
@@ -47,21 +49,21 @@ const AdminContentForm = ({
   const [playErrorSound] = useSound(errorSound, { volume: 0.2 });
 
   useEffect(() => {
-    if (!_.isEmpty(defaultValues) && dataResolved) {
+    if (!isObjEmpty(selectedItem)) {
       handleDefaultValues();
     }
-  }, [dataResolved, selectedVideo]);
+  }, [selectedItem]);
 
   useEffect(() => {
-    if (status === "resolved") {
-      const timer = setTimeout(() => setStatus("idle"), 3000);
+    if (formStatus === "resolved") {
+      const timer = setTimeout(() => setFormStatus("idle"), 3000);
       return () => clearTimeout(timer);
     }
-  }, [status]);
+  }, [formStatus]);
 
   useEffect(() => {
     // check that the error sound is not played on a successful post
-    if (!isSubmitSuccessful && !_.isEmpty(errors)) {
+    if (!isSubmitSuccessful && !isObjEmpty(errors)) {
       playErrorSound();
     }
   }, [errors]);
@@ -71,7 +73,7 @@ const AdminContentForm = ({
       required: "A video ID is required !",
       pattern: {
         value: /^\d*\d$/g,
-        message: "Numbers Only !",
+        message: "The Video ID should be numbers only (not within a folder)",
       },
     },
     name: {
@@ -109,24 +111,24 @@ const AdminContentForm = ({
 
   const handleDefaultValues = () => {
     if (operation === "Edit") {
-      if (page === "weddings") {
+      if (selectedData === "weddings") {
         handleDefaultNames();
       } else {
         reset({
-          corporateVideoId: defaultValues.corporateVideoId,
-          company: defaultValues.company,
-          jobDate: defaultValues.jobDate,
-          corporateTestimonial: defaultValues.corporateTestimonial,
+          corporateVideoId: selectedItem.videoId,
+          company: selectedItem.company,
+          jobDate: selectedItem.date,
+          corporateTestimonial: selectedItem.testimonial,
         });
       }
     }
   };
 
   const handleDefaultNames = () => {
-    const partnersInputLengthClone = _.cloneDeep(partnersInputLength);
+    const partnersInputLengthClone = [...partnersInputLength];
 
-    if (defaultValues.partners.length > 2) {
-      while (defaultValues.partners.length > partnersInputLengthClone.length) {
+    if (selectedItem.partners.length > 2) {
+      while (selectedItem.partners.length > partnersInputLengthClone.length) {
         partnersInputLengthClone.push({
           title: "partner",
           id: Math.floor(1000 + Math.random() * 9000),
@@ -140,28 +142,25 @@ const AdminContentForm = ({
         // all i did was get the index of the first item being looped and use that for other array.
         let index = partnersInputLengthClone.indexOf(i);
         defaultValuesWithPartners["partnerFirstName_" + i.id] =
-          defaultValues.partners[index].firstName;
+          selectedItem.partners[index].firstName;
 
         defaultValuesWithPartners["partnerLastName_" + i.id] =
-          defaultValues.partners[index].lastName;
+          selectedItem.partners[index].lastName;
       }
-
-      defaultValuesWithPartners.weddingVideoId = defaultValues.weddingVideoId;
-      defaultValuesWithPartners.suburb = defaultValues.suburb;
-      defaultValuesWithPartners.weddingDate = defaultValues.weddingDate;
+      defaultValuesWithPartners.weddingVideoId = selectedItem.videoId;
+      defaultValuesWithPartners.suburb = selectedItem.location.suburb;
+      defaultValuesWithPartners.weddingDate = selectedItem.date;
       (defaultValuesWithPartners.stateTerritory = {
-        value: defaultValues.stateTerritory,
-        label: defaultValues.stateTerritory,
+        value: selectedItem.location.state,
+        label: selectedItem.location.state,
       }),
-        (defaultValuesWithPartners.testimonial = defaultValues.testimonial);
+        (defaultValuesWithPartners.testimonial = selectedItem.testimonial);
 
       reset(defaultValuesWithPartners);
-    } else if (
-      partnersInputLengthClone.length > defaultValues.partners.length
-    ) {
+    } else if (partnersInputLengthClone.length > selectedItem.partners.length) {
       const amount =
-        partnersInputLengthClone.length - defaultValues.partners.length;
-      partnersInputLengthClone.splice(defaultValues.partners.length, amount);
+        partnersInputLengthClone.length - selectedItem.partners.length;
+      partnersInputLengthClone.splice(selectedItem.partners.length, amount);
       setPartnersInputLength(partnersInputLengthClone);
 
       weddingDefaultValues();
@@ -172,30 +171,30 @@ const AdminContentForm = ({
 
   const weddingDefaultValues = () => {
     reset({
-      ["partnerFirstName_" + partnersInputLength[0].id]: defaultValues
+      ["partnerFirstName_" + partnersInputLength[0].id]: selectedItem
         .partners[0].firstName,
-      ["partnerLastName_" + partnersInputLength[0].id]: defaultValues
-        .partners[0].lastName,
-      ["partnerFirstName_" + partnersInputLength[1].id]: defaultValues
+      ["partnerLastName_" + partnersInputLength[0].id]: selectedItem.partners[0]
+        .lastName,
+      ["partnerFirstName_" + partnersInputLength[1].id]: selectedItem
         .partners[1].firstName,
-      ["partnerLastName_" + partnersInputLength[1].id]: defaultValues
-        .partners[1].lastName,
-      weddingVideoId: defaultValues.weddingVideoId,
-      suburb: defaultValues.suburb,
-      weddingDate: defaultValues.weddingDate,
+      ["partnerLastName_" + partnersInputLength[1].id]: selectedItem.partners[1]
+        .lastName,
+      weddingVideoId: selectedItem.videoId,
+      suburb: selectedItem.location.suburb,
+      weddingDate: selectedItem.date,
       stateTerritory: {
-        value: defaultValues.stateTerritory,
-        label: defaultValues.stateTerritory,
+        value: selectedItem.location.state,
+        label: selectedItem.location.state,
       },
-      testimonial: defaultValues.testimonial,
+      testimonial: selectedItem.testimonial,
     });
   };
 
   const deletePartner = (index) => {
-    const partnersInputLengthClone = _.cloneDeep(partnersInputLength);
+    const partnersInputLengthClone = [...partnersInputLength];
     if (index > -1 && partnersInputLength.length > 2) {
       playDown();
-      if (page === "weddings") {
+      if (selectedData === "weddings") {
         unregister(`partnerFirstName_${partnersInputLengthClone[index].id}`);
         unregister(`partnerLastName_${partnersInputLengthClone[index].id}`);
       }
@@ -205,7 +204,7 @@ const AdminContentForm = ({
   };
 
   const addPartner = (index) => {
-    const partnersInputLengthClone = _.cloneDeep(partnersInputLength);
+    const partnersInputLengthClone = [...partnersInputLength];
     if (index > -1 && partnersInputLengthClone.length <= 10) {
       play();
       setPartnerFirstNameFocus(true);
@@ -217,38 +216,61 @@ const AdminContentForm = ({
     }
   };
 
-  const handleWedding = (data) => {
-    setStatus("pending");
-    const response = handleWeddingSubmit(data);
+  const handleFormSubmit = async (data) => {
+    setFormStatus("pending");
 
-    if (response) {
-      playSuccessSound();
-      if (operation === "Add") {
-        resetValues(data);
+    // The video id supplied in the form is will be checked in vimeo's database
+    // if it does not exist or the video is private a form validation error message will appear
+    // prompting the user to take action. If it is valid, then the request will be made to add
+    // it to the database or edit existing data.
+
+    const dataWithVimeoData = await getVimeoData(data);
+
+    if (dataWithVimeoData && !isObjEmpty(dataWithVimeoData)) {
+      if (dataWithVimeoData.errorMessage) {
+        setError(
+          selectedData === "weddings" ? "weddingVideoId" : "corporateVideoId",
+          {
+            type: "manual",
+            message: dataWithVimeoData.errorMessage,
+          }
+        );
+        setFormStatus("idle");
+      } else {
+        let response;
+        if (operation === "Add") {
+          response = await handleAddContent(dataWithVimeoData);
+        } else if (operation === "Edit") {
+          response = await handleEditContent(dataWithVimeoData);
+        }
+
+        if (response) {
+          playSuccessSound();
+          if (operation === "Add") {
+            resetValues(data);
+            setFormStatus("resolved");
+          }
+          setFormStatus("resolved");
+        } else {
+          // error message covered inside functions called
+        }
       }
-      setStatus("resolved");
-    }
-  };
-
-  const handleCorporate = (data) => {
-    setStatus("pending");
-    const response = handleCorporateSubmit(data);
-
-    if (response) {
-      playSuccessSound();
-      if (operation === "Add") {
-        resetValues(data);
-      }
-      setStatus("resolved");
+    } else {
+      errorMessage();
     }
   };
 
   const resetValues = (data) => {
-    const resetValues = _.mapValues(data, (i) => {
-      i = "";
-      return i;
+    const dataClone = { ...data };
+    const array = Object.entries(dataClone);
+
+    array.map((inputValue) => {
+      inputValue[1] = "";
+      return inputValue;
     });
-    reset(resetValues);
+
+    const resetFormData = Object.fromEntries(array);
+    reset(resetFormData);
   };
 
   const stateTerritoryOptions = [
@@ -266,6 +288,15 @@ const AdminContentForm = ({
       ],
     },
   ];
+
+  const animation = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+    },
+  };
 
   const variants = {
     hidden: {
@@ -287,218 +318,255 @@ const AdminContentForm = ({
   };
 
   return (
-    <Container variants={variants} layout>
-      <Wave src={downWave} layout />
-      <InnerContainer layout>
-        {page === "weddings" && (
-          <AddWeddingForm onSubmit={handleSubmit(handleWedding)}>
-            <Title>{operation} Wedding Content</Title>
-            <InfoBox>
-              <InfoLabelContainer>
-                <ImageLoader
-                  lazyLoad={true}
-                  maxWidth="22px"
-                  placeholderSize="100%"
-                  src="https://chpistel.sirv.com/Connor-Portfolio/waringSign.png?w=22"
-                />
-                <InfoLabel>
-                  To Change the description or display image go to the video on
-                  your Vimeo account.
-                </InfoLabel>
-              </InfoLabelContainer>
-            </InfoBox>
-            <InputWithIcon
-              name="weddingVideoId"
-              label="video ID"
-              ref={register(schema.videoId)}
-              error={errors.weddingVideoId}
-              icon={
-                "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
-              }
-              iconMaxWidth="16px"
-              iconPlaceHolderSize="100%"
-              toolTipImage={
-                "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
-              }
-              toolTipImagePlaceHolderSize="58%"
-              toolTipImageBorderRadius="9px"
-              toolTipMaxWidth="450px"
-              toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
-            />
-            {partnersInputLength.map((partner) => (
-              <NameContainer key={partner.id}>
-                <AddPartnerButton
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={(e) => {
-                    const key = e.key === 13 || e.keyCode === 13;
-                    key && addPartner(partnersInputLength.indexOf(partner));
-                  }}
-                  onClick={() =>
-                    addPartner(partnersInputLength.indexOf(partner))
+    <AnimateSharedLayout>
+      <Container variants={variants} layout>
+        <Wave src={downWave} />
+        <InnerContainer layout>
+          <AnimatePresence>
+            {selectedData === "weddings" && (
+              <AddWeddingForm
+                onSubmit={handleSubmit(handleFormSubmit)}
+                variants={animation}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+                layout
+              >
+                <Title>{operation} Wedding Content</Title>
+                <InfoBox variant={animation}>
+                  <InfoLabelContainer>
+                    <ImageLoader
+                      lazyLoad={true}
+                      maxWidth="22px"
+                      placeholderSize="100%"
+                      src="https://chpistel.sirv.com/Connor-Portfolio/waringSign.png?w=22"
+                    />
+                    <InfoLabel>
+                      To Change the description or display image go to the video
+                      on your Vimeo account.
+                    </InfoLabel>
+                  </InfoLabelContainer>
+                </InfoBox>
+                <InputWithIcon
+                  name="weddingVideoId"
+                  label="video ID"
+                  ref={register(schema.videoId)}
+                  error={errors.weddingVideoId}
+                  icon={
+                    "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
                   }
-                >
-                  <ImageLoader
-                    maxWidth="inherit"
-                    placeholderSize="100%"
-                    opacity={0}
-                    hover={true}
-                    src={
-                      "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
-                    }
-                  />
-                </AddPartnerButton>
-                <NameInnerContainer>
+                  iconMaxWidth="16px"
+                  iconPlaceHolderSize="100%"
+                  toolTipImage={
+                    "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
+                  }
+                  toolTipImagePlaceHolderSize="58%"
+                  toolTipImageBorderRadius="9px"
+                  toolTipMaxWidth="450px"
+                  toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here. The video cannot be within a folder"
+                />
+                {partnersInputLength.map((partner) => (
+                  <NameContainer
+                    key={partner.id}
+                    variant={animation}
+                    layoutId={partner.id}
+                    layout
+                    data-testid="namesContainer"
+                  >
+                    <AddPartnerButton
+                      tabIndex="0"
+                      role="button"
+                      aria-label="Add Partner"
+                      onKeyDown={(e) => {
+                        const key = e.key === 13 || e.keyCode === 13;
+                        key && addPartner(partnersInputLength.indexOf(partner));
+                      }}
+                      onClick={() =>
+                        addPartner(partnersInputLength.indexOf(partner))
+                      }
+                    >
+                      <ImageLoader
+                        maxWidth="inherit"
+                        placeholderSize="100%"
+                        opacity={0}
+                        hover={true}
+                        src={
+                          "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
+                        }
+                      />
+                    </AddPartnerButton>
+                    <NameInnerContainer>
+                      <Input
+                        name={`partnerFirstName_${partner.id}`}
+                        label="First Name"
+                        ref={register(schema.name)}
+                        error={errors[`partnerFirstName_${partner.id}`]}
+                        marginRight="5px"
+                        autoFocus={partnerFirstNameFocus ? true : false}
+                      />
+                      <Input
+                        name={`partnerLastName_${partner.id}`}
+                        label="Last Name"
+                        ref={register(schema.name)}
+                        error={errors[`partnerLastName_${partner.id}`]}
+                        marginLeft="5px"
+                      />
+                    </NameInnerContainer>
+                    <DeletePartnerButton
+                      tabIndex="0"
+                      role="button"
+                      aria-label="Delete Partner"
+                      onKeyDown={(e) => {
+                        const key = e.key === 13 || e.keyCode === 13;
+                        key &&
+                          deletePartner(partnersInputLength.indexOf(partner));
+                      }}
+                      onClick={() =>
+                        deletePartner(partnersInputLength.indexOf(partner))
+                      }
+                    >
+                      <ImageLoader
+                        maxWidth="inherit"
+                        placeholderSize="100%"
+                        opacity={0}
+                        hover={true}
+                        src={
+                          "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
+                        }
+                      />
+                    </DeletePartnerButton>
+                  </NameContainer>
+                ))}
+                <LocationContainer>
                   <Input
-                    name={`partnerFirstName_${partner.id}`}
-                    label="First Name"
-                    ref={register(schema.name)}
-                    error={errors[`partnerFirstName_${partner.id}`]}
+                    name="suburb"
+                    label="Suburb"
+                    ref={register(schema.suburb)}
+                    error={errors.suburb}
                     marginRight="5px"
-                    autoFocus={partnerFirstNameFocus ? true : false}
                   />
-                  <Input
-                    name={`partnerLastName_${partner.id}`}
-                    label="Last Name"
-                    ref={register(schema.name)}
-                    error={errors[`partnerLastName_${partner.id}`]}
+                  <ReactSelect
+                    control={control}
+                    ref={register}
+                    label="State/Territory"
+                    name="stateTerritory"
+                    options={stateTerritoryOptions}
+                    validation={schema.stateTerritory}
+                    error={errors.stateTerritory}
                     marginLeft="5px"
                   />
-                </NameInnerContainer>
-                <DeletePartnerButton
-                  tabIndex="0"
-                  role="button"
-                  onKeyDown={(e) => {
-                    const key = e.key === 13 || e.keyCode === 13;
-                    key && deletePartner(partnersInputLength.indexOf(partner));
-                  }}
-                  onClick={() =>
-                    deletePartner(partnersInputLength.indexOf(partner))
-                  }
+                </LocationContainer>
+                <DayPicker
+                  control={control}
+                  ref={register}
+                  label="Date"
+                  name="weddingDate"
+                  validation={schema.date}
+                  error={errors.weddingDate}
+                />
+                <TextArea
+                  name="testimonial"
+                  label="Testimonial"
+                  ref={register(schema.testimonial)}
+                  error={errors.testimonial}
+                />
+                <SubmitButton
+                  type="submit"
+                  disabled={formStatus === "pending" ? true : false}
                 >
-                  <ImageLoader
-                    maxWidth="inherit"
-                    placeholderSize="100%"
-                    opacity={0}
-                    hover={true}
-                    src={
-                      "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
-                    }
-                  />
-                </DeletePartnerButton>
-              </NameContainer>
-            ))}
-            <LocationContainer>
-              <Input
-                name="suburb"
-                label="Suburb"
-                ref={register(schema.suburb)}
-                error={errors.suburb}
-                marginRight="5px"
-              />
-              <ReactSelect
-                control={control}
-                ref={register}
-                label="State/Territory"
-                name="stateTerritory"
-                options={stateTerritoryOptions}
-                validation={schema.stateTerritory}
-                error={errors.stateTerritory}
-                marginLeft="5px"
-              />
-            </LocationContainer>
-            <DayPicker
-              control={control}
-              ref={register}
-              label="Date"
-              name="weddingDate"
-              validation={schema.date}
-              error={errors.weddingDate}
-            />
-            <TextArea
-              name="testimonial"
-              label="Testimonial"
-              ref={register(schema.testimonial)}
-              error={errors.testimonial}
-            />
-            <SubmitButton
-              type="submit"
-              disabled={status === "pending" ? true : false}
-            >
-              {status !== "pending"
-                ? status === "resolved"
-                  ? "Success"
-                  : operation === "Edit"
-                  ? "Update"
-                  : operation
-                : "Loading..."}
-            </SubmitButton>
-          </AddWeddingForm>
-        )}
-        {page === "corporate" && (
-          <AddCorporateForm onSubmit={handleSubmit(handleCorporate)}>
-            <Title>{operation} Corporate Content</Title>
-            <InputWithIcon
-              name="corporateVideoId"
-              label="video ID"
-              ref={register(schema.videoId)}
-              error={errors.corporateVideoId}
-              icon={
-                "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
-              }
-              iconMaxWidth="16px"
-              iconPlaceHolderSize="100%"
-              toolTipImage={
-                "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
-              }
-              toolTipImagePlaceHolderSize="58%"
-              toolTipImageBorderRadius="9px"
-              toolTipMaxWidth="450px"
-              toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
-            />
-            <Input
-              name="company"
-              label="Company"
-              ref={register(schema.company)}
-              error={errors.company}
-            />
-            <DayPicker
-              control={control}
-              ref={register}
-              label="Date"
-              name="jobDate"
-              validation={schema.date}
-              error={errors.jobDate}
-            />
-            <TextArea
-              name="corporateTestimonial"
-              label="Testimonial"
-              ref={register(schema.testimonial)}
-              error={errors.corporateTestimonial}
-            />
-            <SubmitButton
-              type="submit"
-              disabled={status === "pending" ? true : false}
-            >
-              {status !== "pending"
-                ? status === "resolved"
-                  ? "Success"
-                  : operation === "Edit"
-                  ? "Update"
-                  : operation
-                : "Loading..."}
-            </SubmitButton>
-          </AddCorporateForm>
-        )}
-      </InnerContainer>
-    </Container>
+                  {formStatus !== "pending"
+                    ? formStatus === "resolved"
+                      ? "Success"
+                      : operation === "Edit"
+                      ? "Update"
+                      : operation
+                    : "Loading..."}
+                </SubmitButton>
+              </AddWeddingForm>
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {selectedData === "corporate" && (
+              <AddCorporateForm
+                onSubmit={handleSubmit(handleFormSubmit)}
+                variants={animation}
+                initial="hidden"
+                animate="show"
+                exit="hidden"
+              >
+                <Title>{operation} Corporate Content</Title>
+                <InputWithIcon
+                  name="corporateVideoId"
+                  label="video ID"
+                  ref={register(schema.videoId)}
+                  error={errors.corporateVideoId}
+                  icon={
+                    "https://chpistel.sirv.com/Connor-Portfolio/3121119-512.png?w=16"
+                  }
+                  iconMaxWidth="16px"
+                  iconPlaceHolderSize="100%"
+                  toolTipImage={
+                    "https://chpistel.sirv.com/Connor-Portfolio/tooltipImage.png?w=450"
+                  }
+                  toolTipImagePlaceHolderSize="58%"
+                  toolTipImageBorderRadius="9px"
+                  toolTipMaxWidth="450px"
+                  toolTipMessage="Paste the video ID from the url above your choosen video on Vimeo here"
+                />
+                <Input
+                  name="company"
+                  label="Company"
+                  ref={register(schema.company)}
+                  error={errors.company}
+                />
+                <DayPicker
+                  control={control}
+                  ref={register}
+                  label="Date"
+                  name="jobDate"
+                  validation={schema.date}
+                  error={errors.jobDate}
+                />
+                <TextArea
+                  name="corporateTestimonial"
+                  label="Testimonial"
+                  ref={register(schema.testimonial)}
+                  error={errors.corporateTestimonial}
+                />
+                <SubmitButton
+                  type="submit"
+                  disabled={formStatus === "pending" ? true : false}
+                >
+                  {formStatus !== "pending"
+                    ? formStatus === "resolved"
+                      ? "Success"
+                      : operation === "Edit"
+                      ? "Update"
+                      : operation
+                    : "Loading..."}
+                </SubmitButton>
+              </AddCorporateForm>
+            )}
+          </AnimatePresence>
+        </InnerContainer>
+      </Container>
+    </AnimateSharedLayout>
   );
 };
 
 export default AdminContentForm;
 
+AdminContentForm.defaultProps = {
+  selectedData: PropTypes.string,
+  handleEditContent: PropTypes.func.isRequired,
+  handleAddContent: PropTypes.func.isRequired,
+  operation: PropTypes.string.isRequired,
+  selectedItem: PropTypes.obj,
+};
+
 const Container = styled(motion.div)`
   width: 100%;
+  height: 100%;
   padding-top: 18%;
   box-sizing: border-box;
   position: relative;
@@ -541,6 +609,14 @@ const InfoBox = styled.div`
   border: 1px solid black;
   margin-bottom: 22px;
   padding: 14px 14px 14px 12px;
+  background-color: rgb(50, 172, 109);
+  background-image: radial-gradient(
+    circle at 10% 20%,
+    rgb(50, 172, 109) 0%,
+    rgb(209, 251, 155) 100.2%
+  );
+  border: none;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
 `;
 
 const InfoLabelContainer = styled.div`
@@ -553,9 +629,10 @@ const InfoLabelContainer = styled.div`
 const InfoLabel = styled.label`
   font-size: 0.8rem;
   margin-left: 10px;
+  color: white;
 `;
 
-const Title = styled.h1`
+const Title = styled(motion.h1)`
   margin: 70px 0px;
   text-align: center;
   @media (max-width: 750px) {
@@ -564,7 +641,7 @@ const Title = styled.h1`
   }
 `;
 
-const AddWeddingForm = styled.form`
+const AddWeddingForm = styled(motion.form)`
   width: 100%;
   max-width: 450px;
   display: flex;
@@ -576,7 +653,7 @@ const AddWeddingForm = styled.form`
   }
 `;
 
-const AddCorporateForm = styled.form`
+const AddCorporateForm = styled(motion.form)`
   width: 100%;
   max-width: 450px;
   display: flex;

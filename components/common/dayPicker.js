@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import DayPickerInput from "react-day-picker/DayPickerInput";
@@ -14,29 +15,31 @@ export const DayPicker = React.forwardRef(
       label,
       error,
       onChange,
-      onClick,
       validation,
       name,
-      doSubmit,
       value,
+      scale,
       control,
+      marginTop,
+      marginBottom,
       marginLeft,
-      defaultValue,
       marginRight,
+      defaultValue,
       x,
       y,
       opacity,
-      ...rest
     },
     ref
   ) => {
     const animation = {
       hidden: {
-        opacity: opacity ? opacity : 1,
-        y: y,
-        x: x,
+        scale: scale == undefined ? 1 : scale,
+        opacity: opacity == undefined ? 1 : opacity,
+        y: y ? y : 0,
+        x: x ? x : 0,
       },
       show: {
+        scale: 1,
         opacity: 1,
         y: 0,
         x: 0,
@@ -51,9 +54,11 @@ export const DayPicker = React.forwardRef(
         control={control}
         rules={validation}
         name={name}
-        defaultValue=""
+        defaultValue={defaultValue ? defaultValue : ""}
         render={({ onChange, onBlur, value, rules }) => (
           <Container
+            marginTop={marginTop}
+            marginBottom={marginBottom}
             marginLeft={marginLeft}
             marginRight={marginRight}
             variants={animation}
@@ -72,6 +77,10 @@ export const DayPicker = React.forwardRef(
                 format="DD/MM/YYYY"
                 parseDate={parseDate}
                 placeholder={`${formatDate(new Date(), "DD/MM/YYYY")}`}
+                inputProps={{
+                  name: `${name}-input`,
+                  title: "dayPicker",
+                }}
               />
               <Icon>
                 <ImageLoader
@@ -80,6 +89,7 @@ export const DayPicker = React.forwardRef(
                   placeholderSize="100%"
                   opacity={0}
                   x={5}
+                  alt="calender"
                   delay={0.3}
                   scale={0.9}
                   src="https://chpistel.sirv.com/Connor-Portfolio/time-and-date.png?w=50&png.optimize=true"
@@ -94,12 +104,13 @@ export const DayPicker = React.forwardRef(
                   timeout={250}
                   unmountOnExit
                 >
-                  <ErrorContainer>
+                  <ErrorContainer aria-label={`${name}-error-message`}>
                     <ImageLoader
                       maxWidth="15px"
                       placeholderSize="100%"
                       opacity={0}
                       scale={0}
+                      alt="error sign"
                       transitionTime="0.250s ease"
                       src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
                     />
@@ -114,6 +125,26 @@ export const DayPicker = React.forwardRef(
     );
   }
 );
+
+DayPicker.propTypes = {
+  label: PropTypes.string.isRequired,
+  error: PropTypes.object,
+  onChange: PropTypes.func,
+  validation: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  scale: PropTypes.number,
+  control: PropTypes.object,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+  defaultValue: PropTypes.func,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  opacity: PropTypes.number,
+};
+
 const Container = styled(motion.div)`
   font-size: 1.1rem;
   margin-bottom: 3px;
@@ -121,6 +152,8 @@ const Container = styled(motion.div)`
   width: 100%;
   flex-direction: column;
   margin-bottom: 22px;
+  margin-top: ${({ marginTop }) => marginTop};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
   margin-left: ${({ marginLeft }) => marginLeft};
   margin-right: ${({ marginRight }) => marginRight};
 `;
@@ -135,8 +168,10 @@ const InputContainer = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  border: 1.2px solid black;
+  margin-top: 3px;
   border-radius: 9px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 `;
 
 const Icon = styled.div`
@@ -155,19 +190,19 @@ const Icon = styled.div`
   pointer-events: none;
 `;
 
-const Image = styled.img``;
-
 const ErrorContainer = styled.div`
   margin-top: 12px;
   padding-left: 12px;
   padding-right: 12px;
   display: flex;
   align-items: center;
-  border: 1.2px solid red;
+  border: 2px solid #f1535e;
   border-radius: 9px;
   padding-top: 10px;
   padding-bottom: 10px;
   flex-direction: row;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   &.errorAnimation-enter {
     transform: scale(0.4);

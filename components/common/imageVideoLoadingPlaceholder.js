@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const ImageVideoLoadingPlaceholder = ({
@@ -33,6 +34,7 @@ const ImageVideoLoadingPlaceholder = ({
         marginLeft={marginLeft}
         marginRight={marginRight}
         borderRadius={borderRadius}
+        data-testid="image-video-loading-skeleton"
       >
         <Placeholder
           borderRadius={borderRadius}
@@ -54,6 +56,18 @@ const ImageVideoLoadingPlaceholder = ({
 
 export default ImageVideoLoadingPlaceholder;
 
+ImageVideoLoadingPlaceholder.propTypes = {
+  duration: PropTypes.number,
+  maxWidth: PropTypes.string,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+  borderRadius: PropTypes.string,
+  contentLoaded: PropTypes.bool,
+  placeholderSize: PropTypes.string,
+};
+
 const PlaceHolderContainer = styled(motion.div)`
   width: 100%;
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : "0px")};
@@ -66,6 +80,7 @@ const PlaceHolderContainer = styled(motion.div)`
   background: transparent;
   background-color: white;
   overflow: hidden;
+  z-index: 200;
   box-shadow: 0px 10px 40px -10px rgba(0, 64, 128, 0.2);
 `;
 

@@ -2,9 +2,12 @@ import styled from "styled-components";
 import Link from "next/link";
 import ImageLoader from "./common/imageLoader";
 import topWave from "../public/images/top-wave.svg";
-import { motion, AnimateSharedLayout } from "framer-motion";
+import { motion } from "framer-motion";
+import { useFontLoaded } from "../components/common/utils/hooks";
 
 const Banner = () => {
+  const [fontLoaded] = useFontLoaded("2rem Att-reborn");
+  const [fontExtraBoldLoaded] = useFontLoaded("1rem Karla-ExtraBold");
   const container = {
     hidden: {
       transition: {
@@ -13,28 +16,14 @@ const Banner = () => {
     },
     show: {
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.3,
       },
     },
   };
 
   const textAnimation = {
     hidden: {
-      // x: -40,
-      opacity: 0,
-    },
-    show: {
-      // x: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-      },
-    },
-  };
-
-  const imageAnimation = {
-    hidden: {
-      x: 40,
+      x: -40,
       opacity: 0,
     },
     show: {
@@ -45,12 +34,18 @@ const Banner = () => {
       },
     },
   };
+
   return (
     <Container layout variants={container} initial="hidden" animate="show">
-      <InnerContainer>
+      <InnerContainer layout>
         <InfoContainer>
-          <SmallTitle variants={textAnimation}>Videographer</SmallTitle>
-          <Name variants={textAnimation}>
+          <SmallTitle
+            fontExtraBoldLoaded={fontExtraBoldLoaded}
+            variants={textAnimation}
+          >
+            Videographer
+          </SmallTitle>
+          <Name variants={textAnimation} fontLoaded={fontLoaded}>
             <FirstName>CONNOR</FirstName>
             <LastName>DEVLIN.</LastName>
           </Name>
@@ -58,13 +53,19 @@ const Banner = () => {
             Digital media producer and filmmaker based out of Perth WA. Creating
             videos for weddings, businesses and everything in between.
           </Description>
+
           <Link href="/about" passHref>
-            <ReadMoreLink tabIndex="0" role="button" variants={textAnimation}>
+            <ReadMoreLink
+              fontExtraBoldLoaded={fontExtraBoldLoaded}
+              tabIndex="0"
+              role="button"
+              variants={textAnimation}
+            >
               Read More
             </ReadMoreLink>
           </Link>
         </InfoContainer>
-        <ImageContainer layout variants={imageAnimation}>
+        <ImageContainer layout variants={textAnimation}>
           <ImageLoader
             maxWidth="inherit"
             placeholderSize="66.66%"
@@ -91,7 +92,8 @@ const Banner = () => {
 export default Banner;
 
 const Container = styled(motion.div)`
-  height: calc(100vh - 75px);
+  height: 100%;
+  min-height: calc(100vh - 75px);
   width: 100%;
   display: flex;
   box-sizing: border-box;
@@ -108,17 +110,24 @@ const Container = styled(motion.div)`
   @media (max-width: 1024px) and (max-height: 910px) {
     height: 100%;
   }
+  @media only screen and (max-width: 768px) {
+    .animated {
+      all: unset;
+    }
+  }
 `;
 
 const InnerContainer = styled(motion.div)`
   padding: 0px 50px;
   width: 100%;
+  margin-top: -6%;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   @media (max-width: 1024px) {
+    margin-top: 0px;
     flex-direction: column;
     justify-content: flex-start;
     padding: 0 20px;
@@ -140,7 +149,10 @@ const InfoContainer = styled(motion.div)`
   justify-content: flex-start;
   flex-direction: column;
   margin-bottom: 110px;
-  margin-right: 50px;
+  margin-right: 10%;
+  &:hover {
+    cursor: default;
+  }
   @media (max-width: 1024px) {
     margin-top: 60px;
     margin-right: 0px;
@@ -153,13 +165,27 @@ const InfoContainer = styled(motion.div)`
 `;
 
 const SmallTitle = styled(motion.span)`
-  font-size: 1rem;
-  font-family: "Karla-ExtraBold";
+  font-family: "Karla-ExtraBold", "Arial", "sans-serif";
+  font-family: "Karla-ExtraBold", "Arial", "sans-serif";
+  font-size: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "1rem" : "0.938rem"};
+  font-weight: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "normal" : "900"};
+  letter-spacing: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "inherit" : "0.9px"};
   @media (max-width: 424px) {
-    font-size: 0.9rem;
+    font-size: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "0.9rem" : "0.963rem"};
+    letter-spacing: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "inherit" : "-0.3px"};
+    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.3")};
   }
   @media (max-width: 300px) {
-    font-size: 0.8rem;
+    font-size: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "0.8rem" : "0.863rem"};
+    letter-spacing: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "inherit" : "-0.4px"};
+    word-spacing: inherit;
   }
 `;
 
@@ -168,10 +194,28 @@ const Name = styled(motion.div)`
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
-  font-family: "Att-reborn";
-  font-weight: 400;
+  font-family: "Att-reborn", "Brush Script MT", "sans-serif";
   font-size: 2rem;
+  line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.25")};
+  font-weight: ${({ fontLoaded }) => (fontLoaded ? "normal" : "900")};
   letter-spacing: 6px;
+  word-spacing: ${({ fontLoaded }) => (fontLoaded ? "21.4px" : "16.3px")};
+  @media (max-width: 570px) {
+    font-size: ${({ fontLoaded }) => (fontLoaded ? "2.3rem" : "2.313rem")};
+    letter-spacing: ${({ fontLoaded }) => (fontLoaded ? "6px" : "7.75px")};
+    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.35")};
+    word-spacing: 21.4px;
+  }
+  @media (max-width: 350px) {
+    font-size: 2rem;
+    letter-spacing: ${({ fontLoaded }) => (fontLoaded ? "6px" : "7.6px")};
+    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.3")};
+    word-spacing: ${({ fontLoaded }) => (fontLoaded ? "21.4px" : "16.3px")};
+  }
+  @media (max-width: 300px) {
+    font-size: ${({ fontLoaded }) => (fontLoaded ? "1.6rem" : "1.563rem")};
+    letter-spacing: ${({ fontLoaded }) => (fontLoaded ? "6px" : "7.65px")};
+  }
 `;
 
 const FirstName = styled(motion.h1)`
@@ -189,15 +233,6 @@ const FirstName = styled(motion.h1)`
     bottom: 0;
     left: 0;
   }
-  @media (max-width: 570px) {
-    font-size: 2.3rem;
-  }
-  @media (max-width: 350px) {
-    font-size: 2rem;
-  }
-  @media (max-width: 300px) {
-    font-size: 1.6rem;
-  }
 `;
 
 const LastName = styled(motion.h1)`
@@ -207,21 +242,11 @@ const LastName = styled(motion.h1)`
   text-align: center;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
-  @media (max-width: 570px) {
-    font-size: 2.3rem;
-  }
-  @media (max-width: 350px) {
-    font-size: 2rem;
-  }
-  @media (max-width: 300px) {
-    font-size: 1.6rem;
-  }
 `;
 
 const Description = styled(motion.p)`
   font-size: 1.05rem;
   width: 95%;
-  font-family: "Karla-Bold";
   margin-bottom: 90px;
   @media (max-width: 1024px) {
     margin-bottom: 40px;
@@ -235,11 +260,17 @@ const Description = styled(motion.p)`
 `;
 
 const ReadMoreLink = styled(motion.a)`
-  font-size: 1rem;
-  font-family: "Karla-ExtraBold";
+  font-family: "Karla-ExtraBold", "Arial", "sans-serif";
+  font-size: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "1rem" : "0.938rem"};
+  font-weight: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "normal" : "900"};
+  letter-spacing: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "inherit" : "0.9px"};
+  word-spacing: ${({ fontExtraBoldLoaded }) =>
+    fontExtraBoldLoaded ? "inherit" : "-0.95px"};
   z-index: 0;
   position: relative;
-  transition: all 0.3s;
   &::after {
     transition: all 0.2s;
     content: "";
@@ -262,10 +293,20 @@ const ReadMoreLink = styled(motion.a)`
     outline: none;
   }
   @media (max-width: 424px) {
-    font-size: 0.9rem;
+    font-size: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "0.9rem" : "0.963rem"};
+    letter-spacing: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "inherit" : "-0.3px"};
+    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.3")};
+    word-spacing: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "inherit" : "-0.7px"};
   }
   @media (max-width: 300px) {
-    font-size: 0.8rem;
+    font-size: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "0.8rem" : "0.863rem"};
+    letter-spacing: ${({ fontExtraBoldLoaded }) =>
+      fontExtraBoldLoaded ? "inherit" : "-0.4px"};
+    word-spacing: inherit;
   }
 `;
 
@@ -273,8 +314,9 @@ const ImageContainer = styled(motion.div)`
   max-width: 700px;
   width: 100%;
   margin-bottom: 75px;
+  display: flex;
   @media (max-width: 1024px) {
-    margin-top: 20px;
+    margin-top: 50px;
     margin-bottom: 0px;
     max-width: 500px;
   }
@@ -285,7 +327,7 @@ const ImageContainer = styled(motion.div)`
 
 const BottomWave = styled.img`
   position: absolute;
-  bottom: -55px;
+  bottom: -50px;
   left: 0px;
   width: 100%;
   z-index: -100;

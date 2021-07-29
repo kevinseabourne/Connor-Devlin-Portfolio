@@ -1,9 +1,10 @@
 module.exports = {
   // add more font or image formats if importing them to here.
+  fastRefresh: false,
   images: {
     domains: ["chpistel.sirv.com"],
   },
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push(
       {
         test: /\.(png|jpg|gif|woff|woff2|otf|ttf|svg)$/i,

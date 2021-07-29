@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
-import cloneDeep from "lodash/cloneDeep";
-import isEmpty from "lodash/isEmpty";
+import isObjEmpty from "lodash/isEmpty";
 import { useForm } from "react-hook-form";
 import { Input } from "./common/input";
 import ImageLoader from "./common/imageLoader";
@@ -10,24 +10,20 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { LoadingSpinner } from "./loading-spinner";
 import popSound from ".././public/sounds/pop_char.mp3";
 import popDownSound from ".././public/sounds/pop_down.mp3";
-import successSound from ".././public/sounds/music_marimba_on_hi.mp3";
-import errorSound from ".././public/sounds/pad_soft_off.mp3";
 import downWave from ".././public/images/down-wave.svg";
 import useSound from "use-sound";
 
 const AdminPricingForm = ({
-  page,
+  selectedData,
   defaultValues,
   dataResolved,
   selectedPackage,
   operation,
-  packagesStatus,
-  addOnsStatus,
+  status,
   handleEditPackageSubmit,
   handleAddPackageSubmit,
   handleEditAddOnsSubmit,
 }) => {
-  const timeout = useRef(null);
   const [packageDetailsLength, setPackageDetailsLength] = useState([
     { title: "packageDetail", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
@@ -37,7 +33,7 @@ const AdminPricingForm = ({
   const [packDetailFocus, setPackDetailFocus] = useState(false);
 
   useEffect(() => {
-    if (!isEmpty(defaultValues) && dataResolved) {
+    if (!isObjEmpty(defaultValues) && dataResolved) {
       handleDefaultValues();
     }
   }, [dataResolved, selectedPackage]);
@@ -46,8 +42,6 @@ const AdminPricingForm = ({
 
   const [play] = useSound(popSound);
   const [playDown] = useSound(popDownSound);
-  const [playSuccessSound] = useSound(successSound, { volume: 0.2 });
-  const [playErrorSound] = useSound(errorSound, { volume: 0.2 });
 
   const schema = {
     packageName: {
@@ -58,7 +52,7 @@ const AdminPricingForm = ({
     price: {
       required: "A price is required !",
       pattern: {
-        value: /\d*/,
+        value: /^\d*\d$/,
         message: "numbers only !",
       },
     },
@@ -78,7 +72,7 @@ const AdminPricingForm = ({
 
   const handleDefaultValues = () => {
     if (operation === "Edit") {
-      if (page === "packages") {
+      if (selectedData === "packages") {
         handlePackageDetails();
       } else {
         handleAddOns();
@@ -87,15 +81,19 @@ const AdminPricingForm = ({
   };
 
   const handlePackageDetails = () => {
-    const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
+    const packageDetailsLengthClone = [...packageDetailsLength];
 
-    while (
+    if (
       defaultValues.packageDetails.length > packageDetailsLengthClone.length
     ) {
-      packageDetailsLengthClone.push({
-        title: "packageDetail",
-        id: Math.floor(1000 + Math.random() * 9000),
-      });
+      while (
+        defaultValues.packageDetails.length > packageDetailsLengthClone.length
+      ) {
+        packageDetailsLengthClone.push({
+          title: "packageDetail",
+          id: Math.floor(1000 + Math.random() * 9000),
+        });
+      }
     }
 
     if (
@@ -103,7 +101,7 @@ const AdminPricingForm = ({
     ) {
       const amount =
         packageDetailsLengthClone.length - defaultValues.packageDetails.length;
-      const index = packageDetailsLengthClone.length - 1;
+      const index = defaultValues.packageDetails.length - 1;
       packageDetailsLengthClone.splice(index, amount);
     }
     setPackageDetailsLength(packageDetailsLengthClone);
@@ -124,7 +122,7 @@ const AdminPricingForm = ({
   };
 
   const handleAddOns = () => {
-    const addOnsLengthClone = _.cloneDeep(addOnsLength);
+    const addOnsLengthClone = [...addOnsLength];
 
     if (defaultValues.length > 1) {
       while (defaultValues.length > addOnsLengthClone.length) {
@@ -147,12 +145,34 @@ const AdminPricingForm = ({
     }
   };
 
-  const handlePackagesSubmit = (data) => {
+  const handlePackagesSubmit = async (data) => {
     if (operation === "Edit") {
       handleEditPackageSubmit(data);
     } else {
-      handleAddPackageSubmit(data);
+      const response = await handleAddPackageSubmit(data);
+      if (response) {
+        unregisterPackageDetails(data);
+        reset();
+        setPackageDetailsLength([
+          {
+            title: "packageDetail",
+            id: Math.floor(1000 + Math.random() * 9000),
+          },
+        ]);
+      }
     }
+  };
+
+  const unregisterPackageDetails = (data) => {
+    const array = Object.entries(data);
+
+    let unregisterArray = [];
+    array.map((value) => {
+      if (value[0].includes("packageDetail_")) {
+        unregisterArray.push(value[0]);
+      }
+    });
+    unregister(unregisterArray);
   };
 
   const handleAddOnsSubmit = (data) => {
@@ -162,7 +182,7 @@ const AdminPricingForm = ({
   };
 
   const deletePackageDetail = (index) => {
-    const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
+    const packageDetailsLengthClone = [...packageDetailsLength];
     if (index > -1 && packageDetailsLength.length > 1) {
       playDown();
       unregister(`packageDetail_${packageDetailsLengthClone[index].id}`);
@@ -172,7 +192,7 @@ const AdminPricingForm = ({
   };
 
   const addPackageDetail = (index) => {
-    const packageDetailsLengthClone = cloneDeep(packageDetailsLength);
+    const packageDetailsLengthClone = [...packageDetailsLength];
     if (index > -1 && packageDetailsLengthClone.length <= 10) {
       play();
       setPackDetailFocus(true);
@@ -180,12 +200,13 @@ const AdminPricingForm = ({
         title: "packageDetail",
         id: Math.floor(1000 + Math.random() * 9000),
       });
+
       setPackageDetailsLength(packageDetailsLengthClone);
     }
   };
 
   const deleteAddOn = (index) => {
-    const addOnsLengthClone = cloneDeep(addOnsLength);
+    const addOnsLengthClone = [...addOnsLength];
     if (index > -1 && addOnsLength.length > 1) {
       playDown();
       unregister(`addOnTitle${addOnsLengthClone[index].id}`);
@@ -196,7 +217,7 @@ const AdminPricingForm = ({
   };
 
   const addAddOn = (index) => {
-    const addOnsLengthClone = cloneDeep(addOnsLength);
+    const addOnsLengthClone = [...addOnsLength];
     if (index > -1 && addOnsLengthClone.length <= 10) {
       play();
       addOnsLengthClone.splice(index + 1, 0, {
@@ -253,7 +274,7 @@ const AdminPricingForm = ({
       <FormContainer layout variants={variants}>
         <Wave src={downWave} layout />
         <AnimatePresence>
-          {page === "packages" && (
+          {selectedData === "packages" && (
             <Form
               onSubmit={handleSubmit(handlePackagesSubmit)}
               variants={formAnimation}
@@ -310,6 +331,7 @@ const AdminPricingForm = ({
                       maxWidth="inherit"
                       placeholderSize="100%"
                       opacity={0}
+                      alt="plus icon"
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
@@ -346,6 +368,7 @@ const AdminPricingForm = ({
                     <ImageLoader
                       maxWidth="inherit"
                       placeholderSize="100%"
+                      alt="minus icon"
                       opacity={0}
                       hover={true}
                       src={
@@ -360,11 +383,11 @@ const AdminPricingForm = ({
                 type="submit"
                 whileTap={{ scale: 0.9 }}
                 variants={buttonAnimation}
-                disabled={packagesStatus === "pending" ? true : false}
+                disabled={status === "pending" ? true : false}
               >
-                {packagesStatus === "pending" ? (
+                {status === "pending" ? (
                   <LoadingSpinner size={"28px"} />
-                ) : packagesStatus === "resolved" ? (
+                ) : status === "resolved" ? (
                   "Success"
                 ) : operation === "Edit" ? (
                   "Update"
@@ -376,7 +399,7 @@ const AdminPricingForm = ({
           )}
         </AnimatePresence>
         <AnimatePresence>
-          {page === "addOns" && (
+          {selectedData === "addOns" && (
             <Form
               onSubmit={handleSubmit(handleAddOnsSubmit)}
               variants={formAnimation}
@@ -396,6 +419,7 @@ const AdminPricingForm = ({
                       maxWidth="inherit"
                       placeholderSize="100%"
                       opacity={0}
+                      alt="plus icon"
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/plus.png?w=23"
@@ -407,12 +431,14 @@ const AdminPricingForm = ({
                     label="Title"
                     ref={register(schema.addOn)}
                     error={errors[`addOnTitle_${addOn.id}`]}
+                    marginRight="6px"
                   />
                   <Input
                     name={`addOnPrice_${addOn.id}`}
                     label="Price"
                     ref={register(schema.addOn)}
                     error={errors[`addOnPrice_${addOn.id}`]}
+                    marginLeft="6px"
                   />
                   <DeletePackageDetail
                     tabIndex="0"
@@ -423,6 +449,7 @@ const AdminPricingForm = ({
                       maxWidth="inherit"
                       placeholderSize="100%"
                       opacity={0}
+                      alt="minus icon"
                       hover={true}
                       src={
                         "https://chpistel.sirv.com/Connor-Portfolio/minus%20(1).png?w=23"
@@ -436,11 +463,11 @@ const AdminPricingForm = ({
                 type="submit"
                 whileTap={{ scale: 0.9 }}
                 variants={buttonAnimation}
-                disabled={addOnsStatus === "pending" ? true : false}
+                disabled={status === "pending" ? true : false}
               >
-                {addOnsStatus === "pending" ? (
+                {status === "pending" ? (
                   <LoadingSpinner size={"28px"} />
-                ) : addOnsStatus === "resolved" ? (
+                ) : status === "resolved" ? (
                   "Success"
                 ) : (
                   "Update"
@@ -455,6 +482,19 @@ const AdminPricingForm = ({
 };
 
 export default AdminPricingForm;
+
+AdminPricingForm.propTypes = {
+  selectedData: PropTypes.string,
+  defaultValues: PropTypes.object,
+  dataResolved: PropTypes.bool,
+  selectedPackage: PropTypes.object,
+  operation: PropTypes.string,
+  status: PropTypes.string,
+  status: PropTypes.string,
+  handleEditPackageSubmit: PropTypes.func,
+  handleAddPackageSubmit: PropTypes.func,
+  handleEditAddOnsSubmit: PropTypes.func,
+};
 
 const FormContainer = styled(motion.div)`
   width: 100%;

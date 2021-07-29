@@ -1,5 +1,7 @@
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { isArrayEmpty } from "./common/utils/isEmpty";
 
 const WeddingPricingAddOns = ({ addOns }) => {
   const variants = {
@@ -15,12 +17,13 @@ const WeddingPricingAddOns = ({ addOns }) => {
       x: 0,
       opacity: 1,
       transition: {
-        delay: 0.8,
+        delay: 0.2,
         damping: 12,
       },
     },
   };
-  return (
+
+  return isArrayEmpty(addOns) ? (
     <AddOnsContainer
       layout
       variants={variants}
@@ -37,10 +40,16 @@ const WeddingPricingAddOns = ({ addOns }) => {
         </ListItem>
       ))}
     </AddOnsContainer>
+  ) : (
+    ""
   );
 };
 
 export default WeddingPricingAddOns;
+
+WeddingPricingAddOns.propTypes = {
+  addOns: PropTypes.array,
+};
 
 const AddOnsContainer = styled(motion.div)`
   display: flex;

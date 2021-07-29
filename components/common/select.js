@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Controller } from "react-hook-form";
@@ -19,23 +20,27 @@ export const ReactSelect = React.forwardRef(
       doSubmit,
       value,
       control,
+      marginTop,
+      marginBottom,
       marginLeft,
       marginRight,
       defaultValue,
       x,
       y,
       opacity,
-      ...rest
+      scale,
     },
     ref
   ) => {
     const animation = {
       hidden: {
-        opacity: opacity ? opacity : 1,
-        y: y,
-        x: x,
+        scale: scale == undefined ? 1 : scale,
+        opacity: opacity == undefined ? 1 : opacity,
+        y: y ? y : 0,
+        x: x ? x : 0,
       },
       show: {
+        scale: 1,
         opacity: 1,
         y: 0,
         x: 0,
@@ -46,9 +51,11 @@ export const ReactSelect = React.forwardRef(
         control={control}
         rules={validation}
         name={name}
-        defaultValue=""
+        defaultValue={defaultValue ? defaultValue : ""}
         render={({ onChange, value, rules }) => (
           <Container
+            marginTop={marginTop}
+            marginBottom={marginBottom}
             marginLeft={marginLeft}
             marginRight={marginRight}
             variants={animation}
@@ -62,6 +69,7 @@ export const ReactSelect = React.forwardRef(
                 value={value}
                 rules={rules}
                 options={options}
+                aria-label={`${name}-input`}
               />
             </InputContainer>
             <TransitionGroup component={null}>
@@ -72,9 +80,11 @@ export const ReactSelect = React.forwardRef(
                   timeout={250}
                   unmountOnExit
                 >
-                  <ErrorContainer>
+                  <ErrorContainer aria-label={`${name}-error-message`}>
                     <ImageLoader
-                      lazyLoad={true}
+                      opacity={0}
+                      scale={0}
+                      alt="error icon"
                       maxWidth="15px"
                       placeholderSize="100%"
                       src="https://chpistel.sirv.com/Connor-Portfolio/error.png?w=24&png.optimize=true"
@@ -90,6 +100,29 @@ export const ReactSelect = React.forwardRef(
     );
   }
 );
+
+ReactSelect.propTypes = {
+  label: PropTypes.string,
+  error: PropTypes.object,
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+  options: PropTypes.array.isRequired,
+  validation: PropTypes.object,
+  name: PropTypes.string.isRequired,
+  doSubmit: PropTypes.func,
+  value: PropTypes.string,
+  control: PropTypes.object,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
+  defaultValue: PropTypes.string,
+  x: PropTypes.number,
+  y: PropTypes.number,
+  opacity: PropTypes.number,
+  scale: PropTypes.number,
+};
+
 const Container = styled(motion.div)`
   font-size: 1.1rem;
   margin-bottom: 3px;
@@ -97,6 +130,8 @@ const Container = styled(motion.div)`
   width: 100%;
   flex-direction: column;
   margin-bottom: 22px;
+  margin-top: ${({ marginTop }) => marginTop};
+  margin-bottom: ${({ marginBottom }) => marginBottom};
   margin-left: ${({ marginLeft }) => marginLeft};
   margin-right: ${({ marginRight }) => marginRight};
   @media (max-width: 420px) {
@@ -114,27 +149,11 @@ const InputContainer = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  border: 1.2px solid black;
+  margin-top: 3px;
   border-radius: 9px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 `;
-
-const Icon = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 14px;
-  margin-left: auto;
-  width: 25px;
-  height: 25px;
-  pointer-events: none;
-`;
-
-const Image = styled.img``;
 
 const ErrorContainer = styled.div`
   margin-top: 12px;
@@ -142,11 +161,13 @@ const ErrorContainer = styled.div`
   padding-right: 12px;
   display: flex;
   align-items: center;
-  border: 1.2px solid red;
+  border: 2px solid #f1535e;
   border-radius: 9px;
   padding-top: 10px;
   padding-bottom: 10px;
   flex-direction: row;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   &.errorAnimation-enter {
     transform: scale(0.4);

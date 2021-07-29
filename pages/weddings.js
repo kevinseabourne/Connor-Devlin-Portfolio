@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { getAllWeddings } from "./api/weddings";
+import { getContent } from "./api/content";
 import ContentPage from "../components/common/contentPage";
 import ErrorMessage from "../components/common/errorMessage";
 
 const Weddings = ({ data }) => {
   return data ? (
     <Container>
-      <ContentPage data={data} page="weddings" />
+      <ContentPage data={data} selectedData="weddings" />
     </Container>
   ) : (
     <ErrorMessage />
@@ -14,7 +14,7 @@ const Weddings = ({ data }) => {
 };
 
 export async function getStaticProps() {
-  const data = await getAllWeddings();
+  const data = await getContent("weddings");
   return {
     props: data ? { data } : { data: null },
   };

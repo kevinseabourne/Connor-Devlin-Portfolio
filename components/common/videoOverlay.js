@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 import styled, { createGlobalStyle } from "styled-components";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import VideoLoader from "./videoLoader";
+import { motion } from "framer-motion";
 
 const VideoOverlay = ({
   isOpen,
@@ -18,6 +19,7 @@ const VideoOverlay = ({
   const videoRef = useRef(null);
 
   useEffect(() => {
+    videoRef.current && videoRef.current.focus();
     window.addEventListener("mousedown", handleClickOutside);
     return () => {
       window.removeEventListener("mousedown", handleClickOutside);
@@ -37,39 +39,67 @@ const VideoOverlay = ({
     closeOverlay();
   };
 
+  const animation = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+    },
+  };
+
   return (
-    <Container>
+    <Container
+      variants={animation}
+      initial="hidden"
+      animate="show"
+      exit="hidden"
+    >
       <GlobalStyle isOpen={isOpen} />
-      <TransitionGroup component={null}>
-        {isOpen && (
-          <CSSTransition
-            in={isOpen}
-            classNames="overlayAnimation"
-            timeout={300}
-          >
-            <Overlay data-testid="videoOverlay">
-              <VideoContainer maxWidth={maxWidth} ref={videoRef}>
-                <VideoLoader
-                  src={src}
-                  maxWidth="inherit"
-                  alt={alt}
-                  borderRadius={borderRadius}
-                  width={width}
-                  placeholderSize={placeholderSize}
-                  centerVideo={centerVideo}
-                  lazyLoad={false}
-                  closeOverlayWhileLoading={closeOverlayWhileLoading}
-                />
-              </VideoContainer>
-            </Overlay>
-          </CSSTransition>
-        )}
-      </TransitionGroup>
+      <Overlay data-testid="videoOverlay">
+        <VideoContainer
+          maxWidth={maxWidth}
+          ref={videoRef}
+          role="button"
+          tabIndex="0"
+          onKeyDown={(e) => {
+            const escKey = e.key === 27 || e.keyCode === 27;
+            if (escKey) {
+              closeOverlay();
+              e.target.blur();
+            }
+          }}
+        >
+          <VideoLoader
+            src={src}
+            maxWidth="inherit"
+            alt={alt}
+            borderRadius={borderRadius}
+            width={width}
+            placeholderSize={placeholderSize}
+            centerVideo={centerVideo}
+            lazyLoad={false}
+            closeOverlayWhileLoading={closeOverlayWhileLoading}
+          />
+        </VideoContainer>
+      </Overlay>
     </Container>
   );
 };
 
 export default VideoOverlay;
+
+VideoOverlay.propTypes = {
+  isOpen: PropTypes.bool,
+  closeOverlay: PropTypes.func,
+  src: PropTypes.string.isRequired,
+  maxWidth: PropTypes.string,
+  width: PropTypes.string,
+  alt: PropTypes.string.isRequired,
+  borderRadius: PropTypes.string,
+  placeholderSize: PropTypes.string,
+  centerVideo: PropTypes.bool,
+};
 
 const GlobalStyle = createGlobalStyle`
  body {
@@ -79,7 +109,7 @@ const GlobalStyle = createGlobalStyle`
 
 const Container = styled.div``;
 
-const Overlay = styled.div`
+const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
@@ -94,34 +124,13 @@ const Overlay = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   box-sizing: border-box;
-  transition: all 0.3s ease;
-
-  &.overlayAnimation-appear {
-    opacity: 0;
-  }
-  &.overlayAnimation-appear-active {
-    opacity: 1;
-    transition: all 0.3s;
-  }
-
-  &.overlayAnimation-enter {
-    opacity: 0;
-  }
-  &.overlayAnimation-enter-active {
-    opacity: 1;
-    transition: all 0.3s;
-  }
-  &.overlayAnimation-exit {
-    transition: all 0.3s;
-    opacity: 1;
-  }
-  &.overlayAnimation-exit-active {
-    opacity: 0;
-  }
 `;
 
-const VideoContainer = styled.div`
+const VideoContainer = styled(motion.div)`
   width: ${({ maxWidth }) => (maxWidth ? maxWidth : "100%")};
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
   @media (max-height: 1000px) {
     width: 1200px;
   }

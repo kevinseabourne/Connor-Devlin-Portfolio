@@ -1,77 +1,134 @@
-import styled, { createGlobalStyle } from "styled-components";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import React, { useState, useRef, useEffect } from "react";
+import styled, { createGlobalStyle } from "styled-components";
 import { getCurrentUser } from "../../pages/api/auth";
 
-const BurgerBar = React.forwardRef(
-  ({ burgerOpen, handleBurgerClick, links, adminLinks }, ref) => {
-    const contentRef = useRef(null);
-    const [user, setUser] = useState(null);
-    useEffect(() => {
-      const currentUser = getCurrentUser();
-      setUser(currentUser);
-    }, [burgerOpen]);
+const BurgerBar = ({ links, adminLinks }) => {
+  // Cypress Testing Coverage //
+  /* istanbul ignore file */
+  const overlayRef = useRef(null);
+  const contentRef = useRef(null);
+  const burgerRef = useRef(null);
+  const [user, setUser] = useState(null);
+  const [renderMenu, setRenderMenu] = useState(false);
+  const [burgerOpen, setBurgerOpen] = useState(false);
 
-    const onClick = () => {
-      handleBurgerClick();
-      contentRef.current.scrollTop = 0;
+  useEffect(() => {
+    window.innerWidth <= 1024 && setRenderMenu(true);
+    window.addEventListener("resize", handleWindowResize);
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+      window.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
 
-    return (
-      <React.Fragment>
-        <Container ref={ref}>
-          <GlobalStyle burgerOpen={burgerOpen} />
-          <Burger
-            burgerOpen={burgerOpen}
-            onClick={onClick}
-            id="burgerOpen"
-            data-testid="burgerOpen"
-          >
-            <BurgerInner burgerOpen={burgerOpen} />
-          </Burger>
-          <Content ref={contentRef} burgerOpen={burgerOpen}>
-            {links.map((link) => (
-              <Link key={links.indexOf(link)} href={link.link} passHref>
-                <BurgerLinkTitle onClick={onClick} user={user}>
+  useEffect(() => {
+    const currentUser = getCurrentUser();
+    setUser(currentUser);
+  }, [burgerOpen]);
+
+  const handleClickOutside = (e) => {
+    if (e.target === overlayRef.current) {
+      closeBurgerMenu();
+    }
+  };
+
+  const handleWindowResize = () => {
+    if (window.innerWidth <= 1024) {
+      setRenderMenu(true);
+    } else {
+      setRenderMenu(false);
+    }
+  };
+
+  const onClick = () => {
+    toggleBurgerMenu();
+    contentRef.current.scrollTop = 0;
+  };
+
+  const toggleBurgerMenu = () => {
+    setBurgerOpen(!burgerOpen);
+  };
+
+  const closeBurgerMenu = () => {
+    setBurgerOpen(false);
+  };
+
+  return renderMenu ? (
+    <Container>
+      <Burger
+        ref={burgerRef}
+        burgerOpen={burgerOpen}
+        onClick={onClick}
+        id="burgerOpen"
+        data-testid="burgerOpen"
+        aria-label={burgerOpen ? "close Menu" : "menu"}
+      >
+        <BurgerInner burgerOpen={burgerOpen} />
+      </Burger>
+      <Overlay
+        burgerOpen={burgerOpen}
+        ref={overlayRef}
+        role="dialog"
+        aria-label="overlay"
+      >
+        <GlobalStyle burgerOpen={burgerOpen} />
+        <Content
+          ref={contentRef}
+          burgerOpen={burgerOpen}
+          aria-label="burger menu"
+        >
+          {links.map((link) => (
+            <Link key={links.indexOf(link)} href={link.route} passHref>
+              <BurgerLinkTitle onClick={onClick} user={user}>
+                {link.title}
+              </BurgerLinkTitle>
+            </Link>
+          ))}
+          {user && <BurgerSubTitle>Admin</BurgerSubTitle>}
+          {user &&
+            adminLinks.map((link) => (
+              <Link
+                key={link.route}
+                href="/admin/[id]"
+                as={link.route}
+                passHref
+              >
+                <BurgerLinkTitle
+                  onClick={onClick}
+                  user={user}
+                  aria-label={`admin - ${link.title}`}
+                >
                   {link.title}
                 </BurgerLinkTitle>
               </Link>
             ))}
-            {user && <BurgerSubTitle>Admin</BurgerSubTitle>}
-            {user &&
-              adminLinks.map((link) => (
-                <Link
-                  key={link.route}
-                  href="/admin/[id]"
-                  as={link.route}
-                  passHref
-                >
-                  <BurgerLinkTitle onClick={onClick} user={user}>
-                    {link.title}
-                  </BurgerLinkTitle>
-                </Link>
-              ))}
-          </Content>
-        </Container>
-        <TransitionGroup component={null}>
-          {burgerOpen && (
-            <CSSTransition
-              in={burgerOpen}
-              classNames="overlayAnimation"
-              timeout={300}
-              unmountOnExit
-            >
-              <Overlay burgerOpen={burgerOpen} />
-            </CSSTransition>
-          )}
-        </TransitionGroup>
-      </React.Fragment>
-    );
-  }
-);
+        </Content>
+        }
+      </Overlay>
+    </Container>
+  ) : null;
+};
 
 export default BurgerBar;
+
+BurgerBar.propTypes = {
+  links: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      route: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  adminLinks: PropTypes.arrayOf(
+    PropTypes.shape({
+      icon: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      route: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
 
 const GlobalStyle = createGlobalStyle`
  body {
@@ -90,9 +147,12 @@ const Container = styled.div`
   @media (max-width: 1024px) {
     display: flex;
   }
+  @media (max-width: 350px) {
+    width: 250px;
+  }
 `;
 
-const Burger = styled.div`
+const Burger = styled.button`
   display: none;
   position: relative;
   width: 32px;
@@ -100,11 +160,14 @@ const Burger = styled.div`
   padding: 25.5px;
   margin-left: auto;
   z-index: 200;
+  background-color: transparent;
+  box-sizing: inherit;
+  border: none;
   &:hover {
     cursor: pointer;
   }
   @media (max-width: 1024px) {
-    display: inline-block;
+    display: flex;
   }
   @media (max-width: 330px) {
     padding-left: 21.4px;
@@ -172,6 +235,7 @@ const Overlay = styled.div`
   width: 100%;
   height: 100%;
   transition: all 0.3s;
+  visibility: ${({ burgerOpen }) => (burgerOpen ? "visible" : "hidden")};
   background-color: ${({ burgerOpen }) =>
     burgerOpen ? "rgba(0, 0, 0, 0.25)" : "transparent"};
   &.overlayAnimation-enter {
@@ -191,7 +255,7 @@ const Overlay = styled.div`
   }
 `;
 
-const Content = styled.div`
+const Content = styled.nav`
   top: 0;
   right: ${({ burgerOpen }) => (burgerOpen ? "0px" : "-40px")};
   box-sizing: border-box;
@@ -207,9 +271,10 @@ const Content = styled.div`
   justify-content: flex-start;
   position: fixed;
   overflow: scroll;
+  visibility: ${({ burgerOpen }) => (burgerOpen ? "visible" : "hidden")};
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
   width: ${({ burgerOpen }) => (burgerOpen ? "280px" : "0px")};
   @media (max-width: 350px) {
     width: ${({ burgerOpen }) => (burgerOpen ? "250px" : "0px")};
