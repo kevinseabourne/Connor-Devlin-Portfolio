@@ -208,8 +208,7 @@ const Name = styled(motion.div)`
   align-items: center;
   margin-top: 0px;
   margin-bottom: 12%;
-  font-family: "Att-reborn-fallback", "sans-serif";
-  ${"" /* "Att-reborn", */}
+  font-family: "Att-reborn", "Att-reborn-fallback", "sans-serif";
   font-size: 2rem;
   font-weight: normal;
   letter-spacing: 6px;
