@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import styled, { createGlobalStyle } from "styled-components";
 import VideoLoader from "./videoLoader";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const VideoOverlay = ({
   isOpen,
@@ -49,41 +49,43 @@ const VideoOverlay = ({
   };
 
   return (
-    <Container
-      variants={animation}
-      initial="hidden"
-      animate="show"
-      exit="hidden"
-    >
-      <GlobalStyle isOpen={isOpen} />
-      <Overlay data-testid="videoOverlay">
-        <VideoContainer
-          maxWidth={maxWidth}
-          ref={videoRef}
-          role="button"
-          tabIndex="0"
-          onKeyDown={(e) => {
-            const escKey = e.key === 27 || e.keyCode === 27;
-            if (escKey) {
-              closeOverlay();
-              e.target.blur();
-            }
-          }}
-        >
-          <VideoLoader
-            src={src}
-            maxWidth="inherit"
-            alt={alt}
-            borderRadius={borderRadius}
-            width={width}
-            placeholderSize={placeholderSize}
-            centerVideo={centerVideo}
-            lazyLoad={false}
-            closeOverlayWhileLoading={closeOverlayWhileLoading}
-          />
-        </VideoContainer>
-      </Overlay>
-    </Container>
+    <AnimatePresence>
+      <Container
+        variants={animation}
+        initial="hidden"
+        animate="show"
+        exit="hidden"
+      >
+        <GlobalStyle isOpen={isOpen} />
+        <Overlay data-testid="videoOverlay">
+          <VideoContainer
+            maxWidth={maxWidth}
+            ref={videoRef}
+            role="button"
+            tabIndex="0"
+            onKeyDown={(e) => {
+              const escKey = e.key === 27 || e.keyCode === 27;
+              if (escKey) {
+                closeOverlay();
+                e.target.blur();
+              }
+            }}
+          >
+            <VideoLoader
+              src={src}
+              maxWidth="inherit"
+              alt={alt}
+              borderRadius={borderRadius}
+              width={width}
+              placeholderSize={placeholderSize}
+              centerVideo={centerVideo}
+              lazyLoad={false}
+              closeOverlayWhileLoading={closeOverlayWhileLoading}
+            />
+          </VideoContainer>
+        </Overlay>
+      </Container>
+    </AnimatePresence>
   );
 };
 

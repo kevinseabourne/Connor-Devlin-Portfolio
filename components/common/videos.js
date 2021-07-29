@@ -162,23 +162,22 @@ const Videos = ({
                 />
               ))}
             </AnimatePresence>
-            <AnimatePresence>
-              {videoOverlayOpen && (
-                <VideoOverlay
-                  isOpen={videoOverlayOpen}
-                  src={selectedItem.video}
-                  closeOverlay={closeOverlay}
-                  maxWidth={"900px"}
-                  placeholderSize={"56.25%"}
-                  alt={
-                    selectedData === "weddings"
-                      ? weddingNames
-                      : selectedItem.company
-                  }
-                  centerVideo={true}
-                />
-              )}
-            </AnimatePresence>
+
+            {videoOverlayOpen && (
+              <VideoOverlay
+                isOpen={videoOverlayOpen}
+                src={selectedItem.video}
+                closeOverlay={closeOverlay}
+                maxWidth={"900px"}
+                placeholderSize={"56.25%"}
+                alt={
+                  selectedData === "weddings"
+                    ? weddingNames
+                    : selectedItem.company
+                }
+                centerVideo={true}
+              />
+            )}
             {showAdminContentData && popUpOpen && (
               <DeletePopUp
                 popUpOpen={popUpOpen}
