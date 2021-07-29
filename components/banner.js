@@ -166,25 +166,12 @@ const InfoContainer = styled(motion.div)`
 
 const SmallTitle = styled(motion.span)`
   font-family: "Karla-ExtraBold", "Arial", "sans-serif";
-  font-family: "Karla-ExtraBold", "Arial", "sans-serif";
-  font-size: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "1rem" : "0.938rem"};
-  font-weight: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "normal" : "900"};
-  letter-spacing: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "inherit" : "0.9px"};
+  font-size: 1rem;
   @media (max-width: 424px) {
-    font-size: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "0.9rem" : "0.963rem"};
-    letter-spacing: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "inherit" : "-0.3px"};
-    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.3")};
+    font-size: 0.9rem;
   }
   @media (max-width: 300px) {
-    font-size: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "0.8rem" : "0.863rem"};
-    letter-spacing: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "inherit" : "-0.4px"};
+    font-size: 0.8rem;
     word-spacing: inherit;
   }
 `;
@@ -196,25 +183,18 @@ const Name = styled(motion.div)`
   margin-bottom: 20px;
   font-family: "Att-reborn", "Brush Script MT", "sans-serif";
   font-size: 2rem;
-  line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.25")};
-  font-weight: ${({ fontLoaded }) => (fontLoaded ? "normal" : "900")};
   letter-spacing: 6px;
-  word-spacing: ${({ fontLoaded }) => (fontLoaded ? "21.4px" : "16.3px")};
+  word-spacing: 21.4px;
   @media (max-width: 570px) {
-    font-size: ${({ fontLoaded }) => (fontLoaded ? "2.3rem" : "2.313rem")};
-    letter-spacing: ${({ fontLoaded }) => (fontLoaded ? "6px" : "7.75px")};
-    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.35")};
+    font-size: 2.3rem;
+    letter-spacing: 6px;
     word-spacing: 21.4px;
   }
   @media (max-width: 350px) {
     font-size: 2rem;
-    letter-spacing: ${({ fontLoaded }) => (fontLoaded ? "6px" : "7.6px")};
-    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.3")};
-    word-spacing: ${({ fontLoaded }) => (fontLoaded ? "21.4px" : "16.3px")};
   }
   @media (max-width: 300px) {
-    font-size: ${({ fontLoaded }) => (fontLoaded ? "1.6rem" : "1.563rem")};
-    letter-spacing: ${({ fontLoaded }) => (fontLoaded ? "6px" : "7.65px")};
+    font-size: 1.6rem;
   }
 `;
 
@@ -261,14 +241,7 @@ const Description = styled(motion.p)`
 
 const ReadMoreLink = styled(motion.a)`
   font-family: "Karla-ExtraBold", "Arial", "sans-serif";
-  font-size: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "1rem" : "0.938rem"};
-  font-weight: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "normal" : "900"};
-  letter-spacing: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "inherit" : "0.9px"};
-  word-spacing: ${({ fontExtraBoldLoaded }) =>
-    fontExtraBoldLoaded ? "inherit" : "-0.95px"};
+  font-size: 1rem;
   z-index: 0;
   position: relative;
   &::after {
@@ -293,19 +266,10 @@ const ReadMoreLink = styled(motion.a)`
     outline: none;
   }
   @media (max-width: 424px) {
-    font-size: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "0.9rem" : "0.963rem"};
-    letter-spacing: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "inherit" : "-0.3px"};
-    line-height: ${({ fontLoaded }) => (fontLoaded ? "inherit" : "1.3")};
-    word-spacing: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "inherit" : "-0.7px"};
+    font-size: 0.9rem;
   }
   @media (max-width: 300px) {
-    font-size: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "0.8rem" : "0.863rem"};
-    letter-spacing: ${({ fontExtraBoldLoaded }) =>
-      fontExtraBoldLoaded ? "inherit" : "-0.4px"};
+    font-size: 0.8rem;
     word-spacing: inherit;
   }
 `;
