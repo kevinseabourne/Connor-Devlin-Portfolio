@@ -116,7 +116,7 @@ const Login = () => {
           type="submit"
           disabled={status === "pending" ? true : false}
         >
-          {status !== "pending" ? "Send" : <LoadingSpinner size="30px" />}
+          {status !== "pending" ? "Login" : <LoadingSpinner size="30px" />}
         </SubmitButton>
       </LoginForm>
     </Container>
