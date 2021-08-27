@@ -56,7 +56,7 @@ const VideoOverlay = ({
       exit="hidden"
     >
       <GlobalStyle isOpen={isOpen} />
-      <Overlay data-testid="videoOverlay">
+      <Overlay data-testid="videoOverlay" variants={animation}>
         <VideoContainer
           maxWidth={maxWidth}
           ref={videoRef}
@@ -107,7 +107,9 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const Container = styled.div``;
+const Container = styled(motion.div)`
+  z-index: 50;
+`;
 
 const Overlay = styled(motion.div)`
   position: fixed;
