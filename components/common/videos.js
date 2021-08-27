@@ -239,7 +239,6 @@ const Container = styled(motion.div)`
 
 const VideoContainer = styled(motion.div)`
   width: 100%;
-  height: 100%;
   display: grid;
   grid-template-columns: repeat(3, minmax(100px, 640px));
   justify-content: center;
@@ -275,9 +274,6 @@ const ShowMoreButton = styled(motion.button)`
   color: white;
   position: relative;
   font-weight: 600;
-  ${"" /* box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
-    rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
-    rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px; */}
   transition: all 0.2s ease;
   background-image: ${({ theme }) =>
     `radial-gradient( circle farthest-corner at 10% 20%,  ${theme.colors.gradient1} 0%, ${theme.colors.gradient2} 100.2% )`};

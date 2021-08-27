@@ -118,6 +118,9 @@ const Title = styled(motion.h1)`
     margin-top: -98px;
     margin-bottom: 25px;
   }
+  @media (max-width: 381px) {
+    font-size: 2rem;
+  }
 `;
 
 const IconsContainer = styled(motion.div)`
