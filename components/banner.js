@@ -186,12 +186,17 @@ const Name = styled(motion.div)`
   letter-spacing: 6px;
   word-spacing: 21.4px;
   @media (max-width: 570px) {
-    font-size: 2.3rem;
+    font-size: 1.6rem;
     letter-spacing: 6px;
     word-spacing: 21.4px;
   }
-  @media (max-width: 350px) {
-    font-size: 2rem;
+  @media (max-width: 470px) {
+    font-size: 1.3rem;
+    letter-spacing: 6px;
+    word-spacing: 21.4px;
+  }
+  @media (max-width: 380px) {
+    font-size: 1rem;
   }
   @media (max-width: 300px) {
     font-size: 1.6rem;
@@ -234,7 +239,7 @@ const Description = styled(motion.p)`
   @media (max-width: 424px) {
     font-size: 1rem;
   }
-  @media (max-width: 300px) {
+  @media (max-width: 380px) {
     font-size: 0.9rem;
   }
 `;
