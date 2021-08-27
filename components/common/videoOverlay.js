@@ -108,15 +108,19 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Container = styled(motion.div)`
-  z-index: 50;
+  z-index: 1000;
+  min-height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
 `;
 
 const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   z-index: 10;
   background-color: rgba(15, 15, 15, 0.8);
   display: flex;
