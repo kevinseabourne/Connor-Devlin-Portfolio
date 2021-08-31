@@ -19,20 +19,19 @@ export function useFontLoaded(font) {
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
-    // const hasFontLoaded = async () => {
-    //   document.fonts.ready.then(async function () {
-    //     try {
-    //       const answer = await document.fonts.check(font);
-    //       setFontLoaded(answer);
-    //     } catch (error) {
-    //       logger.log(error);
-    //       errorMessage();
-    //     }
-    //   });
-    // };
-    //
-    //
-    // hasFontLoaded();
+    const hasFontLoaded = async () => {
+      document.fonts.ready.then(async function () {
+        try {
+          const answer = await document.fonts.check(font);
+          setFontLoaded(answer);
+        } catch (error) {
+          logger.log(error);
+          errorMessage();
+        }
+      });
+    };
+
+    hasFontLoaded();
 
     setFontLoaded(true);
   }, []);
