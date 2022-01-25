@@ -138,7 +138,7 @@ const SkipHeaderLink = styled.a`
   padding: 16px 24px;
   position: absolute;
   top: 92px;
-  left: 62px;
+  left: -162px;
   font-family: "Karla-Bold";
   font-size: 1rem;
   border-radius: 9px;
@@ -147,6 +147,7 @@ const SkipHeaderLink = styled.a`
     rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
     rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
   &:focus {
+    left: 62px;
     outline: initial solid initial;
   }
 `;
