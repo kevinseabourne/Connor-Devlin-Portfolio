@@ -32,7 +32,7 @@
     "jest-next-dynamic": "^1.0.1",
     "jwt-decode": "^2.2.0",
     "lodash.isequal": "^4.5.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "next": "^11.0.1-canary.4",
     "object-path": "^0.11.5",
     "react": "^17.0.2",
