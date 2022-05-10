@@ -58,7 +58,7 @@ const WeddingPricingPackages = ({
   const parent = {
     hidden: {
       transition: {
-        staggerChildren: 0.9,
+        staggerChildren: 0.4,
         staggerDirection: -1,
       },
     },
@@ -217,18 +217,17 @@ const WeddingPricingPackages = ({
           </Package>
         ))}
       </PackagesContainer>
-      <AnimatePresence>
-        {showAdminContent && popUpOpen && (
-          <DeletePopUp
-            popUpOpen={popUpOpen}
-            togglePopUp={toggleDeletePopUp}
-            closePopUp={closeDeletePopUp}
-            handleDelete={handleDeletePricingPackage}
-            showData={showPackagesContent}
-            changeSeletedItemOnDelete={handleSelectedPackageOnDelete}
-          />
-        )}
-      </AnimatePresence>
+
+      {showAdminContent && (
+        <DeletePopUp
+          popUpOpen={popUpOpen}
+          togglePopUp={toggleDeletePopUp}
+          closePopUp={closeDeletePopUp}
+          handleDelete={handleDeletePricingPackage}
+          showData={showPackagesContent}
+          changeSeletedItemOnDelete={handleSelectedPackageOnDelete}
+        />
+      )}
     </AnimateSharedLayout>
   ) : (
     ""
