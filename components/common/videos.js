@@ -27,20 +27,8 @@ const Videos = ({
   const [animationComplete, setAnimationComplete] = useState(true);
   const [popUpOpen, setPopUpOpen] = useState(false);
   const itemsRef = useRef(new Array());
-  const deletePopUpRef = useRef(null);
 
   useEffect(() => {
-    window.addEventListener("mousedown", closeDeletePopUp);
-    return () => {
-      window.removeEventListener("mousedown", closeDeletePopUp);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (popUpOpen && deletePopUpRef.current) {
-      deletePopUpRef.current.focus();
-    }
-
     if (!popUpOpen && isArrayEmpty(itemsRef.current)) {
       bringItemInfocusItemAfterPopUp();
     }
@@ -82,15 +70,13 @@ const Videos = ({
     setPopUpOpen(!popUpOpen);
   };
 
-  const closeDeletePopUp = (e) => {
-    if (deletePopUpRef.current && !deletePopUpRef.current.contains(e.target)) {
-      setPopUpOpen(false);
-    }
+  const closeDeletePopUp = () => {
+    setPopUpOpen(false);
   };
 
   // ------------------------ Accessibility ------------------------ //
 
-  const bringItemInfocusItemAfterPopUp = () => {
+  const bringItemInfocusItemAfterPopUp = (e) => {
     itemsRef.current = itemsRef.current.filter((i) => i);
 
     const selectedItemIndex = state.indexOf(selectedItem);
@@ -179,13 +165,12 @@ const Videos = ({
                 />
               )}
             </AnimatePresence>
-            {showAdminContentData && popUpOpen && (
+            {showAdminContentData && (
               <DeletePopUp
                 popUpOpen={popUpOpen}
                 closePopUp={closeDeletePopUp}
                 togglePopUp={toggleDeletePopUp}
                 handleDelete={handleDeleteContent}
-                ref={deletePopUpRef}
               />
             )}
           </VideoContainer>
