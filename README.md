@@ -5,9 +5,13 @@ This videography portfolio displays content created by the client. Along with an
 ## Stack
 
 • Next.js
+• Javascript
 • Styled Components
-• GraphCMS
-• GraphQL
+• Framer Motion
+• React Hook Form
+• Firebase
+• Axios
+• Vimeo API
 • Jest
 • React Testing Library
 • Cypress
@@ -15,7 +19,7 @@ This videography portfolio displays content created by the client. Along with an
 ## Stack
 
 • Http Requests
-• Dynamic Routes
-• Scroll To Functionality
-• Responsive
-• Accessibility
+• Authentication
+• Admin Dashboard
+• Contact Form
+• Testing
