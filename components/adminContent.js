@@ -139,7 +139,7 @@ const AdminContent = ({ operation }) => {
     const response = await addContent(selectedData, dataObj);
 
     if (response) {
-      await handleGetContent(null);
+      await handleGetContent(selectedData);
       return true;
     } else {
       errorMessage();
@@ -167,11 +167,10 @@ const AdminContent = ({ operation }) => {
         dataObj = arrangeCorporateDataObj(data);
         break;
     }
-
     const response = await editContent(selectedData, selectedItem.id, dataObj);
 
     if (response) {
-      await handleGetContent(null);
+      await handleGetContent(selectedData);
       return true;
     } else {
       errorMessage();
@@ -185,7 +184,7 @@ const AdminContent = ({ operation }) => {
     const response = await deleteContent(selectedData, selectedItem.id);
 
     if (response) {
-      handleGetContent(null, true);
+      handleGetContent(selectedData, true);
       return true;
     } else {
       errorMessage();
@@ -299,6 +298,9 @@ const AdminContent = ({ operation }) => {
       justifyContent: "flex-start",
       transition: {
         type: "spring",
+        staggerChildren: 0.3,
+        delayChildren: 0.9,
+        staggerChildren: 0.9,
       },
     },
   };
@@ -308,13 +310,13 @@ const AdminContent = ({ operation }) => {
     show: { opacity: 1 },
   };
 
-  const formRenderCondition = sameSelectedData
-    ? sameSelectedData
-    : status !== "pending" && isArrayEmpty(state);
-
   return (
     <AnimateSharedLayout>
-      <Container variants={variants} initial="hidden" animate="show">
+      <Container
+        variants={variants}
+        initial="hidden"
+        animate={selectedData ? "show" : "hidden"}
+      >
         <AdminButtonsSection
           handleButtonChange={handleGetContent}
           buttons={buttons}
@@ -337,13 +339,14 @@ const AdminContent = ({ operation }) => {
           operation={operation}
         />
 
-        {formRenderCondition && (
+        {selectedData && (
           <AdminContentForm
             selectedData={selectedData}
             selectedItem={selectedItem}
             handleAddContent={handleAddContent}
             handleEditContent={handleEditContent}
             operation={operation}
+            status={status}
           />
         )}
       </Container>
