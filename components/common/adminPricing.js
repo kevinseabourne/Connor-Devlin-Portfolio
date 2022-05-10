@@ -78,6 +78,7 @@ const AdminPricing = ({ operation, data }) => {
     status !== "pending" && setStatus("pending");
     const response = await getAllPricingPackages();
     if (response) {
+      setPackages([]);
       if (selectedData === "packages") {
         updateselectedPackage(response);
       } else {
@@ -178,6 +179,8 @@ const AdminPricing = ({ operation, data }) => {
     const response = await deletePricingPackage(id);
 
     if (response) {
+      showPackagesContent();
+      handleSelectedPackageOnDelete();
       return true;
     } else {
       errorMessage();
@@ -209,12 +212,16 @@ const AdminPricing = ({ operation, data }) => {
 
   const handlePackagesAnimationComplete = () => {
     setPackagesAnimationComplete(true);
-    setAddOnsAnimationComplete(false);
+    timeoutThird.current = setTimeout(() => {
+      setAddOnsAnimationComplete(false);
+    }, 300);
   };
 
   const handleAddOnsAnimationComplete = () => {
     setAddOnsAnimationComplete(true);
-    setPackagesAnimationComplete(false);
+    timeoutThird.current = setTimeout(() => {
+      setPackagesAnimationComplete(false);
+    }, 300);
   };
 
   const dataResolved =
@@ -251,11 +258,6 @@ const AdminPricing = ({ operation, data }) => {
       },
     },
   };
-
-  const formRenderCondition = sameSelectedData
-    ? sameSelectedData
-    : (status !== "pending" && isArrayEmpty(packages)) ||
-      (status !== "pending" && isArrayEmpty(addOns));
 
   return (
     <AnimateSharedLayout>
@@ -298,7 +300,8 @@ const AdminPricing = ({ operation, data }) => {
               <WeddingPricingAddOns addOns={addOns} />
             )}
         </AnimatePresence>
-        {formRenderCondition && (
+
+        {selectedData && (
           <AdminPricingForm
             selectedData={selectedData}
             defaultValues={defaultValues}
