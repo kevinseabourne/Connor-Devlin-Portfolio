@@ -266,7 +266,9 @@ const Item = React.forwardRef(
             data-testid={item.displayNames ? "fullName" : "companyName"}
           >
             {item.displayNames
-              ? item.displayNames.replace("&", "\n")
+              ? showAdminContentData
+                ? item.displayNames.replaceAll("&", "\n")
+                : item.displayNames.replace("&", "\n")
               : item.company}
           </WrappedNames>
         )}
@@ -371,7 +373,7 @@ const ImageContainer = styled(motion.button)`
       transform: scale(1) translateY(0px);
     }
   }
-  &:focus {
+  &:focus-visible {
     ${VideoDuration} {
       opacity: 1;
       transform: scale(1) translateY(0px);
@@ -447,6 +449,7 @@ const Names = styled(motion.label)`
   font-family: "Karla-Bold";
   font-weight: 900;
   margin-left: auto;
+  text-align: center;
   margin-right: auto;
   white-space: normal;
   position: relative;
