@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import isObjEmpty from "lodash/isEmpty";
@@ -31,6 +31,20 @@ const AdminPricingForm = ({
     { title: "addOn", id: Math.floor(1000 + Math.random() * 9000) },
   ]);
   const [packDetailFocus, setPackDetailFocus] = useState(false);
+  const [
+    packagesFormAnimationComplete,
+    setPackagesFormAnimationComplete,
+  ] = useState(true);
+  const [
+    addOnsFormAnimationComplete,
+    setAddOnsFormAnimationComplete,
+  ] = useState(true);
+
+  const timeout = useRef(null);
+
+  useEffect(() => {
+    () => clearTimeout(timeout.current);
+  }, []);
 
   useEffect(() => {
     if (!isObjEmpty(defaultValues) && dataResolved) {
@@ -228,6 +242,20 @@ const AdminPricingForm = ({
     }
   };
 
+  const handlePackagesFormAnimationComplete = () => {
+    setPackagesFormAnimationComplete(true);
+    timeout.current = setTimeout(() => {
+      setAddOnsFormAnimationComplete(false);
+    }, 300);
+  };
+
+  const handleAddOnsFormAnimationComplete = () => {
+    setAddOnsFormAnimationComplete(true);
+    timeout.current = setTimeout(() => {
+      setPackagesFormAnimationComplete(false);
+    }, 300);
+  };
+
   const variants = {
     transition: {
       delayChildren: 0.3,
@@ -247,12 +275,18 @@ const AdminPricingForm = ({
       opacity: 0,
       y: 20,
       x: 0,
+      transition: {
+        staggerDirection: -1,
+        delayChildren: 0.3,
+        staggerChildren: 0.1,
+      },
     },
     show: {
       opacity: 1,
       y: 0,
       transition: {
-        delayChildren: 0.7,
+        staggerDirection: 1,
+        delayChildren: 0.3,
         staggerChildren: 0.1,
       },
     },
@@ -273,14 +307,15 @@ const AdminPricingForm = ({
     <AnimateSharedLayout>
       <FormContainer layout variants={variants}>
         <Wave src={downWave} layout />
-        <AnimatePresence>
-          {selectedData === "packages" && (
+        <AnimatePresence onExitComplete={handlePackagesFormAnimationComplete}>
+          {selectedData === "packages" && addOnsFormAnimationComplete && (
             <Form
               onSubmit={handleSubmit(handlePackagesSubmit)}
               variants={formAnimation}
               initial="hidden"
               animate="show"
               exit="hidden"
+              layout
             >
               <Title>
                 {operation === "Add"
@@ -382,7 +417,6 @@ const AdminPricingForm = ({
                 layout
                 type="submit"
                 whileTap={{ scale: 0.9 }}
-                variants={buttonAnimation}
                 disabled={status === "pending" ? true : false}
               >
                 {status === "pending" ? (
@@ -398,14 +432,15 @@ const AdminPricingForm = ({
             </Form>
           )}
         </AnimatePresence>
-        <AnimatePresence>
-          {selectedData === "addOns" && (
+        <AnimatePresence onExitComplete={handleAddOnsFormAnimationComplete}>
+          {selectedData === "addOns" && packagesFormAnimationComplete && (
             <Form
               onSubmit={handleSubmit(handleAddOnsSubmit)}
               variants={formAnimation}
               initial="hidden"
               animate="show"
               exit="hidden"
+              layout
             >
               <Title>Edit Add Ons</Title>
               {addOnsLength.map((addOn) => (
