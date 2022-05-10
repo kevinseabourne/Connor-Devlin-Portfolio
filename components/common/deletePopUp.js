@@ -7,154 +7,151 @@ import useSound from "use-sound";
 import popSound from "../../public/sounds/pop.mp3";
 import { LoadingSpinner } from "../loading-spinner";
 
-const DeletePopUp = React.forwardRef(
-  ({ popUpOpen, togglePopUp, closePopUp, handleDelete }, ref) => {
-    const [status, setStatus] = useState("idle");
-    // const ref = useRef(null);
-    const timeout = useRef(null);
+const DeletePopUp = ({ popUpOpen, togglePopUp, closePopUp, handleDelete }) => {
+  const [status, setStatus] = useState("idle");
+  const ref = useRef(null);
+  const timeout = useRef(null);
 
-    useEffect(() => {
-      // if (popUpOpen && ref.current) {
+  useEffect(() => {
+    if (ref) {
       ref.current && ref.current.focus();
-      // }
-      // window.addEventListener("mousedown", handleClickOutside);
-      // return () => {
-      //   window.removeEventListener("mousedown", handleClickOutside);
-      // };
-    }, []);
-
-    const { register, handleSubmit, reset } = useForm({});
-    const [play] = useSound(popSound, { volume: 0.2 });
-
-    const schema = {
-      deleteCheckbox: {
-        required: "tick the box to delete the content",
-      },
+    }
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
 
-    // const handleClickOutside = (e) => {
-    //   if (ref.current && !ref.current.contains(e.target)) {
-    //     closePopUp();
-    //   }
-    // };
+  const { register, handleSubmit, reset } = useForm({});
+  const [play] = useSound(popSound, { volume: 0.2 });
 
-    const handleDeleteContent = async () => {
-      setStatus("pending");
-      const response = await handleDelete();
+  const schema = {
+    deleteCheckbox: {
+      required: "tick the box to delete the content",
+    },
+  };
 
-      if (response) {
-        setStatus("resolved");
-        timeout.current = setTimeout(() => {
-          reset({ deleteCheckbox: false });
-          setStatus("idle");
-          closePopUp();
-        }, 1500);
-      } else {
-        // the function called takes care of the error message
-      }
-    };
+  const handleClickOutside = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      closePopUp();
+    }
+  };
 
-    const overlayAnimation = {
-      hidden: {
-        opacity: 0,
-        transition: { staggerChildren: 0.9, staggerDirection: -1 },
+  const handleDeleteContent = async () => {
+    setStatus("pending");
+    const response = await handleDelete();
+
+    if (response) {
+      setStatus("resolved");
+      timeout.current = setTimeout(() => {
+        reset({ deleteCheckbox: false });
+        setStatus("idle");
+        closePopUp();
+      }, 1500);
+    } else {
+      // the function called takes care of the error message
+    }
+  };
+
+  const overlayAnimation = {
+    hidden: {
+      opacity: 0,
+      transition: { staggerChildren: 0.9, staggerDirection: -1 },
+    },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+    },
+  };
+
+  const popUpAnimation = {
+    hidden: {
+      scale: 0,
+      opacity: 0,
+      transition: {
+        type: "spring",
+        duration: 0.5,
       },
-      show: {
-        opacity: 1,
-        transition: { staggerChildren: 0.07, delayChildren: 0.2 },
+    },
+    show: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        duration: 0.5,
       },
-    };
-
-    const popUpAnimation = {
-      hidden: {
-        scale: 0,
-        opacity: 0,
-        transition: {
-          type: "spring",
-          duration: 0.5,
-        },
-      },
-      show: {
-        scale: 1,
-        opacity: 1,
-        transition: {
-          type: "spring",
-          duration: 0.5,
-        },
-      },
-    };
-    return (
-      <React.Fragment>
-        <GlobalStyle popUpOpen={popUpOpen} />
-        <AnimatePresence>
-          {popUpOpen && (
-            <Overlay
-              variants={overlayAnimation}
-              initial="hidden"
-              animate="show"
-              exit="hidden"
-              data-testid="deleteOverlay"
-              key={popUpOpen}
-              tabindex="-1"
+    },
+  };
+  return (
+    <React.Fragment>
+      <GlobalStyle popUpOpen={popUpOpen} />
+      <AnimatePresence>
+        {popUpOpen && (
+          <Overlay
+            variants={overlayAnimation}
+            animate={popUpOpen ? "show" : "hidden"}
+            exit="hidden"
+            data-testid="deleteOverlay"
+            key={popUpOpen}
+            tabindex="-1"
+          >
+            <PopUp
+              ref={ref}
+              variants={popUpAnimation}
+              role="button"
+              tabIndex="0"
+              onKeyDown={(e) => {
+                const escKey = e.key === 27 || e.keyCode === 27;
+                escKey && togglePopUp();
+              }}
             >
-              <PopUp
-                ref={ref}
-                variants={popUpAnimation}
-                role="button"
-                tabIndex="0"
-                onKeyDown={(e) => {
-                  const escKey = e.key === 27 || e.keyCode === 27;
-                  escKey && togglePopUp();
-                }}
-              >
-                <SmallerTitle>
-                  Are you sure you want to delete this content ?
-                </SmallerTitle>
-                <Form onSubmit={handleSubmit(handleDeleteContent)}>
-                  <Checkbox
-                    type="checkbox"
-                    ref={register(schema.deleteCheckbox)}
-                    name="deleteCheckbox"
-                    onClick={play}
-                    onKeyDown={(e) => {
-                      const escKey = e.key === 27 || e.keyCode === 27;
-                      if (escKey) {
-                        togglePopUp();
-                        e.target.blur();
-                      }
-                      const enterKey = e.key === 13 || e.keyCode === 13;
-                      if (enterKey) {
-                        e.target.checked = !e.target.checked;
-                      }
-                    }}
-                  />
-                  <DeleteButton
-                    type="submit"
-                    onKeyDown={(e) => {
-                      const escKey = e.key === 27 || e.keyCode === 27;
-                      if (escKey) {
-                        togglePopUp();
-                        e.target.blur();
-                      }
-                    }}
-                  >
-                    {status === "pending" ? (
-                      <LoadingSpinner size="28px" />
-                    ) : status === "resolved" ? (
-                      "Success"
-                    ) : (
-                      "Delete"
-                    )}
-                  </DeleteButton>
-                </Form>
-              </PopUp>
-            </Overlay>
-          )}
-        </AnimatePresence>
-      </React.Fragment>
-    );
-  }
-);
+              <SmallerTitle>
+                Are you sure you want to delete this content ?
+              </SmallerTitle>
+              <Form onSubmit={handleSubmit(handleDeleteContent)}>
+                <Checkbox
+                  type="checkbox"
+                  ref={register(schema.deleteCheckbox)}
+                  name="deleteCheckbox"
+                  onClick={play}
+                  onKeyDown={(e) => {
+                    const escKey = e.key === 27 || e.keyCode === 27;
+                    if (escKey) {
+                      togglePopUp();
+                      e.target.blur();
+                    }
+                    const enterKey = e.key === 13 || e.keyCode === 13;
+                    if (enterKey) {
+                      e.target.checked = !e.target.checked;
+                    }
+                  }}
+                />
+                <DeleteButton
+                  type="submit"
+                  onKeyDown={(e) => {
+                    const escKey = e.key === 27 || e.keyCode === 27;
+                    if (escKey) {
+                      togglePopUp();
+                      e.target.blur();
+                    }
+                  }}
+                >
+                  {status === "pending" ? (
+                    <LoadingSpinner size="28px" />
+                  ) : status === "resolved" ? (
+                    "Success"
+                  ) : (
+                    "Delete"
+                  )}
+                </DeleteButton>
+              </Form>
+            </PopUp>
+          </Overlay>
+        )}
+      </AnimatePresence>
+    </React.Fragment>
+  );
+};
 
 export default DeletePopUp;
 
