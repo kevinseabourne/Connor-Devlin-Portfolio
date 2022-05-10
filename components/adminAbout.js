@@ -35,10 +35,11 @@ const AdminAbout = ({ data }) => {
   const onSubmit = async ({ about }) => {
     setStatus("pending");
     const aboutMe = about.replace(/\r?\n/g, "\n");
+
     const response = await updateAboutMe(aboutMe);
     if (response && response.status === 200) {
       const aboutResponse = await getAboutMe();
-      if (aboutResponse && aboutResponse.status === 200) {
+      if (aboutResponse) {
         const { description } = aboutResponse;
         setState(description);
         reset();
@@ -66,6 +67,7 @@ const AdminAbout = ({ data }) => {
             label="About Me"
             ref={register(schema.about)}
             error={errors.about}
+            defaultValue={state}
           />
           <SubmitButton
             layout
@@ -145,6 +147,7 @@ const SubmitButton = styled(motion.button)`
   color: white;
   position: relative;
   font-weight: 600;
+  margin-bottom: 150px;
   box-shadow: rgba(0, 0, 0, 0.02) 0px -5.9px 2.7px,
     rgba(0, 0, 0, 0.024) 0px -1.2px 6.9px, rgba(0, 0, 0, 0.03) 0px 8px 14.2px,
     rgba(0, 0, 0, 0.04) 0px 21.9px 29.2px, rgba(0, 0, 0, 0.07) 0px 49px 80px;
