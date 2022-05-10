@@ -16,7 +16,7 @@ This videography portfolio displays content created by the client. Along with an
 • React Testing Library
 • Cypress
 
-## Stack
+## Features
 
 • Http Requests
 • Authentication
