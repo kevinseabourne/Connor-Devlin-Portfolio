@@ -63,7 +63,6 @@ const AddOnsContainer = styled(motion.div)`
   width: 100%;
   max-width: 540px;
   margin: 30px;
-  margin-right: 0px;
   border-radius: 9px;
   &:hover {
     cursor: default;

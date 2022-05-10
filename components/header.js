@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import ImageLoader from "./common/imageLoader";
 import Link from "next/link";
 import Image from "next/image";
 import BurgerBar from "./common/burgerBar";

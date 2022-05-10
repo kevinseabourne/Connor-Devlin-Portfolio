@@ -25,6 +25,7 @@ const AdminContentForm = ({
   handleAddContent,
   operation,
   selectedItem,
+  status,
 }) => {
   const [partnersInputLength, setPartnersInputLength] = useState([
     { title: "partner", id: Math.floor(1000 + Math.random() * 9000) },
@@ -243,7 +244,6 @@ const AdminContentForm = ({
         } else if (operation === "Edit") {
           response = await handleEditContent(dataWithVimeoData);
         }
-
         if (response) {
           playSuccessSound();
           if (operation === "Add") {
@@ -316,6 +316,8 @@ const AdminContentForm = ({
       },
     },
   };
+
+  const disableFormSubmit = formStatus === "pending" || status === "pending";
 
   return (
     <AnimateSharedLayout>
@@ -472,7 +474,7 @@ const AdminContentForm = ({
                 />
                 <SubmitButton
                   type="submit"
-                  disabled={formStatus === "pending" ? true : false}
+                  disabled={disableFormSubmit ? true : false}
                 >
                   {formStatus !== "pending"
                     ? formStatus === "resolved"
@@ -535,7 +537,7 @@ const AdminContentForm = ({
                 />
                 <SubmitButton
                   type="submit"
-                  disabled={formStatus === "pending" ? true : false}
+                  disabled={disableFormSubmit ? true : false}
                 >
                   {formStatus !== "pending"
                     ? formStatus === "resolved"
