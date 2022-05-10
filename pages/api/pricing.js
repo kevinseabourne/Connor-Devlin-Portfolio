@@ -86,10 +86,8 @@ export async function updateAddOns(addOnObj) {
         .collection("pricing")
         .doc("addOns")
         .update({ addOns: addOnObj })
-        .then(function (doc) {
-          if (doc.exists) {
-            return doc.data();
-          }
+        .then(function () {
+          return true;
         })
         .catch(function (error) {
           logger.log(error);
@@ -113,6 +111,9 @@ export async function addPricingPackage(pack) {
         .doc("packages")
         .collection("packages")
         .add(pack)
+        .then(function () {
+          return true;
+        })
         .catch(function (error) {
           logger.log(error);
         });

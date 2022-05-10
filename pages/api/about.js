@@ -76,5 +76,5 @@ export async function updateAboutMe(updatedAboutMe) {
         });
       return aboutMe;
     });
-  return response;
+  return { status: 200 };
 }
