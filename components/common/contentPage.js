@@ -101,7 +101,9 @@ const ContentPage = ({ data, selectedData, showAdminContentData }) => {
               : "/pricing/corporate"
           }
         >
-          <ContactButton>PRICING</ContactButton>
+          <ContactButton>
+            {selectedData === "corporate" ? "CONTACT FOR PRICING" : "PRICING"}
+          </ContactButton>
         </Link>
       </Pricing>
     </Container>
