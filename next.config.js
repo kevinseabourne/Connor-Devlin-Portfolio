@@ -1,6 +1,5 @@
 module.exports = {
   // add more font or image formats if importing them to here.
-  fastRefresh: false,
   images: {
     domains: ["chpistel.sirv.com"],
   },
