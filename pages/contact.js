@@ -1,5 +1,5 @@
 import { getAllPricingPackages } from "./api/pricing";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import ContactForm from "../components/common/contactForm";
 import ErrorMessage from "../components/common/errorMessage";
 
