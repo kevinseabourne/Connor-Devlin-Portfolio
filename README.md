@@ -18,7 +18,7 @@ This videography portfolio displays content created by the client. Along with an
 
 ## Features
 
-• Http Requests
+• HTTP Requests
 • Authentication
 • Admin Dashboard
 • Contact Form
